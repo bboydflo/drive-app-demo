@@ -14,6 +14,7 @@ module.exports = {
   },
   globals: {
     $: true,
+    gapi: true,
     Modernizr: true,
     ActiveXObject: true
   },
@@ -37,6 +38,7 @@ module.exports = {
     'no-unused-vars': ['warn'],
     'no-control-regex': 0,
     'no-console': 0,
+    'space-before-function-paren': 0,
 
     'padded-blocks': 0,
     'react/jsx-boolean-value': 1

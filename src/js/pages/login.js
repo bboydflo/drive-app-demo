@@ -1,9 +1,8 @@
 import { h, Component } from 'preact';
 import { connect } from 'preact-redux';
+import * as gapiDemo from '../modules/google-auth-demo';
 
 import Navbar from '../components/navbar';
-import Language from '../modules/lang';
-import Const from '../modules/constants';
 
 class IndexPage extends Component {
 
@@ -22,19 +21,7 @@ class IndexPage extends Component {
   };
 
   render (props, state) {
-    let { error } = state;
-    let { lang, version, credentials } = props;
-
-    // log
-    // console.log(state);
-
-    // program lang
-    let pLang = typeof Const.PROGRAM_LANGS[lang] === 'undefined' ? Const.PROGRAM_LANG_MAP['US'] : Const.PROGRAM_LANG_MAP[lang];
-
-    // labels
-    let loginLabel = Language.label.login.capitalizeFirstLetter();
-    let chooseLangLabel = Language.label.chooseLang[pLang].capitalizeFirstLetter();
-
+    let { version } = props;
     let brand = <p class='navbar-text'>DriveApiDemo <code> {version}</code></p>;
 
     let pageContentStyles = 'padding-bottom: 51px';
@@ -49,10 +36,19 @@ class IndexPage extends Component {
         <div id='page-content' class='container' style={pageContentStyles}>
           <div class='row'>
             <div>Hello world!</div>
+            <button type='button' class='btn btn-default' onClick={this.onAuth}>Google Auth</button>
           </div>
         </div>
       </div>
     );
+  }
+
+  onAuth = (ev) => {
+    gapi.load('client:auth2', gapiDemo.initClient);
+  }
+
+  componentDidMount() {
+    // gapiDemo.handleClientLoad();
   }
 };
 
