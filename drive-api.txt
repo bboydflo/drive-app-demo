@@ -1,3 +1,6 @@
 client id: 378789089814-77dah8n0j12glfhi2aa1ic73enacfnks.apps.googleusercontent.com
 api key: AIzaSyAM1Ktgs9e1YlIdLwcgiH_aHNN5hFdEkMw
 client secret: jgibm31jUdkfG55Q-7sVShEl
+
+// link to extension in chrome store
+https://chrome.google.com/webstore/detail/hcamklaijpoffpejfbpedkmdimhmalnd/publish-accepted-testers

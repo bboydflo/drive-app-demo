@@ -5,16 +5,18 @@ import { Provider } from 'preact-redux';
 // import App from '../components/app';
 import App from '../pages/app';
 import Backbone from '../vendor/my-backbone-router';
-import isIeSupported from './is-ie-supported';
 import configureStore from '../redux/store';
 import AppRouterFactory from '../routes/global';
 
 import { STORAGE_KEY } from '../redux/types';
 
 export default () => {
-
-  // TODO: show toast
-  if (!isIeSupported()) return;
+  var pdfUrl;
+  try {
+    pdfUrl = JSON.parse(decodeURIComponent(location.search.slice(7)));
+  } catch (e) {
+    console.error(e);
+  }
 
   let initialState;
   try {
@@ -36,6 +38,10 @@ export default () => {
   // dispatch actions to update the store with backup values
 
   // store.dispatch({ type: 'UPDATE_APP_CACHE' });
+
+  if (pdfUrl) {
+    console.log(pdfUrl);
+  }
 
   // create app router
   const AppRouter = AppRouterFactory(_, Backbone);

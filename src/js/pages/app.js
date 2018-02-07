@@ -6,6 +6,13 @@ import IndexPage from './login';
 
 const mapAppStateToProps = state => ({ ...state });
 
+/* try {
+  var a = decodeURIComponent(location.search.slice(7));
+  console.log(JSON.parse(a));
+} catch (e) {
+  console.error(e);
+} */
+
 const mapDispatchToProps = dispatch => ({
   updateUrl: url => {
     dispatch(updateUrl(url));
@@ -18,6 +25,7 @@ class App extends Component {
     this.router = null;
     this.updateHistory = this.updateHistory.bind(this);
   }
+
   render (props) {
     let { url } = props.ui;
 
