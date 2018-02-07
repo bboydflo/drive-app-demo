@@ -1,0 +1,14 @@
+// Core variables and mixins
+@import "bootstrap/variables";
+
+// SmartPigs views
+@import "sp_vars";
+
+// Other libraries or plugins
+@import "libs/agrosoft_icons";
+@import "libs/toastr";
+
+// SmartPigs views
+@import "views/app";
+@import "views/navbar";
+@import "views/index";

@@ -1,0 +1,26 @@
+// Copyright 2015 Florin Onciu - Agrosoft A/S
+
+.index-view {
+  padding-top: 15px;
+
+  // fix padding on login form
+  .form-group {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  // fix error component margin bottom
+  .error-component .alert { margin-bottom: 0.9375em; /*15px;*/ }
+}
+
+// > 48 em
+@media (min-width: 48em){
+  .index-view { padding-top: 1em; }
+}
+
+// 321px
+@media (max-height: 20em) {
+  .panel {margin-bottom: 0.625em;}
+}
+
+.flagstrap button { width: 100%; }

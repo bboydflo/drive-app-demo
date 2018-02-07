@@ -1,0 +1,40 @@
+// Agrosoft app.css
+// Copyright 2015 Florin Onciu
+// Agrosoft A/S
+
+.db-component {
+
+  // reset top padding
+  padding-top: 0;
+
+  // reset border by default
+  .panel { border: 0; }
+
+  // reset padding on db-component
+  .panel-body { padding: 0; }
+
+  .list-group-item { border: 0 }
+  .list-group-item { border-top: 1px solid #ddd; }
+  .list-group-item:first-child { border-top: 0; }
+}
+
+// on desktop
+@media (min-width: 48em) {
+
+  // update db component
+  .db-component {
+
+    // reset top padding
+    padding-top: 1em;
+
+    // reset border by default
+    .panel { border: 1px solid #ddd; }
+
+    // reset padding on db-component
+    .panel-body { padding: 0.9375em; }
+
+    // list group-item
+    .list-group-item { border: 1px solid #ddd }
+    .list-group-item:first-child { border-top: 1px solid #ddd; }
+  }
+}

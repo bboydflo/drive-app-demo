@@ -1,0 +1,76 @@
+/*!
+ *
+ * Agrosoft navbar.css
+ * Copyright 2015 Florin Onciu
+ * Agrosoft A/S
+ *
+ */
+.navbar-inverse .navbar-brand {color: $white;}
+.navbar-nav.navbar-right:last-child {margin-right: 0.3125em;} /*5px*/
+button.navbar-toggle{outline-color: #dff0d8;outline-width: 1px}
+@media (max-width: 37.5em) { /*600px*/
+  .nav>li>a:first-child{padding-left: 0.625em;} /*10px*/
+}
+
+.toolbar-group-xs {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  li.toolbar-item {
+    list-style: none;
+    float: left;
+    text-align: center;
+    // this has to be set dynamically
+    // width: 16.666667%;
+
+    &:hover {
+      color: #fff;
+      background-color: #249423;
+      cursor: pointer;
+    }
+  }
+
+  .btn-toolbar-xs {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    background-image: none;
+    height: 50px;
+  }
+}
+
+.toolbar-group {
+
+  .btn-toolbar-sp {
+    border: none;
+    outline: none;
+    padding: 8px 10px;
+    margin-top: 6px;
+    margin-bottom: 4px;
+    background-color: transparent;
+    background-image: none;
+    border-radius: 4px;
+
+    &:hover {
+      background-color: #249423;
+      color: white;
+    }
+  }
+}
+
+/*768px and more*/
+@media (min-width: $screen-sm) {
+  .btn-toolbar {
+    margin-top: 5px;
+  }
+}
+
+/*!
+ * theme support
+ * background-color: #1fa033;
+ * border-color: #e7e7e7;
+ */

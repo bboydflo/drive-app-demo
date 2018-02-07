@@ -1,0 +1,117 @@
+// Copyright 2017 Florin Onciu - Agrosoft A/S
+
+// added somew extra styles from
+// https://behigh.github.io/bootstrap_dropdowns_enhancement/
+.dropdown-menu.pull-right {
+  right: 0;
+  left: auto;
+}
+.dropdown-menu.bullet {
+  margin-top: 8px;
+}
+.dropdown-menu.bullet:before {
+  width: 0;
+  height: 0;
+  content: '';
+  display: inline-block;
+  position: absolute;
+  border-color: transparent;
+  border-style: solid;
+  -webkit-transform: rotate(360deg);
+  border-width: 0 7px 7px;
+  border-bottom-color: #cccccc;
+  border-bottom-color: rgba(0, 0, 0, 0.15);
+  top: -7px;
+  left: 9px;
+}
+.dropdown-menu.bullet:after {
+  width: 0;
+  height: 0;
+  content: '';
+  display: inline-block;
+  position: absolute;
+  border-color: transparent;
+  border-style: solid;
+  -webkit-transform: rotate(360deg);
+  border-width: 0 6px 6px;
+  border-bottom-color: #ffffff;
+  top: -6px;
+  left: 10px;
+}
+.dropdown-menu.bullet.pull-right:before {
+  left: auto;
+  right: 9px;
+}
+.dropdown-menu.bullet.pull-right:after {
+  left: auto;
+  right: 10px;
+}
+
+.panel-progeny { margin-bottom: 0; }
+
+.progeny{
+  .container-fluid { padding-left: 0; }
+  .panel-body { padding: 0; }
+  .layout {
+    margin-bottom: 0;
+    border-bottom: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+  .panel-heading { border-bottom: 0 }
+  .panel-footer {
+    padding: 6px 15px 4px;
+    border-top: 0;
+  }
+
+  .input-group-addon {
+    background-color: white;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #e6e6e6;
+    }
+  }
+}
+
+// add proper cursor to out action dropdown
+.actions-dropdown { cursor: pointer; }
+
+// style dropdown-action list item
+.dropdown-action {
+  padding: 8px 20px 6px !important;
+  margin-bottom: 2px;
+  &:hover { background-color: #d6e9c6 !important; }
+}
+
+// add scroll and remove padding
+.layout .panel-body { padding: 0; }
+
+// 767px
+@media (max-width: 48em) {
+  .layout { border: 0; }
+}
+
+.footer-left {
+  margin-right: 10px;
+
+  .glyphicon { padding-top: 5px; }
+}
+
+p.form-control-static {
+  background-color: lightgray;
+  border-radius: 4px;
+  padding-left: 10px;
+}
+
+/**
+ * datepicker paragraph inside simple form
+ */
+ p.datepicker, .modal-body p.datepicker {
+   background-color: #cfeff8;
+   padding-top: 8px;
+   padding-left: 10px;
+  }
+
+// add pointer for toggle-hidden-fields in a dialog
+.toggle-fields { cursor: pointer; }

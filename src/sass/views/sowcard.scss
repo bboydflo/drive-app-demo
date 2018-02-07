@@ -1,0 +1,156 @@
+/*!
+ *
+ * Agrosoft progeny.css
+ * Copyright 2015 Florin Onciu
+ * Agrosoft A/S
+ *
+ */
+.sowcard, .breeding {
+  & .container {
+    margin: 0px;
+    width: 100%;
+  }
+  & #page-content {
+    .card, .history {
+      width: 100%;
+      max-width: 30em !important; /*480px*/
+      margin-bottom: 1em; /*15px;*/
+    }
+
+    .kuld-history, .ungdyr {
+      margin-bottom: 0;
+    }
+
+    .kuld-history th, #sowinfo td {
+      vertical-align: middle;
+    }
+
+    .addEvent {
+      margin-top: 1em; // 15px;
+    }
+
+    .details {
+      margin-top: 1em; // 15px;
+    }
+  }
+
+  & h3 {
+    -webkit-margin-before: 0em;
+  }
+
+  & .details {
+    display: none;
+  }
+
+  & #showError {
+    max-width: 1024px;
+  }
+
+  /*tilbageholdes background*/
+  & .tbg {
+    background-color: red;
+    color: white;
+  }
+
+  /*expecting farring background*/
+  & .farring-success, & .farring-danger { color: white; }
+  & .farring-success { background-color: green; }
+  & .farring-danger { background-color: red; }
+
+  & .td-sow-info {
+    float: right;
+  }
+
+  & .checkmark {
+    float: none !important;
+    margin-left: 0px !important;
+  }
+
+  & .checkbox {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-left: 0px;
+  }
+
+  /*cursor point on addNewEvent class*/
+  & td.ui-datepicker-inline, .addNewEvent {
+    cursor: pointer;
+  }
+
+  /*bring inline styles to css stylesheet*/
+  .modal-form-checkmark {
+    margin-top: 10px !important; width: auto;
+  }
+
+  /*plus gylph-icon on litters history view*/
+  .more {
+    color: #90da95;
+  }
+
+  /* new breeding module */
+  .tab-icon {
+    padding: 2px 6px;
+  }
+
+  .tab-pane {
+    padding-top: 0.5em;
+  }
+
+  & .alternate-brand {
+    margin-top: 3px;
+    .form-group{
+      margin-bottom:0;
+    }
+  }
+
+  .litters-title {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .list-details {
+    margin-bottom: 5px;
+  }
+
+  #location {
+    width: 100%;
+    height: 45px;
+    font-size: 24px;
+    line-height: 1;
+    padding: 0px 2px;
+    margin: 0;
+  }
+
+  /* location form group default max width */
+  .form-group-location {
+    max-width: 65%;
+  }
+
+  /* not necessary on touch devices */
+  .browse-sow, .browse-sow:hover, .browse-sow:active, .browse-sow:focus {
+    cursor: pointer;
+  }
+
+  .browse-sow .glyphicon {
+    color: white;
+    padding: 0.85em 0.75em;
+  }
+
+  #toggleNav .form-group {
+    float: left;
+  }
+}
+
+p.dPicker {
+  margin: 0 !important; min-height: 16px;
+}
+#newSow .well {
+  margin-bottom: 0px;
+}
+
+/*
+ * toolbar view inside tabs
+ */
+.tab-extra {
+  padding: 10px 0;
+}

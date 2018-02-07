@@ -1,0 +1,50 @@
+.spread-line {
+  display: table;
+  width: 100%;
+  border: 1px solid #d9d9d9;
+  border-left: 3px solid #999;
+  border-radius: 4px;
+  margin-bottom: 12px;
+
+  address {
+    border-bottom: 1px solid aliceblue;
+    margin-bottom: 0;
+    padding-bottom: 4px;
+  }
+}
+
+.sl-sidebar {
+  display: table-cell;
+  position: relative;
+  border-right: 1px solid #e7e7e7;
+  background: #f8f8f8;
+  width: 32px;
+
+  .badge {
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    // background: rgb(23, 124, 212);
+  }
+}
+
+.ch {
+  position: absolute;
+  bottom: 4px;
+  left: 8px;
+}
+
+.lc-body-title {
+  margin-bottom: 4px;
+}
+
+.sl-main-content {
+  position: relative;
+  padding: 4px;
+
+  .close {
+    position: absolute;
+    top: 0;
+    right: 4px;
+  }
+}

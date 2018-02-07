@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="AgroSoft">
+  <title><%= htmlWebpackPlugin.options.title %></title>
+
+  <!-- smartpigs main stylesheet -->
+  <link rel="stylesheet" href="android/css/android-main.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="modal show" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><span class="glyphicon glyphicon-phone"></span>&nbsp;SmartPigs</h2>
+            </div>
+            <div class="modal-body">
+                <div id="error-view" style="display: none;">
+                    <div class="alert alert-warning alert-dismissible" role="alert">
+                        <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button><!-- data-dismiss="alert" -->
+                        <strong>Warning!</strong> Incompatible reader selected!
+                    </div>
+                </div>
+                <form class="form-horizontal" name="somerandomname">
+                    <div class="form-group">
+                        <input type="text" class="col-sm-6 form-control input-lg" id="address" placeholder="IP Address..." autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <select  id="deviceType" class="col-sm-6 form-control input-lg">
+                            <option value="-1">Select reader type</option>
+                            <option value="0">TSL Reader</option>
+                            <option value="2">KT45 (LF)</option>
+                            <option value="3">Destron</option>
+                            <option value="4">Nautiz</option>
+                            <option value="5">Agrident</option>
+                            <option value="8">BH9-BOTH</option>
+                            <option value="6">BH9-UHFRFID</option>
+                            <!--<option value="7">BH9-LFRFID</option>--><!-- tested not ok -->
+                            <option value="9">BH9-LFRFID</option><!-- tested ok -->
+                            <option value="10">C4000</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="next" class="btn btn-primary btn-lg btn-block">
+                    Next&nbsp;<span class="glyphicon glyphicon-arrow-right"></span>
+                </button>
+                <!--<button id="clear" class="btn btn-danger btn-lg btn-block">
+                    Clear cache&nbsp;<span class="glyphicon glyphicon-trash"></span>
+                </button>-->
+            </div>
+        </div>
+    </div>
+    </div>
+  </div>
+
+  <!-- smartpigs android index scripts -->
+  <script src="android/js/main.js" type="text/javascript"></script>
+</body>
+</html>

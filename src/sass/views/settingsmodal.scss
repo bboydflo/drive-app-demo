@@ -1,0 +1,49 @@
+/*!
+ *
+ * Agrosoft settings-modal.css
+ * Copyright 2015 Florin Onciu
+ * Agrosoft A/S
+ *
+ */
+
+/*update language menu cursor to pointer*/
+li a.new-lang{cursor: pointer;}
+
+/*update version list-group*/
+li.version p {margin-bottom: 0px;}
+
+/*update version list-group*/
+li.language p, li.timeout p {margin: 6px 0 8px;}
+
+
+/*overwrite the padding for the settings modal items*/
+.list-group-item {padding: 10px 10px;}
+/*fix the gap between accordion and the bottom of the */
+#accordion{margin-bottom: 0px;}
+p.language,p.update-app{margin: 8px 0 0px;}
+
+/*fix padding-top for p.loginTimeout*/
+p.loginTimeout{padding-top: 6px; margin-bottom: 0px}
+
+/*fix progress bar in the settings modal window on mainmenu*/
+.progress {margin-top:10px;margin-bottom: 0px;}
+
+.sp-version, .device-item {
+    border-bottom: 1px dashed #D1D1D1;
+    padding-bottom: 5px;
+}
+
+.sp-language, .sp-timeout {
+    border-bottom: 1px dashed #D1D1D1;
+    height: 50px;
+    line-height: 48px;
+    vertical-align: middle;
+}
+
+.sp-language span.pull-right {
+    padding-top: 6px;
+}
+
+.sp-reset, .sp-update {
+    margin-top: 12px;
+}

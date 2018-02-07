@@ -1,0 +1,3 @@
+client id: 635136783186-4ql36uathmopkbc8maeg020vrfnfpngj.apps.googleusercontent.com
+api key: AIzaSyDxZC99hAP5kRXdcb4iyEHN7kL0QpfmrTQ
+client secret: gzaJtac4FBlOvlf6KqlullZl

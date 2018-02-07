@@ -1,0 +1,68 @@
+/* overwrite some values */
+/* .smartpigs-table>tbody>tr>td {
+  margin: 0;
+  padding: 0;
+} */
+
+.e-cell {
+  /* margin: 0;
+  padding: 0; */
+  line-height: 1.42857;
+}
+
+/* .e-cell.datepicker, .e-cell.simple-value {
+  padding: 0 0.25em;
+} */
+
+.e-cell-input{
+  color: #333;
+  display: block;
+  margin: 0;
+  width: 100%;
+  appearance: none;
+  -moz-appearance:none; /* Firefox */
+  -webkit-appearance:none; /* Safari and Chrome */
+  box-shadow: none;
+  border-radius: none;
+  border: none;
+  height: 2.125em; /* 34px */
+  padding: 0 0.25em; /* 4px */
+  font-size: 1.125em;
+}
+
+// add support for select input
+.e-cell select {
+  color: #333;
+  display: block;
+  margin: 0;
+  width: 100%;
+  box-shadow: none;
+  border-radius: none;
+  border: none;
+  height: 2.125em; /* 34px */
+  padding: 0 0.25em; /* 4px */
+  font-size: 1.125em;
+  overflow: hidden;
+}
+
+.e-cell-input.zws {
+
+  // make cell color to rhow not editable
+  background-color: #d6d6d6
+}
+
+/* .e-cell-value {
+  padding-left: 5px;
+} */
+
+.e-cell-value > form {
+  padding-left: 0;
+}
+
+/* .text-right .e-cell-value {
+  padding-right: 5px;
+}
+
+.text-left .e-cell-value {
+  padding-left: 5px;
+} */

@@ -1,0 +1,29 @@
+// Core variables and mixins
+@import "bootstrap/variables";
+
+// SmartPigs views
+@import "sp_vars";
+
+// Other libraries or plugins
+@import "libs/agrosoft_icons";
+@import "libs/toastr";
+@import "libs/datepicker";
+@import "libs/flagstrap";
+@import "libs/_material-switch.scss";
+
+// SmartPigs views
+@import "views/app";
+@import "views/navbar";
+@import "views/index";
+@import "views/mainmenu";
+@import "views/progeny";
+@import "views/table";
+@import "views/restore";
+@import "views/sowcard";
+@import "views/gauges";
+@import "views/settingsmodal";
+@import "views/settings";
+@import "views/database";
+@import "views/editable-cell";
+@import "views/base-spread";
+@import "views/simple-spread";

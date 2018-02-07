@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+    <meta name="author" content="AgroSoft">
+
+    <!-- favicon -->
+    <link rel="apple-touch-icon" href="dist/favicon_new.png">
+
+    <!-- load modernizr -->
+    <script type="text/javascript" src="dist/js/sp-modernizr.min.js"></script>
+
+    <!-- smartpigs core stylesheet -->
+    <link rel='stylesheet' href='dist/css/core.css'>
+  </head>
+  <body>
+
+    <!-- spinner container -->
+    <div id="spinner"></div>
+
+    <!-- load spin.js -->
+    <script type="text/javascript" src="dist/js/spin.min.js"></script>
+
+    <!-- create spinner -->
+    <script type="text/javascript" src="dist/js/init-spinner.js"></script>
+
+    <!-- enable javascript-->
+    <div class="js-support">
+      <div class="container">
+        <div class="jumbotron">
+          <h1>Sorry!</h1>
+          <p>SmartPigs requires you to have Javascript enabled! Please enable Javascript!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- page container -->
+    <div id="page-container"></div>
+
+    <!-- smartpigs main stylesheet -->
+    <link rel="stylesheet" href="dist/css/smartpigs-whiteboard.css" />
+
+    <!-- scripts-->
+    <script src="dist/js/whiteboard.js"></script>
+  </body>
+</html>

@@ -1,0 +1,298 @@
+// Agrosoft app.css
+// Copyright 2015 Florin Onciu
+// Agrosoft A/S
+
+// Nexus 7 - Android 4.4.2
+//   - Portrait: width 601px; height 881px
+//   - Landscape: width 962px; height 529px
+
+// Outdated Nexus 7 - Android OS
+//   - Portrait: width 603px; height 797px
+//   - Landscape: width 966px; height 444px
+
+// iPad
+//   - Portrait: width 768px; height varies
+//   - Landscape: width: 1024px; height varies
+
+// iPhone
+//   - Portrait: width 320px; height varies
+//   - Landscape: width 480px; height varies
+
+// The responsive viewport breakpoint "staircase" becomes:
+//   -  320px
+//   -  480px
+//   -  603px
+//   -  768px
+//   -  966px
+//   - 1024px
+
+//  16px ------------------1em
+//   ?px ------------------?em
+//  51px_------------------?em
+
+// ======================================================================== //
+// sass variables                                                           //
+// ======================================================================== //
+$fourPx : 0.25rem; // 4px;
+
+@charset "UTF-8";
+@-ms-viewport {width: device-width;}
+
+// javascript disabled
+.sp_js .js-support { display: none; }
+
+// viewport size
+// body
+html {
+  width:100%;
+  height:100%;
+}
+
+// fix color to logo text brand
+.navbar-inverse .navbar-brand {color: $sp-light-grey;}
+
+// read some more here:
+// http://marcgg.com/blog/2014/04/09/phonegap-steroids-hybrid-native-app-tips/
+// html.sp_touch {
+// Disable selection/copy in UIWebView
+// -webkit-user-select: none;
+// disable callout, image save panel
+// -webkit-touch-callout: none;
+// "turn off" link highlight
+// -webkit-tap-highlight-color: transparent;
+// }
+
+.right-caret {
+  border-bottom: $fourPx solid transparent;
+  border-top: $fourPx solid transparent;
+  border-left: $fourPx solid #000000;
+  display: inline-block;
+  height: 0;
+  opacity: 0.3;
+  vertical-align: top;
+  width: 0;
+}
+
+// fix webkit auto-fill values
+input:-webkit-autofill {
+  color: #fff !important;
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
+}
+
+// fix margin on #page-content
+#page-content {
+  margin-top: 3.1875em;
+}
+
+/* fix datepicker on a modal window */
+.datepicker {
+  z-index:1151 !important;
+  &.dropdown-menu{ font-size:1em; }
+}
+
+/* fix list group inside a panel element */
+.panel .list-group {
+  margin-bottom: 0;
+}
+
+/*767px*/
+@media (max-width: 48em) {
+  .datepicker.dropdown-menu{ font-size:14px; }
+
+  /* adjust panel margin-bottom on smaller screens */
+  .panel {
+    margin-bottom: 0;
+  }
+
+  /* adjust padding on mainmenu, progeny and sowcard tablet-view */
+  .mainmenu #page-content, .progeny #page-content, .sowcard #page-content {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* fix blank modal margin-bottom on mainmenu */
+.blank-body ul.list-group {margin-bottom: 2px;}
+
+/** change cursor in iOS */
+.sp_ios body {cursor: pointer;}
+
+/* fix :focus */
+textarea:focus, select:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="date"]:focus, input[type="month"]:focus, input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="color"]:focus, .uneditable-input:focus {
+  border-color: rgba(30, 199, 44, 0.8) !important;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(30, 199, 44, 0.8) !important;
+  outline: 0 none;
+}
+
+/*fix create new sow form: buttons spacing*/
+.reset, .back {
+  margin-right: 0.9375em; /*15px*/
+}
+
+/*500px*/
+@media (max-width: 31.25em) {
+  .reset, .back {
+    margin-right: 0.3125em; /*5px*/
+  }
+}
+
+/*fix editable inputs alignment*/
+form.alignRight input {text-align: right;}
+form.alignLeft input {text-align: left;}
+
+/* toggle accordion glyphicons */
+.panel-heading .accordion-toggle:after {
+  /* symbol for "opening" panels */
+  font-family: 'Glyphicons Halflings';  /* essential for enabling glyphicon */
+  content: "\e114"; /* adjust as needed, taken from bootstrap.css */
+  float: right; /* adjust as needed */
+  color: grey; /* adjust as needed */
+}
+.panel-heading .accordion-toggle.collapsed:after {
+  /**
+   * symbol for "collapsed" panels
+   * adjust as needed, taken from bootstrap.css
+   */
+  content: "\e080";
+}
+
+/**
+ * Fix search input styling in webkit browsers
+ */
+input[type="search"] {
+/**
+ -webkit-box-sizing: content-box;
+ -moz-box-sizing: content-box;
+ box-sizing: content-box;
+ */
+ -webkit-appearance: searchfield;
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: searchfield-cancel-button;
+}
+
+/**
+ * last form-group
+ */
+form .form-group:last-child {
+    margin-bottom: 0;
+}
+
+/** gpu boost trick */
+.gpu-boost {
+    width: 1px;
+    height: 1px;
+    float: left;
+    background: 0 0;
+    z-index: -1;
+    -webkit-transform: translateZ(0);
+    -moz-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    -o-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-transform: translate3d(0,0,0);
+    -moz-transform: translate3d(0,0,0);
+    -ms-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000;
+    -moz-perspective: 1000;
+    -ms-perspective: 1000;
+    perspective: 1000;
+}
+
+/**
+ * fix alert in the error component
+ */
+.error-component .alert{ margin-bottom: 0; }
+
+.blank-body {
+
+  /**
+    * fix alert in modal form
+    */
+  .alert { margin-bottom: 15px; }
+
+  /**
+    * fix group-complex position
+    */
+  .group-complex {
+    margin-bottom: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #f1f1f1;
+  }
+
+  .group-complex:last-child {
+    border-bottom: none;
+  }
+
+  /**
+    * fix spacing on filter form
+    */
+  .group-complex .form-group {
+    margin-bottom: 5px;
+  }
+}
+
+#clipboard {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+}
+
+nav p {
+  margin-left: 10px;
+}
+
+.navbar-inverse .navbar-text {
+  color: white;
+}
+.navbar-default .navbar-text {
+  color: #333333;
+}
+
+// check: https://codepen.io/bboydflo/pen/YxdRqP
+// https://davidwalsh.name/css-slide
+#app { position: relative; }
+
+.sp-slider {
+  position: absolute;
+  top: -999px;
+  max-height: 0;
+  transition-property: all;
+  transition-duration: .5s;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+
+.sp-slider.open {
+  top: 51px;
+  max-height: 100%;
+  -webkit-animation: slide .5s forwards;
+  animation: slide .5s forwards;
+  z-index: 3;
+  width: 100%;
+  min-height: 100%;
+}
+
+.slider-wrapper {
+  position: relative;
+  min-height: 100%;
+  // overflow-y: scroll;
+
+  .panel {
+    background-color: #fff;
+    border: none;
+    // border-radius: 4px;
+    box-shadow: none;
+    box-shadow: 0;
+    // -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    // box-shadow: 0 1px 1px rgba(0,0,0,.05);
+  }
+}

@@ -1,0 +1,143 @@
+// vars
+// $img-gb: '../images/hakon-sataoen-1504x1004-optim.jpg';
+$img-gb: '../images/newsletter-bg.jpg';
+
+/*
+* Globals
+*/
+
+/* Custom default button */
+.btn-secondary,
+.btn-secondary:hover,
+.btn-secondary:focus {
+  color: #333;
+  text-shadow: none; /* Prevent inheritance from `body` */
+  background-color: #fff;
+  border: .05rem solid #fff;
+}
+
+
+/*
+* Base structure
+*/
+
+html,
+body {
+  height: 100%;
+  background-color: #e7ffee;
+}
+body {
+  color: #FAFAFA;
+  text-align: center;
+  // text-shadow: 0 .05rem .1rem rgba(0,0,0,.5);
+}
+
+/* Extra markup and styles for table-esque vertical and horizontal centering */
+.site-wrapper {
+  display: table;
+  width: 100%;
+  height: 100%; /* For at least Firefox */
+  min-height: 100%;
+  -webkit-box-shadow: inset 0 0 5rem rgba(0,0,0,.5);
+          box-shadow: inset 0 0 5rem rgba(0,0,0,.5);
+
+  background: url($img-gb) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+.site-wrapper-inner {
+  display: table-cell;
+  vertical-align: top;
+}
+.cover-container {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* Padding for spacing */
+.inner {
+  padding: 2rem;
+}
+
+/*
+* Cover
+*/
+
+.cover {
+  padding: 1.5rem;
+}
+
+// update footer styles
+.c-footer a {
+  color: #7bc243;
+}
+
+.newsletter-ig .form-control {
+  background: transparent;
+  color: white;
+  border-color: white;
+}
+
+// update newsletter button group
+.newsletter-ig .btn-secondary {
+  // border-color: rgba(0,0,0,.15);
+  border-color: white;
+}
+
+hr.my-4 {
+  border-top: 1px solid rgba(255,255,255,.4);
+}
+
+/*
+ * jumbotron
+ */
+.jumbotron {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+
+/*
+ * Affix and center
+ */
+
+@media (max-width: 450px) {
+  hr.my-4 {
+    border-top: 1px solid rgba(255,255,255,.7);
+  }
+
+  .jumbotron {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0;
+  }
+
+  .display-3 {
+    font-size: 3rem;
+  }
+}
+
+@media (min-width: 40em) {
+  .mastfoot {
+    position: fixed;
+    bottom: 0;
+  }
+
+  /* Start the vertical centering */
+  .site-wrapper-inner {
+    vertical-align: middle;
+  }
+  /* Handle the widths */
+  .mastfoot,
+  .cover-container {
+    width: 100%; /* Must be percentage or pixels for horizontal alignment */
+  }
+}
+
+@media (min-width: 62em) {
+  .mastfoot,
+  .cover-container {
+    width: 42rem;
+  }
+}

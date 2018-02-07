@@ -1,0 +1,142 @@
+// Agrosoft table.css
+// Copyright 2015 Florin Onciu
+// Agrosoft A/S
+
+// better style element in here
+.component-wrapper {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+// fix padding bottom on table-body
+.sm-table-body { padding-bottom: 1px; }
+
+// zero width space cells color
+td.readonly, td.zws{
+  background-color: #e8e8e8;
+  color: black;
+}
+
+.smartpigs-table {
+  table-layout: fixed;
+  border-collapse: collapse;
+  word-wrap:break-word;
+  margin-bottom: 0;
+
+  // diminish border-bottom size on thead
+  &>thead>tr>th { border-bottom-width: 1px; }
+
+  /* // subtle box-shadow
+  -webkit-box-shadow: 0 8px 20px -10px rgba(0,0,0, 0.4);
+     -moz-box-shadow: 0 8px 20px -10px rgba(0,0,0, 0.4);
+          box-shadow: 0 8px 20px -10px rgba(0,0,0, 0.4); */
+
+  td, th {
+    font-size: 1em;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .checkmark { text-align: center; }
+  .checkmark label { margin-bottom: 0; }
+
+  // header primary background
+  thead { background-color: #d6e9c6; }
+
+  // heading align center
+  .center, .warning {
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  // table rows spacing (in the table body)
+  tr {
+    min-height: 35px;
+    height: 35px;
+    &>td.center{
+      text-align: center;
+    }
+  }
+
+  /* select table rows that are not editable */
+  [data-editable="0"], [data-editable="0"]:hover { background: darkgray; }
+
+  /* select table rows by hidden attribute */
+  [data-hidden="true"]  { display: none; }
+  [data-hidden="false"] { display: table-row; }
+
+  /* fix padding for table cell on small tablet and other bigger devices with width > 800px */
+  &>thead>tr>th,
+  &>tbody>tr>th,
+  &>tfoot>tr>th,
+  &>thead>tr>td,
+  &>tbody>tr>td,
+  &>tfoot>tr>td {
+    // padding: 4px 6px;
+    padding: 4px 6px 0px 6px;
+    vertical-align: middle;
+  }
+
+  /* to fix the input cell */
+  form input, form select{
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    margin:-2px 0;
+    outline: none;
+    width: 100%;
+    font-size: 15px;
+  }
+  form.alignRight input{ text-align: right; }
+
+  /* to fix the label input[type="checkbox"] */
+  & td label.check{ margin-bottom: 0; }
+
+  [data-red="1"], [data-red="1"]:hover {
+    background: red;
+  }
+
+  /* select table rows that are marked */
+  [data-marked="1"], [data-marked="1"]:hover {
+    background: #afed7a;
+  }
+
+  [data-scanned="1"] {
+    background: #E99D10;
+  }
+
+  [data-marked="1"][data-scanned="1"] {
+    background: #E99D10;
+  }
+  [data-marked="1"][data-scanned="1"]:hover {
+    background: #E99D10;
+  }
+  [data-red="1"][data-scanned="1"]:hover {
+    background: #E99D10;
+  }
+
+  .limited-thead-cell {
+    position: relative;
+    display: block;
+    text-align: left;
+    bottom: 6px;
+  }
+
+  input[readonly],
+  input[disabled],
+  input[readonly="readonly"],
+  input[readonly='readonly'],
+  input[disabled="disabled"],
+  input[disabled='disabled'],
+  input[type="text"]:read-only
+  input[type='text']:read-only
+  input[type="number"]:read-only,
+  input[type='number']:read-only,
+  input:read-only,
+  input:disabled {
+    color: black !important;
+    -webkit-text-fill-color: black !important;
+  }
+}
