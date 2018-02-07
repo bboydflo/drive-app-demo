@@ -8,7 +8,7 @@ import Backbone from '../vendor/my-backbone-router';
 import configureStore from '../redux/store';
 import AppRouterFactory from '../routes/global';
 
-import { STORAGE_KEY } from '../redux/types';
+import { STORAGE_KEY, UPDATE_URL } from '../redux/types';
 
 export default () => {
   var pdfUrl;
@@ -40,7 +40,8 @@ export default () => {
   // store.dispatch({ type: 'UPDATE_APP_CACHE' });
 
   if (pdfUrl) {
-    console.log(pdfUrl);
+    // console.log(pdfUrl);
+    store.dispatch({ type: UPDATE_URL, payload: 'viewpdf?fileid=' + pdfUrl.ids[0] });
   }
 
   // create app router
