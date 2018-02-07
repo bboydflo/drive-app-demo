@@ -9,7 +9,7 @@
     "build-analize": "cross-env analize=true target=web webpack",
     "build-android": "cross-env NODE_ENV=production target=android webpack",
     "dev": "webpack-dev-server webpack--env development",
-    "serve": "http-server ./ -c-1 -p 7171"
+    "serve": "http-server ./ -c-1 -a localhost -p 7171"
   },
   "author": "",
   "license": "ISC",
