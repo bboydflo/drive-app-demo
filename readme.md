@@ -1,6 +1,6 @@
 ### Things to keep in mind
 
-`/* eslint-disable */` will disable eslint on the next line. if put on the top of the file will disable linting for the entire file. read more at [this link](http://eslint.org/docs/user-guide/configuring"eslint disable")
+`/* eslint-disable */` will disable eslint on the next line. if put on the top of the file will disable linting for the entire file. read more at [this link](https://eslint.org/docs/user-guide/configuring#disabling-rules-with-inline-comments)
 
 use `// eslint-disable-next-line` to disable `eslint` for the next line
 
