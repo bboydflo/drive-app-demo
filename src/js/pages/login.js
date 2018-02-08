@@ -71,8 +71,12 @@ class IndexPage extends Component {
   }
 
   componentDidMount () {
-    if (chrome && chrome.app.isInstalled) {
-      this.setState({ isAppInstalled: true });
+    try {
+      if (chrome && chrome.app.isInstalled) {
+        this.setState({ isAppInstalled: true });
+      }
+    } catch (e) {
+      console.log('not chrome');
     }
   }
 

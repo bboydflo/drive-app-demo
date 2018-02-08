@@ -110,33 +110,34 @@ export function getFileById(fileId) {
 
   // example here: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
   // return fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&access_token=${accessToken}`, fetchOptions).then(response => {
-  return fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&&access_token=${accessToken}`).then(response => {
-    if (response.ok) {
-      console.log(response);
-      // response.body
-      // example here: https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams
-      const reader = response.body.getReader();
-      return new ReadableStream({
-        start(controller) {
-          return pump();
-          function pump() {
-            return reader.read().then(({ done, value }) => {
-              // When no more data needs to be consumed, close the stream
-              if (done) {
-                controller.close();
-                return;
-              }
-              // Enqueue the next data chunk into our target stream
-              controller.enqueue(value);
-              return pump();
-            });
+  return fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&&access_token=${accessToken}`)
+    .then(response => {
+      if (response.ok) {
+        console.log(response);
+        // response.body
+        // example here: https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams
+        const reader = response.body.getReader();
+        return new ReadableStream({
+          start(controller) {
+            return pump();
+            function pump() {
+              return reader.read().then(({ done, value }) => {
+                // When no more data needs to be consumed, close the stream
+                if (done) {
+                  controller.close();
+                  return;
+                }
+                // Enqueue the next data chunk into our target stream
+                controller.enqueue(value);
+                return pump();
+              });
+            }
           }
-        }
-      })
-        .then(stream => new Response(stream))
-        .then(response => response.blob())
-        .then(blob => URL.createObjectURL(blob));
-    }
-    throw new Error('Network response was not ok.');
-  });
+        });
+      }
+      throw new Error('Network response was not ok.');
+    })
+    .then(stream => new Response(stream))
+    .then(response => response.blob())
+    .then(blob => URL.createObjectURL(blob));
 }
