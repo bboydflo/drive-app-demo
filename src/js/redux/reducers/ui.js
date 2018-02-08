@@ -3,6 +3,7 @@ import browserLanguage from 'get-browser-language';
 import {
   UPDATE_URL,
   UPDATE_LANG,
+  UPDATE_FILE_ID,
   UPDATE_SPINNER,
   UPDATE_MENU_TYPE,
   UPDATE_CONNECTION,
@@ -12,6 +13,7 @@ import {
 const initialUiState = {
   url: '',
   lang: 'US',
+  fileId: null,
   locale: browserLanguage(),
   fadeIn: 100,
   fadeOut: 10,
@@ -22,6 +24,8 @@ const initialUiState = {
 
 export default (state = initialUiState, action) => {
   switch (action.type) {
+    case UPDATE_FILE_ID:
+      return Object.assign({}, state, { fileId: action.payload });
     case UPDATE_LANG:
       return Object.assign({}, state, { lang: action.payload });
     case UPDATE_DATE_FORMAT:

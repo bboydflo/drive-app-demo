@@ -50,7 +50,7 @@ class IndexPage extends Component {
             <button type='button' class='btn btn-default' id='authorize-button' style={signedIn ? 'display: none;' : 'display: block;'} onClick={this.handleAuth}>Sign in</button>
             <button type='button' class='btn btn-default' id='signout-button' style='display: none;' onClick={this.handleSignOut}>Sign Out</button>
           </div>
-          <div class='row'>
+          {false && <div class='row'>
             <ul class='pdf-files-list'>
               {files.length && files.map((f, idx) => {
                 return (
@@ -61,12 +61,9 @@ class IndexPage extends Component {
                 );
               })}
             </ul>
-          </div>
+          </div>}
           {!isAppInstalled && <div class='row'>
             <button type='button' class='btn btn-success' id='install-button' onClick={this.handleInstall}>Add to Chrome</button>
-          </div>}
-          {pdfData && <div class='row'>
-            insert pdf here
           </div>}
         </div>
       </div>
@@ -81,6 +78,35 @@ class IndexPage extends Component {
     } catch (e) {
       console.log('not chrome');
     }
+
+    // check props
+    if (this.props.fileId) {
+      let loadingTask = pdfjsLib.getDocument(this.props.fileId);
+      loadingTask.promise.then(pdfDocument => {
+
+        // request the first page only
+        return pdfDocument.getPage(1).then(pdfPage => {
+
+          // Display page on the existing canvas with 100% scale.
+          var viewport = pdfPage.getViewport(1.0);
+          var canvas = document.getElementById('the-canvas');
+
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+          // canvas.width = 640;
+          // canvas.height = 480;
+
+          var ctx = canvas.getContext('2d');
+          var renderTask = pdfPage.render({
+            canvasContext: ctx,
+            viewport: viewport
+          });
+          return renderTask.promise;
+        });
+      }).catch(function (reason) {
+        console.error('Error: ' + reason);
+      });
+    }
   }
 
   downloadFile = (ev) => {
@@ -94,15 +120,18 @@ class IndexPage extends Component {
         let loadingTask = pdfjsLib.getDocument(pdfUrl);
         loadingTask.promise.then(pdfDocument => {
 
-          // Request a first page
+          // request the first page only
           return pdfDocument.getPage(1).then(pdfPage => {
+
             // Display page on the existing canvas with 100% scale.
             var viewport = pdfPage.getViewport(1.0);
             var canvas = document.getElementById('the-canvas');
-            // canvas.width = viewport.width;
-            // canvas.height = viewport.height;
-            canvas.width = 640;
-            canvas.height = 480;
+
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+            // canvas.width = 640;
+            // canvas.height = 480;
+
             var ctx = canvas.getContext('2d');
             var renderTask = pdfPage.render({
               canvasContext: ctx,
@@ -248,6 +277,7 @@ class IndexPage extends Component {
 
 const mapStateToProps = state => ({
   lang: state.ui.lang,
+  fileId: state.ui.fileId,
   locale: state.ui.locale,
   version: state.settings.version
 });

@@ -12,9 +12,9 @@ import AppRouterFactory from '../routes/global';
 import { STORAGE_KEY } from '../redux/types';
 
 export default () => {
-  var pdfUrl;
+  var stateParam;
   try {
-    pdfUrl = JSON.parse(decodeURIComponent(location.search.slice(7)));
+    stateParam = JSON.parse(decodeURIComponent(location.search.slice(7)));
   } catch (e) {
     console.log(e);
   }
@@ -40,13 +40,11 @@ export default () => {
 
   // store.dispatch({ type: 'UPDATE_APP_CACHE' });
 
-  if (pdfUrl) {
-    console.log(pdfUrl);
-    // update location
-    // window.location = '#viewpdf?fileid=' + pdfUrl.ids[0];
-
-    // update url
-    // store.dispatch({ type: UPDATE_URL, payload: window.location });
+  if (stateParam && stateParam.ids && stateParam.ids.length === 1) {
+    store.dispatch({
+      type: 'UPDATE_FILE_ID',
+      payload: stateParam.ids[0]
+    });
   }
 
   // create app router
