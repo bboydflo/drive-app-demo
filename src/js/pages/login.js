@@ -10,6 +10,7 @@ class IndexPage extends Component {
     files: [],
     initApi: false,
     signedIn: false,
+    isAppInstalled: false,
 
     // TODO: use global state instead
     error: {
@@ -24,7 +25,7 @@ class IndexPage extends Component {
     let brand = <p class='navbar-text'>DriveApiDemo <code> {version}</code></p>;
 
     let pageContentStyles = 'padding-bottom: 51px';
-    let { initApi, signedIn, files } = state;
+    let { initApi, signedIn, files, isAppInstalled } = state;
 
     return (
       <div class='index-view'>
@@ -45,9 +46,18 @@ class IndexPage extends Component {
               return <ul key={f.id} >name: {f.name} - id = {f.id} </ul>;
             })}
           </div>
+          {!isAppInstalled && <div class='row'>
+            <button type='button' class='btn btn-success' id='install-button' onClick={this.handleInstall}>Add to Chrome</button>
+          </div>}
         </div>
       </div>
     );
+  }
+
+  componentDidMount () {
+    if (chrome.app.isInstalled) {
+      this.setState({ isAppInstalled: true });
+    }
   }
 
   handleAuth = (ev) => {
@@ -56,6 +66,12 @@ class IndexPage extends Component {
 
   handleSignOut = (ev) => {
     gapi.auth2.getAuthInstance().signOut();
+  }
+
+  handleInstall = () => {
+    chrome.webstore.install(() => {
+      this.setState({ isAppInstalled: true });
+    });
   }
 
   updateSigninStatus = (isSignedIn) => {

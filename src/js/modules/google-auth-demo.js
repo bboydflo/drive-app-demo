@@ -76,17 +76,17 @@ export function getFiles(pageSize) {
 }
 
 /**
- * get single file by id 
- * nodejs example url: https://developers.google.com/drive/v3/web/manage-downloads 
+ * get single file by id
+ * nodejs example url: https://developers.google.com/drive/v3/web/manage-downloads
  */
 export function getFileById(fileId) {
   return gapi.client.drive.files.get({
     'fileId': fileId,
     'alt': 'media'
-  }).on('end', function () {
-      console.log('Done');
-    })
-    .on('error', function (err) {
-      console.log('Error during download', err);
-    })
+  }).on('end', function (data) {
+    console.log('Done');
+    console.log(data);
+  }).on('error', function (err) {
+    console.log('Error during download', err);
+  });
 }
