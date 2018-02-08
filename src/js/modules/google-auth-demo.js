@@ -107,7 +107,7 @@ export function getFileById(fileId) {
   };
 
   // example here: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-  return fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&&access_token=${accessToken}`, fetchOptions).then(response => {
+  return fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&access_token=${accessToken}`, fetchOptions).then(response => {
   // return fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&&access_token=${accessToken}`).then(response => {
     if (response.ok) {
       console.log(response);
