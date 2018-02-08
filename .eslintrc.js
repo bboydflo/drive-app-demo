@@ -15,6 +15,7 @@ module.exports = {
   globals: {
     $: true,
     gapi: true,
+    PDFJS: true,
     chrome: true,
     Modernizr: true,
     ActiveXObject: true
