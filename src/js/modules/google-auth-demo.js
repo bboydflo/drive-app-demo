@@ -78,6 +78,10 @@ export function getFiles(pageSize) {
   });
 }
 
+export function getAccessToken() {
+  return gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
+}
+
 /**
  * get single file by id
  * nodejs example url: https://developers.google.com/drive/v3/web/manage-downloads
