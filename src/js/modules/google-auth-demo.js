@@ -9,7 +9,7 @@ const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/r
 
 // Authorization scopes required by the API; multiple scopes can be
 // included, separated by spaces.
-const SCOPES = 'https://www.googleapis.com/auth/drive.metadata.readonly';
+const SCOPES = 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.metadata.readonly';
 
 export const handleClientLoad = (callback) => {
   gapi.load('client:auth2', callback);
@@ -73,4 +73,20 @@ export function getFiles(pageSize) {
     'pageSize': pageSize,
     'fields': 'nextPageToken, files(id, name)'
   });
+}
+
+/**
+ * get single file by id 
+ * nodejs example url: https://developers.google.com/drive/v3/web/manage-downloads 
+ */
+export function getFileById(fileId) {
+  return gapi.client.drive.files.get({
+    'fileId': fileId,
+    'alt': 'media'
+  }).on('end', function () {
+      console.log('Done');
+    })
+    .on('error', function (err) {
+      console.log('Error during download', err);
+    })
 }
