@@ -96,7 +96,7 @@ export function getFileById(fileId) {
   // });
 
   let myHeaders = new Headers();
-  myHeaders.append('Content-Type', 'application/pdf');
+  // myHeaders.append('Content-Type', 'application/pdf');
   myHeaders.append('Authorization', 'Bearer ' + accessToken);
 
   let fetchOptions = {
@@ -107,11 +107,12 @@ export function getFileById(fileId) {
   };
 
   // example here: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-  return fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, fetchOptions).then(function (response) {
+  return fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, fetchOptions).then(response => {
     if (response.ok) {
+      console.log(response);
       // console.log(response.type());
-      return response;
-      // return response.blob();
+      // return response;
+      return response.blob();
       // return response.arrayBuffer();
     }
     throw new Error('Network response was not ok.');
