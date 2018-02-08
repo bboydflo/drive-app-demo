@@ -69,7 +69,9 @@ class IndexPage extends Component {
   }
 
   handleInstall = () => {
-    chrome.webstore.install('hcamklaijpoffpejfbpedkmdimhmalnd', () => {
+
+    // https://chrome.google.com/webstore/detail/hcamklaijpoffpejfbpedkmdimhmalnd
+    chrome.webstore.install(() => {
       this.setState({ isAppInstalled: true });
     });
   }
