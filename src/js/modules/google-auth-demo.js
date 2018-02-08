@@ -122,6 +122,7 @@ export function getFileById(fileId) {
       throw new Error('Network response was not ok.');
     })
     .then(stream => new Response(stream))
-    .then(response => response.blob());
+    // .then(response => response.blob());
+    .then(response => new Blob([response], { type: 'application/pdf' }));
   // .then(blob => URL.createObjectURL(blob));
 }
