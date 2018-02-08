@@ -8,6 +8,7 @@ import pdfjsLib from 'pdfjs-dist';
 
 // Setting worker path to worker bundle.
 // pdfjsLib.PDFJS.workerSrc = '../../build/webpack/pdf.worker.bundle.js';
+pdfjsLib.PDFJS.workerSrc = '../../src/js/vendor/pdf.worker.js';
 
 class IndexPage extends Component {
 
