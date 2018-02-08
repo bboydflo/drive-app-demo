@@ -1,6 +1,5 @@
 import 'whatwg-fetch';
 import 'preact/devtools';
-// import 'pdfjs-dist';
 
 import Domready from 'domready';
 import { Promise as P } from 'promise-polyfill';
