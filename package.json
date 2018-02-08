@@ -82,6 +82,7 @@
     "redux-thunk": "^2.2.0",
     "set-value": "^2.0.0",
     "spin.js": "^2.3.2",
+    "stream-to-array": "^2.3.0",
     "toastr": "^2.1.2",
     "underscore": "^1.8.3",
     "unset-value": "^1.0.0",

@@ -1,3 +1,5 @@
+import toArray from 'stream-to-array';
+
 // tutorial here: https://developers.google.com/drive/v3/web/quickstart/js
 
 // Client ID and API key from the Developer Console
@@ -112,7 +114,8 @@ export function getFileById(fileId) {
     if (response.ok) {
       console.log(response);
       // console.log(response.type());
-      return response;
+      return toArray(response.body());
+      // return response;
       // return response.blob();
       // return new Blob([response], { type: 'application/pdf' });
       // return response.arrayBuffer();
