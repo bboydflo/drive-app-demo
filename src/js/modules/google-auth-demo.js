@@ -9,7 +9,8 @@ const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/r
 
 // Authorization scopes required by the API; multiple scopes can be
 // included, separated by spaces.
-const SCOPES = 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.metadata.readonly';
+// const SCOPES = 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.metadata.readonly';
+const SCOPES = 'https://www.googleapis.com/auth/drive';
 
 export const handleClientLoad = (callback) => {
   gapi.load('client:auth2', callback);
@@ -80,16 +81,51 @@ export function getFiles(pageSize) {
  * nodejs example url: https://developers.google.com/drive/v3/web/manage-downloads
  */
 export function getFileById(fileId) {
-  return gapi.client.drive.files.get(
-    `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`
-  ).then(function (data) {
+
+  // or this: gapi.auth.getToken().access_token;
+  const accessToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
+
+  // return gapi.client.drive.files.get(
+  //   `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`
+  // ).then(function (data) {
+
+  // ?access_token = ' + encodeURIComponent(oauthToken))
   // return gapi.client.drive.files.get({
-  //   'fileId': fileId,
-  //   'alt': 'media'
-  // }).then(function (data) {
-    console.log('Done');
-    console.log(data);
-  }).catch(function (err) {
-    console.log('Error during download', err);
+  //   fileId: fileId,
+  //   alt: 'media'
+  // });
+
+  let myHeaders = new Headers();
+  myHeaders.append('Content-Type', 'application/pdf');
+  myHeaders.append('Authorization', 'Bearer ' + accessToken);
+
+  let fetchOptions = {
+    mode: 'cors',
+    method: 'GET',
+    headers: myHeaders
+    // cache: 'default'
+  };
+
+  // example here: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+  return fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, fetchOptions).then(function (response) {
+    if (response.ok) {
+      console.log(response);
+      // return response.blob();
+      return response.arrayBuffer();
+    }
+    throw new Error('Network response was not ok.');
   });
+
+  // var xhr = new XMLHttpRequest();
+  // xhr.open("GET", "https://www.googleapis.com/drive/v3/files/" + fileId + '?alt=media', true);
+  // xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+  // xhr.responseType = 'arraybuffer'
+  // xhr.onload = function () {
+  //   //base64ArrayBuffer from https://gist.github.com/jonleighton/958841
+  //   var base64 = 'data:image/png;base64,' + base64ArrayBuffer(xhr.response);
+
+  //   //do something with the base64 image here
+
+  // }
+  // xhr.send();
 }

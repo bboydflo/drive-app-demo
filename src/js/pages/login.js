@@ -75,9 +75,14 @@ class IndexPage extends Component {
 
   downloadFile = (ev) => {
     if (this.state.signedIn) {
-      gapiDemo.getFileById(ev.currentTarget.dataset.id).then(data => {
-        this.setState({ pdfData: data });
-      });
+      gapiDemo
+        .getFileById(ev.currentTarget.dataset.id)
+        .then(pdfData => {
+          this.setState({ pdfData });
+        })
+        .catch(err => {
+          console.log('Error during download', err);
+        });
     }
   }
 
