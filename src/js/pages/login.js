@@ -4,13 +4,13 @@ import * as gapiDemo from '../modules/google-auth-demo';
 
 import Navbar from '../components/navbar';
 
-import 'pdfjs-dist';
+// import 'pdfjs-dist';
 
-// import pdfjsLib from 'pdfjs-dist';
+import pdfjsLib from 'pdfjs-dist';
 
 // Setting worker path to worker bundle.
 // pdfjsLib.PDFJS.workerSrc = '../../build/webpack/pdf.worker.bundle.js';
-// pdfjsLib.PDFJS.workerSrc = '../../src/js/vendor/pdf.worker.js';
+pdfjsLib.PDFJS.workerSrc = './src/js/vendor/pdf.worker.js';
 
 class IndexPage extends Component {
 
@@ -93,14 +93,14 @@ class IndexPage extends Component {
           // log
           console.log(pdfData);
 
-          // Using DocumentInitParameters object to load binary data.
+          /* // Using DocumentInitParameters object to load binary data.
           var loadingTask = PDFJS.getDocument({ data: pdfData });
-          loadingTask.promise.then(function (pdf) {
+          loadingTask.promise.then(pdf => {
             console.log('PDF loaded');
 
             // Fetch the first page
             var pageNumber = 1;
-            pdf.getPage(pageNumber).then(function (page) {
+            pdf.getPage(pageNumber).then(page => {
               console.log('Page loaded');
 
               var scale = 1.5;
@@ -109,8 +109,8 @@ class IndexPage extends Component {
               // Prepare canvas using PDF page dimensions
               var canvas = document.getElementById('the-canvas');
               var context = canvas.getContext('2d');
-              /* canvas.height = viewport.height;
-              canvas.width = viewport.width; */
+              // canvas.height = viewport.height;
+              // canvas.width = viewport.width;
               canvas.height = 800;
               canvas.width = 600;
 
@@ -120,16 +120,16 @@ class IndexPage extends Component {
                 viewport: viewport
               };
               var renderTask = page.render(renderContext);
-              renderTask.then(function () {
+              renderTask.then(() => {
                 console.log('Page rendered');
               });
             });
-          }, function (reason) {
+          }, reason => {
             // PDF loading error
             console.error(reason);
-          });
+          }); */
 
-          /* // Loading a document.
+          // Loading a document.
           var loadingTask = pdfjsLib.getDocument({ data: pdfData });
           loadingTask.promise.then(pdfDocument => {
 
@@ -151,7 +151,7 @@ class IndexPage extends Component {
             });
           }).catch(function (reason) {
             console.error('Error: ' + reason);
-          }); */
+          });
         })
         .catch(err => {
           console.log('Error during download', err);
