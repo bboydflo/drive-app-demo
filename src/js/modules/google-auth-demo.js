@@ -1,4 +1,4 @@
-import toArray from 'stream-to-array';
+// import toArray from 'stream-to-array';
 
 // tutorial here: https://developers.google.com/drive/v3/web/quickstart/js
 
@@ -113,26 +113,30 @@ export function getFileById(fileId) {
   return fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&&access_token=${accessToken}`).then(response => {
     if (response.ok) {
       console.log(response);
-      // console.log(response.type());
-      return toArray(response.body);
-      // return response;
-      // return response.blob();
-      // return new Blob([response], { type: 'application/pdf' });
-      // return response.arrayBuffer();
+      // response.body
+      // example here: https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams
+      const reader = response.body.getReader();
+      return new ReadableStream({
+        start(controller) {
+          return pump();
+          function pump() {
+            return reader.read().then(({ done, value }) => {
+              // When no more data needs to be consumed, close the stream
+              if (done) {
+                controller.close();
+                return;
+              }
+              // Enqueue the next data chunk into our target stream
+              controller.enqueue(value);
+              return pump();
+            });
+          }
+        }
+      })
+        .then(stream => new Response(stream))
+        .then(response => response.blob())
+        .then(blob => URL.createObjectURL(blob));
     }
     throw new Error('Network response was not ok.');
   });
-
-  // var xhr = new XMLHttpRequest();
-  // xhr.open("GET", "https://www.googleapis.com/drive/v3/files/" + fileId + '?alt=media', true);
-  // xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-  // xhr.responseType = 'arraybuffer'
-  // xhr.onload = function () {
-  //   // base64ArrayBuffer from https://gist.github.com/jonleighton/958841
-  //   var base64 = 'data:image/png;base64,' + base64ArrayBuffer(xhr.response);
-
-  //   //do something with the base64 image here
-
-  // }
-  // xhr.send();
 }
