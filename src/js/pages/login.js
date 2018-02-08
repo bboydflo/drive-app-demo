@@ -71,7 +71,7 @@ class IndexPage extends Component {
   }
 
   componentDidMount () {
-    if (chrome.app.isInstalled) {
+    if (chrome && chrome.app.isInstalled) {
       this.setState({ isAppInstalled: true });
     }
   }
@@ -160,11 +160,15 @@ class IndexPage extends Component {
 
   handleInstall = () => {
     // https://chrome.google.com/webstore/detail/drive-api-demo/hcamklaijpoffpejfbpedkmdimhmalnd
-    chrome.webstore.install('https://chrome.google.com/webstore/detail/hcamklaijpoffpejfbpedkmdimhmalnd', () => {
+    if (chrome) {
+      chrome.webstore.install('https://chrome.google.com/webstore/detail/hcamklaijpoffpejfbpedkmdimhmalnd', () => {
+        this.setState({ isAppInstalled: true });
+      }, err => {
+        console.error(err);
+      });
+    } else {
       this.setState({ isAppInstalled: true });
-    }, err => {
-      console.error(err);
-    });
+    }
   }
 
   updateSigninStatus = (isSignedIn) => {
