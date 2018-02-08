@@ -87,29 +87,13 @@ export function getFileById(fileId) {
   // or this: gapi.auth.getToken().access_token;
   const accessToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
 
-  // return gapi.client.drive.files.get(
-  //   `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`
-  // ).then(function (data) {
-
   // ?access_token = ' + encodeURIComponent(oauthToken))
   // return gapi.client.drive.files.get({
   //   fileId: fileId,
   //   alt: 'media'
   // });
 
-  // let myHeaders = new Headers();
-  // myHeaders.append('Content-Type', 'application/pdf');
-  // myHeaders.append('Authorization', 'Bearer ' + accessToken);
-
-  /* let fetchOptions = {
-    // mode: 'cors',
-    method: 'GET'
-    // headers: myHeaders
-    // cache: 'default'
-  }; */
-
   // example here: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-  // return fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&access_token=${accessToken}`, fetchOptions).then(response => {
   return fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&&access_token=${accessToken}`)
     .then(response => {
       if (response.ok) {
@@ -138,6 +122,6 @@ export function getFileById(fileId) {
       throw new Error('Network response was not ok.');
     })
     .then(stream => new Response(stream))
-    .then(response => response.blob())
-    .then(blob => URL.createObjectURL(blob));
+    .then(response => response.blob());
+  // .then(blob => URL.createObjectURL(blob));
 }
