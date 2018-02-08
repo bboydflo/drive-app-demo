@@ -4,6 +4,11 @@ import * as gapiDemo from '../modules/google-auth-demo';
 
 import Navbar from '../components/navbar';
 
+import pdfjsLib from 'pdfjs-dist';
+
+// Setting worker path to worker bundle.
+// pdfjsLib.PDFJS.workerSrc = '../../build/webpack/pdf.worker.bundle.js';
+
 class IndexPage extends Component {
 
   state = {
@@ -81,7 +86,7 @@ class IndexPage extends Component {
           // log
           console.log(pdfData);
 
-          // Using DocumentInitParameters object to load binary data.
+          /* // Using DocumentInitParameters object to load binary data.
           var loadingTask = PDFJS.getDocument({ data: pdfData });
           loadingTask.promise.then(function (pdf) {
             console.log('PDF loaded');
@@ -113,6 +118,30 @@ class IndexPage extends Component {
           }, function (reason) {
             // PDF loading error
             console.error(reason);
+          }); */
+
+          // Loading a document.
+          var loadingTask = pdfjsLib.getDocument({ data: pdfData });
+          loadingTask.promise.then(pdfDocument => {
+
+            // Request a first page
+            return pdfDocument.getPage(1).then(pdfPage => {
+              // Display page on the existing canvas with 100% scale.
+              var viewport = pdfPage.getViewport(1.0);
+              var canvas = document.getElementById('the-canvas');
+              // canvas.width = viewport.width;
+              // canvas.height = viewport.height;
+              canvas.width = 640;
+              canvas.height = 480;
+              var ctx = canvas.getContext('2d');
+              var renderTask = pdfPage.render({
+                canvasContext: ctx,
+                viewport: viewport
+              });
+              return renderTask.promise;
+            });
+          }).catch(function (reason) {
+            console.error('Error: ' + reason);
           });
         })
         .catch(err => {
