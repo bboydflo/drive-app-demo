@@ -9,6 +9,7 @@ class IndexPage extends Component {
   state = {
     files: [],
     initApi: false,
+    pdfData: null,
     signedIn: false,
     isAppInstalled: false,
 
@@ -25,7 +26,7 @@ class IndexPage extends Component {
     let brand = <p class='navbar-text'>DriveApiDemo <code> {version}</code></p>;
 
     let pageContentStyles = 'padding-bottom: 51px';
-    let { initApi, signedIn, files, isAppInstalled } = state;
+    let { initApi, signedIn, files, isAppInstalled, pdfData } = state;
 
     return (
       <div class='index-view'>
@@ -42,12 +43,23 @@ class IndexPage extends Component {
             <button type='button' class='btn btn-default' id='signout-button' style='display: none;' onClick={this.handleSignOut}>Sign Out</button>
           </div>
           <div class='row'>
-            {files.length && files.map((f, idx) => {
-              return <ul key={f.id} >name: {f.name} - id = {f.id} </ul>;
-            })}
+            <ul class='pdf-files-list'>
+              {files.length && files.map((f, idx) => {
+                return (
+                  <li key={f.id}>
+                    <span>name: {f.name} - id = {f.id}</span> <button type='button' class='btn btn-info' onClick={this.downloadFile(f.id)}>Download PDF File</button>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
           {!isAppInstalled && <div class='row'>
             <button type='button' class='btn btn-success' id='install-button' onClick={this.handleInstall}>Add to Chrome</button>
+          </div>}
+          {pdfData && <div class='row'>
+            <object data={pdfData} type='application/pdf' width='100%' height='100%'>
+              <p>It appears you don't have a PDF plugin for this browser.</p>
+            </object>
           </div>}
         </div>
       </div>
@@ -60,6 +72,14 @@ class IndexPage extends Component {
     }
   }
 
+  downloadFile = (fileId) => {
+    if (this.setState.isSignedIn) {
+      gapiDemo.getFileById(fileId).then(data => {
+        this.setState({ pdfData: data });
+      });
+    }
+  }
+
   handleAuth = (ev) => {
     gapi.auth2.getAuthInstance().signIn();
   }
@@ -69,6 +89,7 @@ class IndexPage extends Component {
   }
 
   handleInstall = () => {
+    // https://chrome.google.com/webstore/detail/drive-api-demo/hcamklaijpoffpejfbpedkmdimhmalnd
     chrome.webstore.install('https://chrome.google.com/webstore/detail/hcamklaijpoffpejfbpedkmdimhmalnd', () => {
       this.setState({ isAppInstalled: true });
     }, err => {
