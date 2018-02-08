@@ -114,7 +114,7 @@ export function getFileById(fileId) {
     if (response.ok) {
       console.log(response);
       // console.log(response.type());
-      return toArray(response.body());
+      return toArray(response.body);
       // return response;
       // return response.blob();
       // return new Blob([response], { type: 'application/pdf' });
