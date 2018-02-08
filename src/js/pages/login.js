@@ -74,7 +74,7 @@ class IndexPage extends Component {
   }
 
   downloadFile = (ev) => {
-    if (this.state.isSignedIn) {
+    if (this.state.signedIn) {
       gapiDemo.getFileById(ev.currentTarget.dataset.id).then(data => {
         this.setState({ pdfData: data });
       });
