@@ -47,7 +47,8 @@ class IndexPage extends Component {
               {files.length && files.map((f, idx) => {
                 return (
                   <li key={f.id}>
-                    <span>name: {f.name} - id = {f.id}</span> <button type='button' class='btn btn-info' onClick={this.downloadFile(f.id)}>Download PDF File</button>
+                    <span>name: {f.name} - id = {f.id}</span>
+                    <button type='button' class='btn btn-info' data-id={f.id} onClick={this.downloadFile}>Download PDF File</button>
                   </li>
                 );
               })}
@@ -72,9 +73,9 @@ class IndexPage extends Component {
     }
   }
 
-  downloadFile = (fileId) => {
+  downloadFile = (ev) => {
     if (this.setState.isSignedIn) {
-      gapiDemo.getFileById(fileId).then(data => {
+      gapiDemo.getFileById(ev.currentTarget.dataset.id).then(data => {
         this.setState({ pdfData: data });
       });
     }
