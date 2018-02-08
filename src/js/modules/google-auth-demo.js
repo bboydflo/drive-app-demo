@@ -80,13 +80,15 @@ export function getFiles(pageSize) {
  * nodejs example url: https://developers.google.com/drive/v3/web/manage-downloads
  */
 export function getFileById(fileId) {
+
+  // `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`
   return gapi.client.drive.files.get({
     'fileId': fileId,
     'alt': 'media'
-  }).on('end', function (data) {
+  }).then(function (data) {
     console.log('Done');
     console.log(data);
-  }).on('error', function (err) {
+  }).catch(function (err) {
     console.log('Error during download', err);
   });
 }
