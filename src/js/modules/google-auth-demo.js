@@ -112,7 +112,8 @@ export function getFileById(fileId) {
       console.log(response);
       // console.log(response.type());
       // return response;
-      return response.blob();
+      // return response.blob();
+      return new Blob([response], { type: 'application/pdf' });
       // return response.arrayBuffer();
     }
     throw new Error('Network response was not ok.');
@@ -123,7 +124,7 @@ export function getFileById(fileId) {
   // xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
   // xhr.responseType = 'arraybuffer'
   // xhr.onload = function () {
-  //   //base64ArrayBuffer from https://gist.github.com/jonleighton/958841
+  //   // base64ArrayBuffer from https://gist.github.com/jonleighton/958841
   //   var base64 = 'data:image/png;base64,' + base64ArrayBuffer(xhr.response);
 
   //   //do something with the base64 image here
