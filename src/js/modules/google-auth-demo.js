@@ -109,7 +109,7 @@ export function getFileById(fileId) {
   // example here: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
   return fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, fetchOptions).then(function (response) {
     if (response.ok) {
-      console.log(response.type());
+      // console.log(response.type());
       return response.body();
       // return response.blob();
       // return response.arrayBuffer();
