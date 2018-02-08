@@ -110,7 +110,8 @@ export function getFileById(fileId) {
   return fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, fetchOptions).then(function (response) {
     if (response.ok) {
       console.log(response.type());
-      return response.blob();
+      return response.body();
+      // return response.blob();
       // return response.arrayBuffer();
     }
     throw new Error('Network response was not ok.');
