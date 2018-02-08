@@ -42,7 +42,7 @@ export default () => {
   if (pdfUrl) {
     // console.log(pdfUrl);
     // update location
-    window.location = 'viewpdf?fileid=' + pdfUrl.ids[0];
+    window.location = '#viewpdf?fileid=' + pdfUrl.ids[0];
 
     // update url
     store.dispatch({ type: UPDATE_URL, payload: window.location });
