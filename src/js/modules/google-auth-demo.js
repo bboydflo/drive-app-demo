@@ -96,18 +96,19 @@ export function getFileById(fileId) {
   // });
 
   let myHeaders = new Headers();
-  // myHeaders.append('Content-Type', 'application/pdf');
-  myHeaders.append('Authorization', 'Bearer ' + accessToken);
+  myHeaders.append('Content-Type', 'application/pdf');
+  // myHeaders.append('Authorization', 'Bearer ' + accessToken);
 
   let fetchOptions = {
-    mode: 'cors',
+    // mode: 'cors',
     method: 'GET',
     headers: myHeaders
     // cache: 'default'
   };
 
   // example here: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-  return fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, fetchOptions).then(response => {
+  return fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&&access_token=${accessToken}`, fetchOptions).then(response => {
+  // return fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&&access_token=${accessToken}`).then(response => {
     if (response.ok) {
       console.log(response);
       // console.log(response.type());
