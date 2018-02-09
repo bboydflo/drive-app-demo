@@ -78,6 +78,10 @@ export function getFiles(pageSize) {
   });
 }
 
+export function getFolderStructure() {
+  return gapi.client.drive.files.list({ q: 'appDataFolder in parents' });
+}
+
 export function getAccessToken() {
   return gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
 }
