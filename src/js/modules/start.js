@@ -42,6 +42,7 @@ export default () => {
   // create app router
   const AppRouter = AppRouterFactory(_, Backbone);
 
+  // TODO: google api loading should be synchronous
   gapiDemo.handleClientLoad(() => {
     gapiDemo
       .initClient()
