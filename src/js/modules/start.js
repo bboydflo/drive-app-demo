@@ -2,6 +2,8 @@ import _ from 'underscore';
 import { h, render } from 'preact';
 import { Provider } from 'preact-redux';
 
+import * as gapiDemo from '../modules/google-auth-demo';
+
 // import App from '../components/app';
 import App from '../pages/app';
 import Backbone from '../vendor/my-backbone-router';
@@ -9,7 +11,7 @@ import configureStore from '../redux/store';
 import AppRouterFactory from '../routes/global';
 
 // import { STORAGE_KEY, UPDATE_URL } from '../redux/types';
-import { STORAGE_KEY } from '../redux/types';
+import { STORAGE_KEY, SIGNED_IN } from '../redux/types';
 
 export default () => {
   var stateParam;
@@ -35,6 +37,15 @@ export default () => {
 
   let store = configureStore(STORAGE_KEY, initialState, Backbone);
 
+  // isChrome support
+  try {
+    if (chrome && chrome.app.isInstalled) {
+      store.dispatch({ type: 'IS_APP_INSTALLED' });
+    }
+  } catch (e) {
+    console.log('not chrome');
+  }
+
   // TODO: check backup.SmartPigs local storage key and
   // dispatch actions to update the store with backup values
 
@@ -50,12 +61,31 @@ export default () => {
   // create app router
   const AppRouter = AppRouterFactory(_, Backbone);
 
-  render(
-    <Provider store={store}>
-      <App Router={AppRouter} />
-    </Provider>,
-    document.getElementById('app')
-  );
+  gapiDemo.handleClientLoad(() => {
+    gapiDemo
+      .initClient()
+      .then(() => {
+        store.dispatch({
+          type: SIGNED_IN,
+          payload: gapi.auth2.getAuthInstance().isSignedIn.get()
+        });
 
-  store.dispatch({ type: 'HIDE_SPINNER' });
+        // listen for sign in changes
+        gapiDemo.listenForSignInChanges(() => {
+          store.dispatch({
+            type: SIGNED_IN,
+            payload: gapi.auth2.getAuthInstance().isSignedIn.get()
+          });
+        });
+
+        render(
+          <Provider store={store}>
+            <App Router={AppRouter} />
+          </Provider>,
+          document.getElementById('app')
+        );
+
+        store.dispatch({ type: 'HIDE_SPINNER' });
+      });
+  });
 };

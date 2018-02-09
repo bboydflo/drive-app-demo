@@ -16,10 +16,7 @@ class IndexPage extends Component {
 
   state = {
     files: [],
-    initApi: false,
     pdfData: null,
-    signedIn: false,
-    isAppInstalled: false,
 
     // TODO: use global state instead
     error: {
@@ -34,7 +31,8 @@ class IndexPage extends Component {
     let brand = <p class='navbar-text'>DriveApiDemo <code> {version}</code></p>;
 
     let pageContentStyles = 'padding-bottom: 51px';
-    let { initApi, signedIn, files, isAppInstalled, pdfData } = state;
+    let { files } = state;
+    let { signedIn, isAppInstalled } = props;
 
     return (
       <div class='index-view'>
@@ -45,8 +43,6 @@ class IndexPage extends Component {
         />
         <div id='page-content' class='container' style={pageContentStyles}>
           <div class='row'>
-            <div>Hello world!</div>
-            {!initApi && <button type='button' class='btn btn-default' onClick={this.initApi}>Init Google API</button>}
             <button type='button' class='btn btn-default' id='authorize-button' style={signedIn ? 'display: none;' : 'display: block;'} onClick={this.handleAuth}>Sign in</button>
             <button type='button' class='btn btn-default' id='signout-button' style='display: none;' onClick={this.handleSignOut}>Sign Out</button>
           </div>
@@ -71,17 +67,10 @@ class IndexPage extends Component {
   }
 
   componentDidMount () {
-    try {
-      if (chrome && chrome.app.isInstalled) {
-        this.setState({ isAppInstalled: true });
-      }
-    } catch (e) {
-      console.log('not chrome');
-    }
-
-    // check props
-    if (this.props.fileId) {
-      let loadingTask = pdfjsLib.getDocument(this.props.fileId);
+    if (this.props.signedIn && this.props.fileId) {
+      let accessToken = gapiDemo.getAccessToken();
+      let pdfUrl = `https://www.googleapis.com/drive/v3/files/${this.props.fileId}?alt=media&&access_token=${accessToken}`;
+      let loadingTask = pdfjsLib.getDocument(pdfUrl);
       loadingTask.promise.then(pdfDocument => {
 
         // request the first page only
@@ -110,7 +99,7 @@ class IndexPage extends Component {
   }
 
   downloadFile = (ev) => {
-    if (this.state.signedIn) {
+    if (this.props.signedIn) {
       let fileId = ev.currentTarget.dataset.id;
       let accessToken = gapiDemo.getAccessToken();
       let pdfUrl = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&&access_token=${accessToken}`;
@@ -231,21 +220,18 @@ class IndexPage extends Component {
     // https://chrome.google.com/webstore/detail/drive-api-demo/hcamklaijpoffpejfbpedkmdimhmalnd
     if (chrome) {
       chrome.webstore.install('https://chrome.google.com/webstore/detail/hcamklaijpoffpejfbpedkmdimhmalnd', () => {
-        this.setState({ isAppInstalled: true });
+        // this.setState({ isAppInstalled: true });
+        console.log('TODO: dispatch IS_APP_INSTALLED action');
       }, err => {
         console.error(err);
       });
     } else {
-      this.setState({ isAppInstalled: true });
+      // this.setState({ isAppInstalled: true });
+      console.log('app is installed already');
     }
   }
 
-  updateSigninStatus = (isSignedIn) => {
-    this.setState({
-      signedIn: isSignedIn
-    });
-  }
-
+  /* // not used
   getFiles() {
     return gapiDemo
       .getFiles(10)
@@ -255,31 +241,16 @@ class IndexPage extends Component {
           files: response.result.files
         });
       });
-  }
-
-  initApi = () => {
-    gapiDemo.handleClientLoad(() => {
-      gapiDemo
-        .initClient()
-        .then(() => {
-          let isSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
-          this.updateSigninStatus(isSignedIn);
-
-          if (isSignedIn) {
-            this.getFiles();
-          }
-
-          this.setState({ initApi: true });
-        });
-    });
-  }
+  } */
 };
 
 const mapStateToProps = state => ({
   lang: state.ui.lang,
   fileId: state.ui.fileId,
   locale: state.ui.locale,
-  version: state.settings.version
+  signedIn: state.ui.signedIn,
+  version: state.settings.version,
+  isAppInstalled: state.ui.isAppInstalled
 });
 
 export default connect(mapStateToProps, null)(IndexPage);

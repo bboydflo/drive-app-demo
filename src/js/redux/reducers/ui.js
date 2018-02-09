@@ -1,10 +1,12 @@
 import browserLanguage from 'get-browser-language';
 
 import {
+  SIGNED_IN,
   UPDATE_URL,
   UPDATE_LANG,
   UPDATE_FILE_ID,
   UPDATE_SPINNER,
+  IS_APP_INSTALLED,
   UPDATE_MENU_TYPE,
   UPDATE_CONNECTION,
   UPDATE_DATE_FORMAT
@@ -19,6 +21,7 @@ const initialUiState = {
   fadeOut: 10,
   spinner: true,
   menuType: 0,
+  signedIn: false,
   connection: 1
 };
 
@@ -26,6 +29,10 @@ export default (state = initialUiState, action) => {
   switch (action.type) {
     case UPDATE_FILE_ID:
       return Object.assign({}, state, { fileId: action.payload });
+    case IS_APP_INSTALLED:
+      return Object.assign({}, state, { isAppInstalled: true });
+    case SIGNED_IN:
+      return Object.assign({}, state, { signedIn: true });
     case UPDATE_LANG:
       return Object.assign({}, state, { lang: action.payload });
     case UPDATE_DATE_FORMAT:
