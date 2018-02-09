@@ -5,6 +5,7 @@ import * as gapiDemo from '../modules/google-auth-demo';
 import Navbar from '../components/navbar';
 
 // import 'pdfjs-dist';
+import '../vendor/gapi';
 
 import pdfjsLib from 'pdfjs-dist';
 
