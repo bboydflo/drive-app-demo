@@ -12,7 +12,8 @@ const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/r
 // Authorization scopes required by the API; multiple scopes can be
 // included, separated by spaces.
 // const SCOPES = 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.metadata.readonly';
-const SCOPES = 'https://www.googleapis.com/auth/drive';
+// const SCOPES = 'https://www.googleapis.com/auth/drive';
+const SCOPES = 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.appfolder';
 
 export const handleClientLoad = (callback) => {
   gapi.load('client:auth2', callback);
@@ -79,7 +80,9 @@ export function getFiles(pageSize) {
 }
 
 export function getFolderStructure() {
-  return gapi.client.drive.files.list({ q: 'appDataFolder in parents' });
+  // gapi.client.drive.files.list({ q: "'appDataFolder' in parents" }).then(resp => console.log(resp));
+  // gapi.client.drive.files.list({ q: "mimeType = 'application/vnd.google-apps.folder'", spaces: 'drive' }).then(resp => console.log(resp));
+  return gapi.client.drive.files.list({ q: '"appDataFolder" in parents' });
 }
 
 export function getAccessToken() {

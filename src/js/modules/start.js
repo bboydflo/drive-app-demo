@@ -99,7 +99,7 @@ export default () => {
 
         if (fileId) {
           let accessToken = gapiDemo.getAccessToken();
-          let pdfUrl = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&&access_token=${accessToken}`;
+          let pdfUrl = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&access_token=${accessToken}`;
           let loadingTask = pdfjsLib.getDocument(pdfUrl);
 
           // TODO: dispatch action with pdfDocument as payload
