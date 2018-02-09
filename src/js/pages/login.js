@@ -55,7 +55,8 @@ class IndexPage extends Component {
   }
 
   componentDidMount () {
-    if (this.props.signedIn && this.props.fileId) {
+    let demo = false;
+    if (this.props.signedIn && this.props.fileId && demo) {
       let accessToken = gapiDemo.getAccessToken();
       let pdfUrl = `https://www.googleapis.com/drive/v3/files/${this.props.fileId}?alt=media&&access_token=${accessToken}`;
       let loadingTask = pdfjsLib.getDocument(pdfUrl);
