@@ -27,6 +27,15 @@ class IndexPage extends Component {
     let pageContentStyles = 'padding-bottom: 51px';
     let { signedIn, isAppInstalled } = props;
 
+    let isChrome = false;
+    try {
+      if (chrome) {
+        isChrome = true;
+      }
+    } catch (e) {
+      console.log('not chrome');
+    }
+
     return (
       <div class='index-view'>
         <Navbar
@@ -39,7 +48,7 @@ class IndexPage extends Component {
             <button type='button' class='btn btn-default' id='authorize-button' style={signedIn ? 'display: none;' : 'display: block;'} onClick={this.handleAuth}>Sign in</button>
             <button type='button' class='btn btn-default' id='signout-button' style={signedIn ? 'display: block;' : 'display: none;'} onClick={this.handleSignOut}>Sign Out</button>
           </div>
-          {chrome && !isAppInstalled && <div class='row'>
+          {isChrome && !isAppInstalled && <div class='row'>
             <button type='button' class='btn btn-success' id='install-button' onClick={this.handleInstall}>Add to Chrome</button>
           </div>}
         </div>
