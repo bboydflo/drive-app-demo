@@ -33,7 +33,7 @@ export default (state = initialUiState, action) => {
     case IS_APP_INSTALLED:
       return Object.assign({}, state, { isAppInstalled: true });
     case SIGNED_IN:
-      return Object.assign({}, state, { signedIn: true });
+      return Object.assign({}, state, { signedIn: action.payload });
     case UPDATE_LANG:
       return Object.assign({}, state, { lang: action.payload });
     case UPDATE_DATE_FORMAT:
