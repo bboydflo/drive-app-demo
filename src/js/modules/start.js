@@ -14,13 +14,6 @@ import AppRouterFactory from '../routes/global';
 import { STORAGE_KEY, SIGNED_IN } from '../redux/types';
 
 export default () => {
-  var stateParam;
-  try {
-    stateParam = JSON.parse(decodeURIComponent(location.search.slice(7)));
-  } catch (e) {
-    console.log(e);
-  }
-
   let initialState;
   try {
 
@@ -37,25 +30,13 @@ export default () => {
 
   let store = configureStore(STORAGE_KEY, initialState, Backbone);
 
-  // isChrome support
+  // inline app installation support
   try {
     if (chrome && chrome.app.isInstalled) {
       store.dispatch({ type: 'IS_APP_INSTALLED' });
     }
   } catch (e) {
-    console.log('not chrome');
-  }
-
-  // TODO: check backup.SmartPigs local storage key and
-  // dispatch actions to update the store with backup values
-
-  // store.dispatch({ type: 'UPDATE_APP_CACHE' });
-
-  if (stateParam && stateParam.ids && stateParam.ids.length === 1) {
-    store.dispatch({
-      type: 'UPDATE_FILE_ID',
-      payload: stateParam.ids[0]
-    });
+    store.dispatch({ type: 'IS_APP_INSTALLED' });
   }
 
   // create app router
@@ -65,6 +46,7 @@ export default () => {
     gapiDemo
       .initClient()
       .then(() => {
+        let signedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
         store.dispatch({
           type: SIGNED_IN,
           payload: gapi.auth2.getAuthInstance().isSignedIn.get()
@@ -77,6 +59,25 @@ export default () => {
             payload: gapi.auth2.getAuthInstance().isSignedIn.get()
           });
         });
+
+        try {
+          let fileId;
+          let stateParam = JSON.parse(decodeURIComponent(location.search.slice(7)));
+          if (stateParam && stateParam.ids && stateParam.ids.length === 1) {
+            fileId = stateParam.ids[0];
+            store.dispatch({
+              type: 'UPDATE_FILE_ID',
+              payload: fileId
+            });
+
+            // file id but not signed in
+            if (!signedIn) {
+              gapiDemo.signIn();
+            }
+          }
+        } catch (e) {
+          console.log(e);
+        }
 
         render(
           <Provider store={store}>

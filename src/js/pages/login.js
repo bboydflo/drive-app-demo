@@ -31,7 +31,6 @@ class IndexPage extends Component {
     let brand = <p class='navbar-text'>DriveApiDemo <code> {version}</code></p>;
 
     let pageContentStyles = 'padding-bottom: 51px';
-    let { files } = state;
     let { signedIn, isAppInstalled } = props;
 
     return (
@@ -44,21 +43,9 @@ class IndexPage extends Component {
         <div id='page-content' class='container' style={pageContentStyles}>
           <div class='row'>
             <button type='button' class='btn btn-default' id='authorize-button' style={signedIn ? 'display: none;' : 'display: block;'} onClick={this.handleAuth}>Sign in</button>
-            <button type='button' class='btn btn-default' id='signout-button' style='display: none;' onClick={this.handleSignOut}>Sign Out</button>
+            <button type='button' class='btn btn-default' id='signout-button' style={signedIn ? 'display: block;' : 'display: none;'} onClick={this.handleSignOut}>Sign Out</button>
           </div>
-          {false && <div class='row'>
-            <ul class='pdf-files-list'>
-              {files.length && files.map((f, idx) => {
-                return (
-                  <li key={f.id}>
-                    <span>name: {f.name} - id = {f.id}</span>
-                    <button type='button' class='btn btn-info' data-id={f.id} onClick={this.downloadFile}>Download PDF File</button>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>}
-          {!isAppInstalled && <div class='row'>
+          {chrome && !isAppInstalled && <div class='row'>
             <button type='button' class='btn btn-success' id='install-button' onClick={this.handleInstall}>Add to Chrome</button>
           </div>}
         </div>
@@ -98,116 +85,6 @@ class IndexPage extends Component {
     }
   }
 
-  downloadFile = (ev) => {
-    if (this.props.signedIn) {
-      let fileId = ev.currentTarget.dataset.id;
-      let accessToken = gapiDemo.getAccessToken();
-      let pdfUrl = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&&access_token=${accessToken}`;
-
-      let demo = true;
-      if (demo) {
-        let loadingTask = pdfjsLib.getDocument(pdfUrl);
-        loadingTask.promise.then(pdfDocument => {
-
-          // request the first page only
-          return pdfDocument.getPage(1).then(pdfPage => {
-
-            // Display page on the existing canvas with 100% scale.
-            var viewport = pdfPage.getViewport(1.0);
-            var canvas = document.getElementById('the-canvas');
-
-            canvas.width = viewport.width;
-            canvas.height = viewport.height;
-            // canvas.width = 640;
-            // canvas.height = 480;
-
-            var ctx = canvas.getContext('2d');
-            var renderTask = pdfPage.render({
-              canvasContext: ctx,
-              viewport: viewport
-            });
-            return renderTask.promise;
-          });
-        }).catch(function (reason) {
-          console.error('Error: ' + reason);
-        });
-        return;
-      }
-
-      gapiDemo
-        .getFileById(fileId)
-        .then(pdfData => {
-          // this.setState({ pdfData });
-
-          // log
-          console.log(pdfData);
-
-          /* // Using DocumentInitParameters object to load binary data.
-          var loadingTask = PDFJS.getDocument({ data: pdfData });
-          loadingTask.promise.then(pdf => {
-            console.log('PDF loaded');
-
-            // Fetch the first page
-            var pageNumber = 1;
-            pdf.getPage(pageNumber).then(page => {
-              console.log('Page loaded');
-
-              var scale = 1.5;
-              var viewport = page.getViewport(scale);
-
-              // Prepare canvas using PDF page dimensions
-              var canvas = document.getElementById('the-canvas');
-              var context = canvas.getContext('2d');
-              // canvas.height = viewport.height;
-              // canvas.width = viewport.width;
-              canvas.height = 800;
-              canvas.width = 600;
-
-              // Render PDF page into canvas context
-              var renderContext = {
-                canvasContext: context,
-                viewport: viewport
-              };
-              var renderTask = page.render(renderContext);
-              renderTask.then(() => {
-                console.log('Page rendered');
-              });
-            });
-          }, reason => {
-            // PDF loading error
-            console.error(reason);
-          }); */
-
-          // Loading a document.
-          var loadingTask = pdfjsLib.getDocument({ data: pdfData });
-          loadingTask.promise.then(pdfDocument => {
-
-            // Request a first page
-            return pdfDocument.getPage(1).then(pdfPage => {
-              // Display page on the existing canvas with 100% scale.
-              var viewport = pdfPage.getViewport(1.0);
-              var canvas = document.getElementById('the-canvas');
-              // canvas.width = viewport.width;
-              // canvas.height = viewport.height;
-              canvas.width = 640;
-              canvas.height = 480;
-              var ctx = canvas.getContext('2d');
-              var renderTask = pdfPage.render({
-                canvasContext: ctx,
-                viewport: viewport
-              });
-              return renderTask.promise;
-            });
-          }).catch(function (reason) {
-            console.error('Error: ' + reason);
-          });
-        })
-        .catch(err => {
-          console.log('Error during download', err);
-        });
-    }
-  }
-
   handleAuth = (ev) => {
     gapi.auth2.getAuthInstance().signIn();
   }
@@ -216,12 +93,12 @@ class IndexPage extends Component {
     gapi.auth2.getAuthInstance().signOut();
   }
 
+  // handle chrome inline install
   handleInstall = () => {
     // https://chrome.google.com/webstore/detail/drive-api-demo/hcamklaijpoffpejfbpedkmdimhmalnd
-    if (chrome) {
+    if (!this.props.isAppInstalled) {
       chrome.webstore.install('https://chrome.google.com/webstore/detail/hcamklaijpoffpejfbpedkmdimhmalnd', () => {
-        // this.setState({ isAppInstalled: true });
-        console.log('TODO: dispatch IS_APP_INSTALLED action');
+        this.props.appInstalled();
       }, err => {
         console.error(err);
       });
@@ -230,18 +107,6 @@ class IndexPage extends Component {
       console.log('app is installed already');
     }
   }
-
-  /* // not used
-  getFiles() {
-    return gapiDemo
-      .getFiles(10)
-      .then(response => {
-        // console.log(response);
-        return this.setState({
-          files: response.result.files
-        });
-      });
-  } */
 };
 
 const mapStateToProps = state => ({
@@ -253,4 +118,12 @@ const mapStateToProps = state => ({
   isAppInstalled: state.ui.isAppInstalled
 });
 
-export default connect(mapStateToProps, null)(IndexPage);
+const mapDispatchToProps = dispatch => ({
+  appInstalled: () => {
+
+    // TODO: improve navbar click handling
+    dispatch({ type: 'IS_APP_INSTALLED' });
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(IndexPage);

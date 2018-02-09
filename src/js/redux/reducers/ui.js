@@ -22,7 +22,8 @@ const initialUiState = {
   spinner: true,
   menuType: 0,
   signedIn: false,
-  connection: 1
+  connection: 1,
+  isAppInstalled: false
 };
 
 export default (state = initialUiState, action) => {

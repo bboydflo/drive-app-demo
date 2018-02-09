@@ -44,14 +44,14 @@ export function listenForSignInChanges(callback) {
 /**
  *  Sign in the user upon button click.
  */
-export function handleAuthClick(event) {
+export function signIn() {
   gapi.auth2.getAuthInstance().signIn();
 }
 
 /**
  *  Sign out the user upon button click.
  */
-export function handleSignoutClick(event) {
+export function signOut() {
   gapi.auth2.getAuthInstance().signOut();
 }
 
