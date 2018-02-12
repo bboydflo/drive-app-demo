@@ -1,7 +1,6 @@
 import { h, Component } from 'preact';
 import { connect } from 'preact-redux';
-// import * as gapiDemo from '../modules/google-auth-demo';
-import { getPdfFiles } from '../modules/google-auth-demo';
+import { getFolderStructure } from '../modules/google-auth-demo';
 
 import Navbar from '../components/navbar';
 
@@ -82,7 +81,7 @@ class IndexPage extends Component {
   }
 
   getFolderStructure = () => {
-    getPdfFiles().then(resp => console.log(resp));
+    getFolderStructure();
   }
 };
 

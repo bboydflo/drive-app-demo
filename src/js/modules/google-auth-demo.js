@@ -86,30 +86,27 @@ export function getFolderStructure() {
   // gapi.client.drive.files.list({ q: "fullText contains '.pdf'", spaces: 'drive', useDomainAdminAccess: true, trashed: false });
   // gapi.client.drive.files.list({ 'fields': "nextPageToken, files(id, name)" }).execute();
 
-  // get all folders from google drive
+  /* // get all folders from google drive
   gapi.client.drive.files.list({
-    q: 'mimeType = "application/vnd.google-apps.folder" trashed=false',
+    q: 'mimeType = "application/vnd.google-apps.folder"',
     fields: 'nextPageToken, files(id, name, parents)',
     spaces: 'drive'
-  });
+  }); */
 
-  let files = [];
+  // let files = [];
+  // let folders = [];
 
-  getChunkPdfFiles()
-    .then(res => {
-      if (res.files) {
-        files.push(...res.files);
-      }
-      if (res.nextPageToken) {
-        files.push(...res.files);
-      }
+  Promise.all(getPdfFiles(), getAllFolders())
+    .then((files, folders) => {
+      console.log(files);
+      console.log(folders);
     });
 }
 
-// get all files recursively
+// get all pdf files recursively
 export function getPdfFiles(nextPageToken, files = []) {
   return new Promise(resolve => {
-    getChunkPdfFiles(nextPageToken, getChunkPdfFiles)
+    getChunkFiles('mimeType = "application/pdf"', nextPageToken)
       .then(res => {
 
         if (res.files) {
@@ -125,13 +122,33 @@ export function getPdfFiles(nextPageToken, files = []) {
   });
 }
 
+// get all files recursively
+function getAllFolders(nextPageToken, folders = []) {
+  return new Promise(resolve => {
+    getChunkFiles('mimeType = "application/vnd.google-apps.folder"', nextPageToken)
+      .then(res => {
+
+        if (res.files) {
+          folders.push(...res.files);
+        }
+
+        if (res.nextPageToken) {
+          return resolve(getPdfFiles(res.nextPageToken, folders));
+        }
+
+        return resolve(folders);
+      });
+  });
+}
+
 // get chunk of pdf files
-export function getChunkPdfFiles(nextPageToken, callback) {
+function getChunkFiles(q, nextPageToken) {
 
   // get all .pdf files[id, name, parents] from drive
   let opt = {
+    q,
+    // q: 'mimeType = "application/pdf"',
     fields: 'nextPageToken, files(id, name, parents)',
-    q: 'mimeType = "application/pdf"',
     spaces: 'drive', // not necessary
     trashed: false // not necessary
     // useDomainAdminAccess: true, // not necessary
@@ -149,7 +166,6 @@ export function getChunkPdfFiles(nextPageToken, callback) {
       // do some validation
       if (resp && resp.status && resp.status === 200 && resp.result && resp.result.files.length) {
         return resp.result;
-        // return callback(resp, callback);
       }
     });
 }
