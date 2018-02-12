@@ -84,8 +84,75 @@ export function getFolderStructure() {
   // gapi.client.drive.files.list({ q: "mimeType = 'application/vnd.google-apps.folder' and name contains 'pdf'", spaces: 'drive' });
   // gapi.client.drive.files.list({q: "mimeType = 'application/pdf'", spaces: 'drive', useDomainAdminAccess: true, trashed: false});
   // gapi.client.drive.files.list({ q: "fullText contains '.pdf'", spaces: 'drive', useDomainAdminAccess: true, trashed: false });
-  gapi.client.drive.files.list({ q: '"appDataFolder" in parents', spaces: 'appDataFolder', useDomainAdminAccess: true });
-  return gapi.client.drive.files.list({ q: '"appDataFolder" in parents' });
+  // gapi.client.drive.files.list({ 'fields': "nextPageToken, files(id, name)" }).execute();
+
+  // get all folders from google drive
+  gapi.client.drive.files.list({
+    q: 'mimeType = "application/vnd.google-apps.folder" trashed=false',
+    fields: 'nextPageToken, files(id, name, parents)',
+    spaces: 'drive'
+  });
+
+  let files = [];
+
+  getChunkPdfFiles()
+    .then(res => {
+      if (res.files) {
+        files.push(...res.files);
+      }
+      if (res.nextPageToken) {
+        files.push(...res.files);
+      }
+    });
+}
+
+// get all files recursively
+export function getPdfFiles(nextPageToken) {
+  var files = [];
+  return getChunkPdfFiles(nextPageToken, getChunkPdfFiles)
+    .then(res => {
+
+      // finish
+      if (!res) return files;
+
+      // there is a next page
+      if (res.nextPageToken) {
+        return getPdfFiles(nextPageToken).then(f => files.push(...f));
+      }
+      if (res.files) {
+        files.push(...res.files);
+      }
+      return files;
+    });
+}
+
+// get chunk of pdf files
+export function getChunkPdfFiles(nextPageToken, callback) {
+
+  // get all .pdf files[id, name, parents] from drive
+  let opt = {
+    fields: 'nextPageToken, files(id, name, parents)',
+    q: 'mimeType = "application/pdf"',
+    spaces: 'drive', // not necessary
+    trashed: false // not necessary
+    // useDomainAdminAccess: true, // not necessary
+  };
+
+  // has next page token
+  if (nextPageToken) {
+    opt.pageToken = nextPageToken;
+  }
+
+  // send google drive api v3 request
+  return gapi.client.drive.files.list(opt)
+    .then(resp => {
+
+      // do some validation
+      if (resp && resp.status && resp.status === 200 && resp.result && resp.result.files.length) {
+        return resp.result;
+        // return callback(resp, callback);
+      }
+    });
 }
 
 export function getAccessToken() {
