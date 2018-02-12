@@ -107,25 +107,20 @@ export function getFolderStructure() {
 }
 
 // get all files recursively
-export function getPdfFiles(nextPageToken) {
-  var files = [];
+export function getPdfFiles(nextPageToken, files = []) {
   return new Promise(resolve => {
     getChunkPdfFiles(nextPageToken, getChunkPdfFiles)
       .then(res => {
 
-        // finish
-        if (!res) {
-          return resolve(files);
-        }
-
-        // there is a next page
-        if (res.nextPageToken) {
-          getPdfFiles(nextPageToken).then(f => resolve(files.push(...f)));
-        }
         if (res.files) {
           files.push(...res.files);
         }
-        resolve(files);
+
+        if (res.nextPageToken) {
+          return resolve(getPdfFiles(res.nextPageToken, files));
+        }
+
+        return resolve(files);
       });
   });
 }
