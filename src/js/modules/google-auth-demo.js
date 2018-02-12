@@ -1,5 +1,3 @@
-// import toArray from 'stream-to-array';
-
 // tutorial here: https://developers.google.com/drive/v3/web/quickstart/js
 
 // Client ID and API key from the Developer Console
@@ -13,7 +11,7 @@ const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/r
 // included, separated by spaces.
 // const SCOPES = 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.metadata.readonly';
 // const SCOPES = 'https://www.googleapis.com/auth/drive';
-const SCOPES = 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.appfolder';
+const SCOPES = 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.appfolder https://www.googleapis.com/auth/drive.readonly.metadata';
 
 export const handleClientLoad = (callback) => {
   gapi.load('client:auth2', callback);
@@ -81,7 +79,12 @@ export function getFiles(pageSize) {
 
 export function getFolderStructure() {
   // gapi.client.drive.files.list({ q: "'appDataFolder' in parents" }).then(resp => console.log(resp));
-  // gapi.client.drive.files.list({ q: "mimeType = 'application/vnd.google-apps.folder'", spaces: 'drive' }).then(resp => console.log(resp));
+  // gapi.client.drive.files.list({ q: "mimeType = 'application/vnd.google-apps.folder' trashed=false", spaces: 'drive' });
+  // gapi.client.drive.files.list({ q: "mimeType = 'application/vnd.google-apps.folder' and appProperties has { key='mimeType' and value='application/pdf' }", spaces: 'drive' });
+  // gapi.client.drive.files.list({ q: "mimeType = 'application/vnd.google-apps.folder' and name contains 'pdf'", spaces: 'drive' });
+  // gapi.client.drive.files.list({q: "mimeType = 'application/pdf'", spaces: 'drive', useDomainAdminAccess: true, trashed: false});
+  // gapi.client.drive.files.list({ q: "fullText contains '.pdf'", spaces: 'drive', useDomainAdminAccess: true, trashed: false });
+  gapi.client.drive.files.list({ q: '"appDataFolder" in parents', spaces: 'appDataFolder', useDomainAdminAccess: true });
   return gapi.client.drive.files.list({ q: '"appDataFolder" in parents' });
 }
 
