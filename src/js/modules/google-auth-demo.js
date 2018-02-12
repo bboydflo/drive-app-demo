@@ -1,3 +1,4 @@
+import _ from 'underscore';
 // tutorial here: https://developers.google.com/drive/v3/web/quickstart/js
 
 // Client ID and API key from the Developer Console
@@ -96,10 +97,31 @@ export function getFolderStructure() {
   // let files = [];
   // let folders = [];
 
-  Promise.all([getPdfFiles(), getAllFolders()])
-    .then((files, folders) => {
-      console.log(files);
-      console.log(folders);
+  let skip = true;
+
+  if (!skip) {
+    Promise.all([getPdfFiles(), getAllFolders()])
+      .then((files, folders) => {
+        console.log(files);
+
+        // get unique parents of this files
+        var uniqueFilesParents = _.uniq(files, file => file.parents[0]).map(file => file.parents[0]);
+
+        console.log(uniqueFilesParents);
+
+        // filter folders to the ones that include only pdf files
+        folders = folders.filter(folder => uniqueFilesParents.indexOf(folder.parents[0]) < 0);
+
+        // log
+        console.log(folders);
+      });
+  }
+
+  Promise.all([getRootPdfFiles(), getRootFolders()])
+    .then((rootPdfs, rootFolders) => {
+      // log
+      console.log(rootPdfs);
+      console.log(rootFolders);
     });
 }
 
@@ -120,7 +142,7 @@ export function getPdfFiles(nextPageToken, files = []) {
     });
 }
 
-// get all files recursively
+// get all folders recursively
 function getAllFolders(nextPageToken, folders = []) {
   return getChunkFiles('mimeType = "application/vnd.google-apps.folder"', nextPageToken)
     .then(res => {
@@ -137,14 +159,11 @@ function getAllFolders(nextPageToken, folders = []) {
     });
 }
 
-// get chunk of pdf files
+// get all files[id, name, parents, webContentLink] by query string from drive
 function getChunkFiles(q, nextPageToken) {
-
-  // get all .pdf files[id, name, parents] from drive
   let opt = {
     q,
-    // q: 'mimeType = "application/pdf"',
-    fields: 'nextPageToken, files(id, name, parents)',
+    fields: 'nextPageToken, files(id, name, parents, webContentLink)',
     spaces: 'drive', // not necessary
     trashed: false // not necessary
     // useDomainAdminAccess: true, // not necessary
@@ -163,6 +182,56 @@ function getChunkFiles(q, nextPageToken) {
       if (resp && resp.status && resp.status === 200 && resp.result && resp.result.files && resp.result.files.length) {
         return resp.result;
       }
+    });
+}
+
+function getRootPdfFiles(nextPageToken, rootPdfs = []) {
+  /* // get root pdf files
+  let opt1 = {
+    q: '"root" in parents and (mimeType = "application/pdf") and trashed = false',
+    spaces: 'drive',
+    fields: 'nextPageToken, files(id, name, parents)'
+  };
+  let opt2 = {
+    q: 'mimeType = "application/pdf" and trashed = false and "root" in parents ',
+    spaces: 'drive',
+    fields: 'files(id, name, parents)'
+  }; */
+  return getChunkFiles('"root" in parents and (mimeType = "application/pdf") and trashed = false', nextPageToken)
+    .then(res => {
+
+      if (res.files) {
+        rootPdfs.push(...res.files);
+      }
+
+      if (res.nextPageToken) {
+        return Promise.resolve(getRootPdfFiles(res.nextPageToken, rootPdfs));
+      }
+
+      return rootPdfs;
+    });
+}
+
+function getRootFolders(nextPageToken, rootFolders = []) {
+  /* // get all root folders
+  let opt = {
+    q: 'mimeType = "application/vnd.google-apps.folder" and trashed = false and "root" in parents',
+    spaces: 'drive',
+    fields: 'files(id, name, parents)'
+  }; */
+
+  return getChunkFiles('mimeType = "application/vnd.google-apps.folder" and trashed = false and "root" in parents', nextPageToken)
+    .then(res => {
+
+      if (res.files) {
+        rootFolders.push(...res.files);
+      }
+
+      if (res.nextPageToken) {
+        return Promise.resolve(getRootPdfFiles(res.nextPageToken, rootFolders));
+      }
+
+      return rootFolders;
     });
 }
 
