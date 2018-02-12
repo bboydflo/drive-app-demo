@@ -105,40 +105,36 @@ export function getFolderStructure() {
 
 // get all pdf files recursively
 export function getPdfFiles(nextPageToken, files = []) {
-  return new Promise(resolve => {
-    getChunkFiles('mimeType = "application/pdf"', nextPageToken)
-      .then(res => {
+  return getChunkFiles('mimeType = "application/pdf"', nextPageToken)
+    .then(res => {
 
-        if (res.files) {
-          files.push(...res.files);
-        }
+      if (res.files) {
+        files.push(...res.files);
+      }
 
-        if (res.nextPageToken) {
-          return resolve(getPdfFiles(res.nextPageToken, files));
-        }
+      if (res.nextPageToken) {
+        return Promise.resolve(getPdfFiles(res.nextPageToken, files));
+      }
 
-        return resolve(files);
-      });
-  });
+      return files;
+    });
 }
 
 // get all files recursively
 function getAllFolders(nextPageToken, folders = []) {
-  return new Promise(resolve => {
-    getChunkFiles('mimeType = "application/vnd.google-apps.folder"', nextPageToken)
-      .then(res => {
+  return getChunkFiles('mimeType = "application/vnd.google-apps.folder"', nextPageToken)
+    .then(res => {
 
-        if (res.files) {
-          folders.push(...res.files);
-        }
+      if (res.files) {
+        folders.push(...res.files);
+      }
 
-        if (res.nextPageToken) {
-          return resolve(getPdfFiles(res.nextPageToken, folders));
-        }
+      if (res.nextPageToken) {
+        return Promise.resolve(getAllFolders(res.nextPageToken, folders));
+      }
 
-        return resolve(folders);
-      });
-  });
+      return folders;
+    });
 }
 
 // get chunk of pdf files
@@ -164,7 +160,7 @@ function getChunkFiles(q, nextPageToken) {
     .then(resp => {
 
       // do some validation
-      if (resp && resp.status && resp.status === 200 && resp.result && resp.result.files.length) {
+      if (resp && resp.status && resp.status === 200 && resp.result && resp.result.files && resp.result.files.length) {
         return resp.result;
       }
     });
