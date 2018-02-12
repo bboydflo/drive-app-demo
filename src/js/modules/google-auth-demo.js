@@ -96,7 +96,7 @@ export function getFolderStructure() {
   // let files = [];
   // let folders = [];
 
-  Promise.all(getPdfFiles(), getAllFolders())
+  Promise.all([getPdfFiles(), getAllFolders()])
     .then((files, folders) => {
       console.log(files);
       console.log(folders);
