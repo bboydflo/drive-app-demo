@@ -109,21 +109,25 @@ export function getFolderStructure() {
 // get all files recursively
 export function getPdfFiles(nextPageToken) {
   var files = [];
-  return getChunkPdfFiles(nextPageToken, getChunkPdfFiles)
-    .then(res => {
+  return new Promise(resolve => {
+    getChunkPdfFiles(nextPageToken, getChunkPdfFiles)
+      .then(res => {
 
-      // finish
-      if (!res) return files;
+        // finish
+        if (!res) {
+          return resolve(files);
+        }
 
-      // there is a next page
-      if (res.nextPageToken) {
-        return getPdfFiles(nextPageToken).then(f => files.push(...f));
-      }
-      if (res.files) {
-        files.push(...res.files);
-      }
-      return files;
-    });
+        // there is a next page
+        if (res.nextPageToken) {
+          getPdfFiles(nextPageToken).then(f => resolve(files.push(...f)));
+        }
+        if (res.files) {
+          files.push(...res.files);
+        }
+        resolve(files);
+      });
+  });
 }
 
 // get chunk of pdf files
