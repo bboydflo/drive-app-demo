@@ -215,7 +215,14 @@ export function getFolderStructure() {
         }
       }
 
-      t.traverseBF(node => { console.log(node.data); });
+      t.traverseBF(node => {
+        console.log(node.data);
+        if (node.children.length) {
+          node.children.forEach(element => {
+            console.log(element);
+          });
+        }
+      });
     });
 }
 
