@@ -299,7 +299,8 @@ function getSharedPdfFiles(nextPageToken, files = []) {
 // get the rest of the folders recursively
 function getRemainingFolders(nextPageToken, folders = []) {
   // return getChunkFiles('mimeType = "application/vnd.google-apps.folder"', nextPageToken)
-  return getChunkFiles('mimeType = "application/vnd.google-apps.folder" and not ("root" in parents)', nextPageToken)
+  // visibility = "limited" -> private folders
+  return getChunkFiles('mimeType = "application/vnd.google-apps.folder" and visibility = "limited" and not ("root" in parents)', nextPageToken)
     .then(res => {
 
       if (res.files) {
@@ -318,6 +319,7 @@ function getRemainingFolders(nextPageToken, folders = []) {
 function getRemainingPdfFiles(nextPageToken, files = []) {
   // return getChunkFiles('mimeType = "application/pdf"', nextPageToken)
   // 'mimeType = "application/pdf" and not ("root" in parents)'
+  // visibility = "limited" -> private pdf files
   return getChunkFiles('mimeType = "application/pdf" and trashed = false and visibility = "limited" and not ("root" in parents)', nextPageToken)
     .then(res => {
 
