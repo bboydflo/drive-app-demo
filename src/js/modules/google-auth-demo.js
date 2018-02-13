@@ -300,7 +300,13 @@ function getSharedPdfFiles(nextPageToken, files = []) {
 function getRemainingFolders(nextPageToken, folders = []) {
   // return getChunkFiles('mimeType = "application/vnd.google-apps.folder"', nextPageToken)
   // visibility = "limited" -> private folders
-  return getChunkFiles('mimeType = "application/vnd.google-apps.folder" and trashed = false and visibility = "limited" and not ("root" in parents)', nextPageToken)
+  // {
+  //   q: 'mimeType = "application/vnd.google-apps.folder" and trashed = false and "me" in owners',
+  //   fields: 'files(id, name, owners, shared, trashed, parents)',
+  //   corpora: 'user',
+  //   ownedByMe: true
+  // }
+  return getChunkFiles('mimeType = "application/vnd.google-apps.folder" and trashed = false and visibility = "limited" and "me" in owners and not ("root" in parents)', nextPageToken)
     .then(res => {
 
       if (res.files) {
@@ -320,7 +326,7 @@ function getRemainingPdfFiles(nextPageToken, files = []) {
   // return getChunkFiles('mimeType = "application/pdf"', nextPageToken)
   // 'mimeType = "application/pdf" and not ("root" in parents)'
   // visibility = "limited" -> private pdf files
-  return getChunkFiles('mimeType = "application/pdf" and trashed = false and visibility = "limited" and not ("root" in parents)', nextPageToken)
+  return getChunkFiles('mimeType = "application/pdf" and trashed = false and visibility = "limited" "me" in owners and not ("root" in parents)', nextPageToken)
     .then(res => {
 
       if (res.files) {
