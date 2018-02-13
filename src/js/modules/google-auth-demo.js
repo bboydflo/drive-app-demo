@@ -299,7 +299,7 @@ function getSharedPdfFiles(nextPageToken, files = []) {
 // get the rest of the folders recursively
 function getRemainingFolders(nextPageToken, folders = []) {
   // return getChunkFiles('mimeType = "application/vnd.google-apps.folder"', nextPageToken)
-  return getChunkFiles('mimeType = "application/vnd.google-apps.folder" and not sharedWithMe and not ("root" in parents)', nextPageToken)
+  return getChunkFiles('mimeType = "application/vnd.google-apps.folder" and not ("root" in parents)', nextPageToken)
     .then(res => {
 
       if (res.files) {
