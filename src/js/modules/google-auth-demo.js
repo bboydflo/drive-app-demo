@@ -127,14 +127,14 @@ export function getFolderStructure() {
       }
 
       // traverse tree
-      t.traverseBF(node => { console.log(node.data); });
+      // t.traverseBF(node => { console.log(node.data); });
 
       // add remaining folders
       // while (nodes[2].length > 0) {}
 
       // skip
-      let skip = true;
-      if (skip) return;
+      // let skip = true;
+      // if (skip) return;
 
       // insert remaining nodes and remove them while they are added to the tree
       for (index = 0; index < nodes[2].length; index++) {
@@ -144,31 +144,35 @@ export function getFolderStructure() {
           // try {} catch (e) {console.log(e);}
 
           // do not handle trashed nodes
-          if (nodes[2][index] && nodes[2][index].trashed) return;
+          // if (nodes[2][index] && nodes[2][index].trashed) return;
 
-          // found condition
-          if (node.data.id && nodes[2][index].parents && node.data.id === nodes[2][index].parents[0]) {
+          // remove node if doesn't have any parents
+          if (nodes[2][index].trashed || !nodes[2][index].hasOwnProperty('parents')) {
+            nodes[2].splice(index, 1);
+          } else {
 
-            // remove node from the remaining folders
-            var a = nodes[2].splice(index, 1);
+            // found condition
+            if (node.data.id === nodes[2][index].parents[0]) {
 
-            // console.log(nodes[2][index]);
-            console.log(JSON.stringify(a[0]));
+              // remove node from the remaining folders
+              var a = nodes[2].splice(index, 1);
 
-            try {
+              // console.log(nodes[2][index]);
+              console.log(JSON.stringify(a[0]));
 
-              // add node to the tree
-              t.add(a[0], node, t.traverseBF);
-            } catch (e) {
-              console.log(e, index, a[0], node);
+              try {
+
+                // add node to the tree
+                t.add(a[0], node.data.id, t.traverseBF);
+              } catch (e) {
+                console.log(e, index, a[0], node);
+              }
             }
           }
         }, t.traverseBF);
       }
 
-      t.traverseBF(node => {
-        console.log(node.data);
-      });
+      t.traverseBF(node => { console.log(node.data); });
     });
 }
 
