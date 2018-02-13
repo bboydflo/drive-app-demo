@@ -1,6 +1,8 @@
 import _ from 'underscore';
 import clone from 'clone';
 import Tree from './simple-tree';
+import isPojo from 'is-pojo';
+
 // tutorial here: https://developers.google.com/drive/v3/web/quickstart/js
 
 // Client ID and API key from the Developer Console
@@ -101,13 +103,6 @@ export function getFolderStructure() {
       // create a new tree
       var t = new Tree({ id: 'root' });
 
-      // a collection of trees
-      var trees = [];
-      trees.push({
-        name: 'drive',
-        value: t
-      });
-
       // add shared with me node
       t.add({ id: 'shared' }, 'root', t.traverseBF);
 
@@ -196,7 +191,7 @@ export function getFolderStructure() {
                 console.log(e, index, a[0], node);
               }
             } else {
-              if (!nodes[4][index].hasOwnProperty('parents')) {
+              if (nodes[4][index] && !nodes[4][index].hasOwnProperty('parents')) {
                 a = nodes[4].splice(index, 1);
 
                 try {
