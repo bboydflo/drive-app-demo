@@ -1,4 +1,5 @@
 // import _ from 'underscore';
+import clone from 'clone';
 import Tree from './simple-tree';
 // tutorial here: https://developers.google.com/drive/v3/web/quickstart/js
 
@@ -103,10 +104,12 @@ export function getFolderStructure() {
     getRemainingFolders(),
     getRemainingPdfFiles()
   ])
-    .then(nodes => {
+    .then(n => {
 
       // log
-      console.log(nodes);
+      console.log(n);
+
+      var nodes = clone(n);
 
       // create a new tree
       var t = new Tree({ id: 'root' });
