@@ -1,3 +1,5 @@
+// import isPojo from 'is-pojo';
+// import _ from 'underscore';
 /**
  * Queue
  */
@@ -96,11 +98,15 @@ Tree.prototype.contains = function (callback, traversal) {
   traversal.call(this, callback);
 };
 
-Tree.prototype.add = function (data, toData, traversal) {
+Tree.prototype.add = function (data, parentId, traversal) {
   var child = new Node(data);
   var parent = null;
   var callback = function (node) {
-    if (node.data === toData) {
+    // if (node.data === toData) {
+    //   parent = node;
+    // }
+
+    if (node.data.id === parentId) {
       parent = node;
     }
   };

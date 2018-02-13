@@ -102,7 +102,7 @@ export function getFolderStructure() {
       console.log(nodes);
 
       // create a new tree
-      var t = new Tree('root');
+      var t = new Tree({ id: 'root' });
 
       // nodes[0] = root pdf files
       // nodes[1] = root folders
@@ -126,8 +126,15 @@ export function getFolderStructure() {
         index++;
       }
 
+      // traverse tree
+      t.traverseBF(node => { console.log(node.data); });
+
       // add remaining folders
       // while (nodes[2].length > 0) {}
+
+      // skip
+      let skip = true;
+      if (skip) return;
 
       // insert remaining nodes and remove them while they are added to the tree
       for (index = 0; index < nodes[2].length; index++) {
@@ -137,7 +144,7 @@ export function getFolderStructure() {
           // try {} catch (e) {console.log(e);}
 
           // do not handle trashed nodes
-          if (nodes[2][index].trashed) return;
+          if (nodes[2][index] && nodes[2][index].trashed) return;
 
           // found condition
           if (node.data.id && nodes[2][index].parents && node.data.id === nodes[2][index].parents[0]) {
