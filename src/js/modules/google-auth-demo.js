@@ -1,4 +1,4 @@
-// import _ from 'underscore';
+import _ from 'underscore';
 import clone from 'clone';
 import Tree from './simple-tree';
 // tutorial here: https://developers.google.com/drive/v3/web/quickstart/js
@@ -58,19 +58,6 @@ export function signOut() {
 }
 
 /**
- * Append a pre element to the body containing the given message
- * as its text node. Used to display the results of the API call.
- *
- * @param {string} message Text to be placed in pre element.
- */
-export function appendPre(message) {
-  // var pre = document.getElementById('content');
-  // var textContent = document.createTextNode(message + '\n');
-  // pre.appendChild(textContent);
-  console.log(message);
-}
-
-/**
  * Print files.
  */
 export function getFiles(pageSize) {
@@ -124,20 +111,24 @@ export function getFolderStructure() {
       // nodes[4] = remaining folders (not directly inside root folder)
       // nodes[5] = remaining pdf files (not directly inside root folder) and not shared with anyone (visibility = "limited")
 
+      // TOOD: change while to for loops
+
       var index = 0;
 
       // add root folders
-      while (index < nodes[1].length) {
-        if (nodes[1][index].trashed) continue;
-        t.add(nodes[1][index], 'root', t.traverseBF);
+      while (index < nodes[0].length) {
+        t.add(nodes[0][index], 'root', t.traverseBF);
         index++;
       }
 
       index = 0;
 
       // add root pdf files
-      while (index < nodes[0].length) {
-        t.add(nodes[0][index], 'root', t.traverseBF);
+      while (index < nodes[1].length) {
+        // if (!nodes[1][index].trashed) {
+        //   t.add(nodes[1][index], 'root', t.traverseBF);
+        // }
+        t.add(nodes[1][index], 'root', t.traverseBF);
         index++;
       }
 
@@ -185,7 +176,9 @@ export function getFolderStructure() {
             } else {
 
               // found condition
-              if (node.data.id && node.data.id === nodes[4][index].parents[0]) {
+              // TODO: check if node.data.id is included in the list of parents of nodes[4][index]
+              // if (node.data.id && node.data.id === nodes[4][index].parents[0]) {
+              if (_.contains(nodes[4][index].parents, node.data.id)) {
 
                 // remove node from the remaining folders
                 var a = nodes[4].splice(index, 1);
@@ -222,7 +215,7 @@ function getRootFolders(nextPageToken, rootFolders = []) {
   }; */
 
   // add `and visibility = "limited"` to see only the private folders
-  return getChunkFiles('mimeType = "application/vnd.google-apps.folder" and trashed = false and "root" in parents', nextPageToken)
+  return getChunkFiles('"root" in parents and mimeType = "application/vnd.google-apps.folder" and trashed = false', nextPageToken)
     .then(res => {
 
       if (res.files) {
@@ -230,7 +223,7 @@ function getRootFolders(nextPageToken, rootFolders = []) {
       }
 
       if (res.nextPageToken) {
-        return Promise.resolve(getRootPdfFiles(res.nextPageToken, rootFolders));
+        return Promise.resolve(getRootFolders(res.nextPageToken, rootFolders));
       }
 
       return rootFolders;
@@ -267,7 +260,7 @@ function getRootPdfFiles(nextPageToken, rootPdfs = []) {
 function getSharedFolders(nextPageToken, sharedFolders = []) {
 
   // and trashed = false
-  return getChunkFiles('mimeType = "application/vnd.google-apps.folder" and sharedWithMe', nextPageToken)
+  return getChunkFiles('sharedWithMe and mimeType = "application/vnd.google-apps.folder" and trashed = false', nextPageToken)
     .then(res => {
 
       if (res.files) {
@@ -287,7 +280,8 @@ function getSharedPdfFiles(nextPageToken, files = []) {
 
   // 'mimeType = "application/pdf" and sharedWithMe'
   // 'mimeType = "application/pdf" and sharedWithMe and not ("root" in parents)' -> faster
-  return getChunkFiles('mimeType = "application/pdf" and sharedWithMe and not ("root" in parents)', nextPageToken)
+  // 'sharedWithMe and mimeType = "application/pdf" and not ("root" in parents)'
+  return getChunkFiles('sharedWithMe and mimeType = "application/pdf" and trashed = false and not ("root" in parents)', nextPageToken)
     .then(res => {
 
       if (res.files) {
@@ -312,7 +306,7 @@ function getRemainingFolders(nextPageToken, folders = []) {
   //   corpora: 'user',
   //   ownedByMe: true
   // }
-  return getChunkFiles('mimeType = "application/vnd.google-apps.folder" and trashed = false and visibility = "limited" and "me" in owners and not ("root" in parents)', nextPageToken)
+  return getChunkFiles('mimeType = "application/vnd.google-apps.folder" and trashed = false and "me" in owners and not ("root" in parents)', nextPageToken)
     .then(res => {
 
       if (res.files) {

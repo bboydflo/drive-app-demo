@@ -48,6 +48,12 @@ Queue.prototype.dequeue = function () {
   }
 };
 
+/**
+ * data = {
+ *   id [string]
+ * }
+ * @param {object} data
+ */
 function Node (data) {
   this.data = data;
   this.parent = null;
