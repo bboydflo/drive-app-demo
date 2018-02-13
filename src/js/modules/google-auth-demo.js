@@ -119,24 +119,27 @@ export function getFolderStructure() {
   }
 
   Promise.all([getRootPdfFiles(), getRootFolders()])
-    .then((rootPdfs, rootFolders) => {
+    .then(rootElements => {
 
       // create a new tree
       var t = new Tree('root');
 
+      // rootElements[0] = root pdf files
+      // rootElements[1] = root pdf folders
+
       // reset index
       var index = 0;
 
-      while (index < rootPdfs.length) {
-        t.add(rootFolders[index], 'root', Tree.traverseBF);
+      while (index < rootElements[1].length) {
+        t.add(rootElements[1][index], 'root', Tree.traverseBF);
         index++;
       }
 
       // reset index
       index = 0;
 
-      while (index < rootPdfs.length) {
-        t.add(rootPdfs[index], 'root', Tree.traverseBF);
+      while (index < rootElements[0].length) {
+        t.add(rootElements[0][index], 'root', Tree.traverseBF);
         index++;
       }
 
