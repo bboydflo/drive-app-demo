@@ -150,7 +150,7 @@ export function getFolderStructure() {
 
           // add remaining folders in a loop
           t.contains(node => {
-            if (node.data.id === nodes[2][index].parents[0]) {
+            if (node.data.id && node.data.id === nodes[2][index].parents[0]) {
               console.log(nodes[2][index]);
               nodes[2].splice(index, 1);
             }
