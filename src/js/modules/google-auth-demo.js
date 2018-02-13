@@ -171,7 +171,7 @@ export function getFolderStructure() {
 // get all pdf files recursively not in the root folder
 export function getPdfFiles(nextPageToken, files = []) {
   // return getChunkFiles('mimeType = "application/pdf"', nextPageToken)
-  return getChunkFiles('mimeType = "application/pdf" and "root" not in parents', nextPageToken)
+  return getChunkFiles('mimeType = "application/pdf" and not ("root" in parents)', nextPageToken)
     .then(res => {
 
       if (res.files) {
@@ -189,7 +189,7 @@ export function getPdfFiles(nextPageToken, files = []) {
 // get the rest of the folders recursively
 function getRemainingFolders(nextPageToken, folders = []) {
   // return getChunkFiles('mimeType = "application/vnd.google-apps.folder"', nextPageToken)
-  return getChunkFiles('mimeType = "application/vnd.google-apps.folder" and "root" not in parents', nextPageToken)
+  return getChunkFiles('mimeType = "application/vnd.google-apps.folder" and not ("root" in parents)', nextPageToken)
     .then(res => {
 
       if (res.files) {
@@ -208,7 +208,8 @@ function getRemainingFolders(nextPageToken, folders = []) {
 function getChunkFiles(q, nextPageToken) {
   let opt = {
     q,
-    fields: 'nextPageToken, files(id, name, parents, webContentLink)',
+    // fields: 'nextPageToken, files(id, name, parents, webContentLink)',
+    fields: 'nextPageToken, files(id, name, parents)',
     spaces: 'drive', // not necessary
     trashed: false // not necessary
     // useDomainAdminAccess: true, // not necessary
