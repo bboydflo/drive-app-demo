@@ -136,8 +136,10 @@ export function getFolderStructure() {
       // let skip = true;
       // if (skip) return;
 
+      var len = nodes[2].length;
+
       // insert remaining nodes and remove them while they are added to the tree
-      for (index = 0; index < nodes[2].length; index++) {
+      for (index = 0; index < len; index++) {
 
         // add remaining folders in a loop
         t.contains(node => {
@@ -147,15 +149,19 @@ export function getFolderStructure() {
           // if (nodes[2][index] && nodes[2][index].trashed) return;
 
           // remove node if doesn't have any parents
-          if (nodes[2][index].trashed || !nodes[2][index].hasOwnProperty('parents')) {
+          if ((nodes[2][index] && nodes[2][index].trashed) || !(nodes[2][index] && nodes[2][index].hasOwnProperty('parents'))) {
             nodes[2].splice(index, 1);
+            len = len - 1;
           } else {
 
             // found condition
-            if (node.data.id === nodes[2][index].parents[0]) {
+            if (node.data.id && node.data.id === nodes[2][index].parents[0]) {
 
               // remove node from the remaining folders
               var a = nodes[2].splice(index, 1);
+
+              // update length
+              len = len - 1;
 
               // console.log(nodes[2][index]);
               console.log(JSON.stringify(a[0]));
