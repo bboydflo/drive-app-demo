@@ -127,28 +127,30 @@ export function getFolderStructure() {
       }
 
       // add remaining folders
-      while (nodes[2].length > 0) {
+      // while (nodes[2].length > 0) {}
 
-        // insert remaining nodes and remove them while they are added to the tree
-        for (index = 0; index < nodes[2].length; index++) {
+      // insert remaining nodes and remove them while they are added to the tree
+      for (index = 0; index < nodes[2].length; index++) {
 
-          // add remaining folders in a loop
-          t.contains(node => {
-            try {
+        // add remaining folders in a loop
+        t.contains(node => {
+          // try {} catch (e) {console.log(e);}
 
-              // do not handle trashed nodes
-              if (nodes[2][index].trashed) return;
+          // do not handle trashed nodes
+          if (nodes[2][index].trashed) return;
 
-              if (node.data.id && nodes[2][index].parents && node.data.id === nodes[2][index].parents[0]) {
-                var a = nodes[2].splice(index, 1);
-                // console.log(nodes[2][index]);
-                console.log(a);
-              }
-            } catch (e) {
-              console.log(e);
-            }
-          }, t.traverseBF);
-        }
+          if (node.data.id && nodes[2][index].parents && node.data.id === nodes[2][index].parents[0]) {
+
+            // remove node from the remaining folders
+            var a = nodes[2].splice(index, 1);
+
+            // console.log(nodes[2][index]);
+            console.log(JSON.stringify(a[0]));
+
+            // add node to the tree
+            t.add(a[0], node, t.traverseBF);
+          }
+        }, t.traverseBF);
       }
 
       t.traverseBF(node => {
