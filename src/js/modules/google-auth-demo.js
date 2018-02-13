@@ -1,4 +1,4 @@
-import _ from 'underscore';
+// import _ from 'underscore';
 import Tree from './simple-tree';
 // tutorial here: https://developers.google.com/drive/v3/web/quickstart/js
 
@@ -95,31 +95,11 @@ export function getFolderStructure() {
     spaces: 'drive'
   }); */
 
-  // let files = [];
-  // let folders = [];
+  Promise.all([getRootPdfFiles(), getRootFolders(), getRemainingFolders(), getPdfFiles()])
+    .then(nodes => {
 
-  let skip = true;
-
-  if (!skip) {
-    Promise.all([getPdfFiles(), getAllFolders()])
-      .then((files, folders) => {
-        console.log(files);
-
-        // get unique parents of this files
-        var uniqueFilesParents = _.uniq(files, file => file.parents[0]).map(file => file.parents[0]);
-
-        console.log(uniqueFilesParents);
-
-        // filter folders to the ones that include only pdf files
-        folders = folders.filter(folder => uniqueFilesParents.indexOf(folder.parents[0]) < 0);
-
-        // log
-        console.log(folders);
-      });
-  }
-
-  Promise.all([getRootPdfFiles(), getRootFolders()])
-    .then(rootElements => {
+      // log
+      console.log(nodes);
 
       // create a new tree
       var t = new Tree('root');
@@ -130,22 +110,55 @@ export function getFolderStructure() {
       // reset index
       var index = 0;
 
-      while (index < rootElements[1].length) {
+      while (index < nodes[1].length) {
         // t.add(rootElements[1][index], 'root', Tree.traverseBF);
-        t.add(rootElements[1][index], 'root', t.traverseBF);
+        t.add(nodes[1][index], 'root', t.traverseBF);
         index++;
       }
 
       // reset index
       index = 0;
 
-      while (index < rootElements[0].length) {
+      while (index < nodes[0].length) {
         // t.add(rootElements[0][index], 'root', Tree.traverseBF);
-        t.add(rootElements[0][index], 'root', t.traverseBF);
+        t.add(nodes[0][index], 'root', t.traverseBF);
         index++;
       }
 
-      t.traverseBF(function (node) {
+      /* // reset index
+      index = 0;
+
+      // loop through remaining folders and try to insert new folders
+      try {
+        for (index; index < nodes[2].length; index++) {
+
+          // tree is an example of a root node
+          t.contains(node => {
+            if (node.data.id === nodes[2][index].parents[0]) {
+              console.log(nodes[2][index]);
+            }
+          }, t.traverseBF);
+        }
+      } catch (e) {
+        console.log(e.toString + `, index: ${index} ${JSON.stringify(nodes[2][index])}`);
+      } */
+
+      while (nodes[2].length > 0) {
+
+        // insert remaining nodes and remove them while they are added to the tree
+        for (index = 0; index < nodes[2].length; index++) {
+
+          // add remaining folders in a loop
+          t.contains(node => {
+            if (node.data.id === nodes[2][index].parents[0]) {
+              console.log(nodes[2][index]);
+              nodes[2].splice(index, 1);
+            }
+          }, t.traverseBF);
+        }
+      }
+
+      t.traverseBF(node => {
         console.log(node.data);
       });
 
@@ -173,9 +186,10 @@ export function getPdfFiles(nextPageToken, files = []) {
     });
 }
 
-// get all folders recursively
-function getAllFolders(nextPageToken, folders = []) {
-  return getChunkFiles('mimeType = "application/vnd.google-apps.folder"', nextPageToken)
+// get the rest of the folders recursively
+function getRemainingFolders(nextPageToken, folders = []) {
+  // return getChunkFiles('mimeType = "application/vnd.google-apps.folder"', nextPageToken)
+  return getChunkFiles('mimeType = "application/vnd.google-apps.folder" and "root" not in parents', nextPageToken)
     .then(res => {
 
       if (res.files) {
@@ -183,7 +197,7 @@ function getAllFolders(nextPageToken, folders = []) {
       }
 
       if (res.nextPageToken) {
-        return Promise.resolve(getAllFolders(res.nextPageToken, folders));
+        return Promise.resolve(getRemainingFolders(res.nextPageToken, folders));
       }
 
       return folders;
