@@ -131,7 +131,8 @@ export function getFolderStructure() {
       var index = 0;
 
       while (index < rootElements[1].length) {
-        t.add(rootElements[1][index], 'root', Tree.traverseBF);
+        // t.add(rootElements[1][index], 'root', Tree.traverseBF);
+        t.add(rootElements[1][index], 'root', t.traverseBF);
         index++;
       }
 
@@ -139,7 +140,8 @@ export function getFolderStructure() {
       index = 0;
 
       while (index < rootElements[0].length) {
-        t.add(rootElements[0][index], 'root', Tree.traverseBF);
+        // t.add(rootElements[0][index], 'root', Tree.traverseBF);
+        t.add(rootElements[0][index], 'root', t.traverseBF);
         index++;
       }
 
