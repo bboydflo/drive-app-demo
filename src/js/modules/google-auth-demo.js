@@ -96,7 +96,7 @@ export function getFolderStructure() {
     .then(n => {
 
       // log
-      console.log(n);
+      // console.log(n);
 
       var nodes = clone(n);
 
@@ -104,6 +104,7 @@ export function getFolderStructure() {
       var t = new Tree({ id: 'root' });
 
       // add shared with me node
+      t.add({ id: 'drive' }, 'root', t.traverseBF);
       t.add({ id: 'shared' }, 'root', t.traverseBF);
 
       // nodes[0] = root folders
@@ -157,7 +158,7 @@ export function getFolderStructure() {
       var len = nodes[4].length;
 
       // log
-      console.log(JSON.parse(JSON.stringify(nodes[4])));
+      // console.log(JSON.parse(JSON.stringify(nodes[4])));
 
       // add remaining folders
       while (len > 0) {
@@ -191,7 +192,7 @@ export function getFolderStructure() {
                 console.log(e, index, a[0], node);
               }
             } else {
-              if (nodes[4][index] && !nodes[4][index].hasOwnProperty('parents')) {
+              if (isPojo(nodes[4][index]) && !nodes[4][index].hasOwnProperty('parents')) {
                 a = nodes[4].splice(index, 1);
 
                 try {
@@ -214,7 +215,7 @@ export function getFolderStructure() {
         }
       }
 
-      t.traverseBF(node => { console.log(node); });
+      t.traverseBF(node => { console.log(node.data); });
     });
 }
 
