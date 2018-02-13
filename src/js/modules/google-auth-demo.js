@@ -104,20 +104,20 @@ export function getFolderStructure() {
       // create a new tree
       var t = new Tree('root');
 
-      // rootElements[0] = root pdf files
-      // rootElements[1] = root pdf folders
+      // nodes[0] = root pdf files
+      // nodes[1] = root folders
+      // nodes[2] = remaining folders (not directly inside root folder)
+      // nodes[3] = remaining pdf files (not directly inside root folder)
 
-      // reset index
       var index = 0;
 
       // add root folders
       while (index < nodes[1].length) {
-        // t.add(rootElements[1][index], 'root', Tree.traverseBF);
+        if (nodes[1][index].trashed) continue;
         t.add(nodes[1][index], 'root', t.traverseBF);
         index++;
       }
 
-      // reset index
       index = 0;
 
       // add root pdf files
@@ -135,7 +135,11 @@ export function getFolderStructure() {
           // add remaining folders in a loop
           t.contains(node => {
             try {
-              if (node.data.id && node.data.id === nodes[2][index].parents[0]) {
+
+              // do not handle trashed nodes
+              if (nodes[2][index].trashed) return;
+
+              if (node.data.id && nodes[2][index].parents && node.data.id === nodes[2][index].parents[0]) {
                 var a = nodes[2].splice(index, 1);
                 // console.log(nodes[2][index]);
                 console.log(a);
@@ -194,7 +198,7 @@ function getChunkFiles(q, nextPageToken) {
   let opt = {
     q,
     // fields: 'nextPageToken, files(id, name, parents, webContentLink)',
-    fields: 'nextPageToken, files(id, name, parents)',
+    fields: 'nextPageToken, files(id, name, trashed, parents)',
     spaces: 'drive', // not necessary
     trashed: false // not necessary
     // useDomainAdminAccess: true, // not necessary
