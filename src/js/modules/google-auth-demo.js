@@ -110,6 +110,7 @@ export function getFolderStructure() {
       // reset index
       var index = 0;
 
+      // add root folders
       while (index < nodes[1].length) {
         // t.add(rootElements[1][index], 'root', Tree.traverseBF);
         t.add(nodes[1][index], 'root', t.traverseBF);
@@ -119,30 +120,13 @@ export function getFolderStructure() {
       // reset index
       index = 0;
 
+      // add root pdf files
       while (index < nodes[0].length) {
-        // t.add(rootElements[0][index], 'root', Tree.traverseBF);
         t.add(nodes[0][index], 'root', t.traverseBF);
         index++;
       }
 
-      /* // reset index
-      index = 0;
-
-      // loop through remaining folders and try to insert new folders
-      try {
-        for (index; index < nodes[2].length; index++) {
-
-          // tree is an example of a root node
-          t.contains(node => {
-            if (node.data.id === nodes[2][index].parents[0]) {
-              console.log(nodes[2][index]);
-            }
-          }, t.traverseBF);
-        }
-      } catch (e) {
-        console.log(e.toString + `, index: ${index} ${JSON.stringify(nodes[2][index])}`);
-      } */
-
+      // add remaining folders
       while (nodes[2].length > 0) {
 
         // insert remaining nodes and remove them while they are added to the tree
@@ -150,9 +134,14 @@ export function getFolderStructure() {
 
           // add remaining folders in a loop
           t.contains(node => {
-            if (node.data.id && node.data.id === nodes[2][index].parents[0]) {
-              console.log(nodes[2][index]);
-              nodes[2].splice(index, 1);
+            try {
+              if (node.data.id && node.data.id === nodes[2][index].parents[0]) {
+                var a = nodes[2].splice(index, 1);
+                // console.log(nodes[2][index]);
+                console.log(a);
+              }
+            } catch (e) {
+              console.log(e);
             }
           }, t.traverseBF);
         }
@@ -161,10 +150,6 @@ export function getFolderStructure() {
       t.traverseBF(node => {
         console.log(node.data);
       });
-
-      // log
-      // console.log(rootPdfs);
-      // console.log(rootFolders);
     });
 }
 
