@@ -163,6 +163,9 @@ export function getFolderStructure() {
       // get initial length of remaining folders
       var len = nodes[4].length;
 
+      // log
+      console.log(JSON.parse(JSON.stringify(nodes[4])));
+
       // add remaining folders
       while (len > 0) {
 
