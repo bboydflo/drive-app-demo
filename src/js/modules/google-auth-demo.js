@@ -157,10 +157,7 @@ export function getFolderStructure() {
       // traverse tree
       // t.traverseBF(node => { console.log(node.data); });
 
-      // skip
-      // let skip = true;
-      // if (skip) return;
-
+      // get initial length of remaining folders
       var len = nodes[4].length;
 
       // add remaining folders
@@ -171,10 +168,9 @@ export function getFolderStructure() {
 
           // add remaining folders in a loop
           t.contains(node => {
-            // try {} catch (e) {console.log(e);}
 
             // do not handle trashed nodes
-            // if (nodes[2][index] && nodes[2][index].trashed) return;
+            // if (nodes[4][index] && nodes[4][index].trashed) return;
 
             // remove node if doesn't have any parents
             if ((nodes[4][index] && nodes[4][index].trashed) || !(nodes[4][index] && nodes[4][index].hasOwnProperty('parents'))) {
@@ -191,7 +187,7 @@ export function getFolderStructure() {
                 // update length
                 len = len - 1;
 
-                // console.log(nodes[2][index]);
+                // console.log(nodes[4][index]);
                 // console.log(JSON.stringify(a[0]));
 
                 try {
