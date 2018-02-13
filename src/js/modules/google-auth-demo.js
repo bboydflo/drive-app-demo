@@ -101,6 +101,13 @@ export function getFolderStructure() {
       // create a new tree
       var t = new Tree({ id: 'root' });
 
+      // a collection of trees
+      var trees = [];
+      trees.push({
+        name: 'drive',
+        value: t
+      });
+
       // add shared with me node
       t.add({ id: 'shared' }, 'root', t.traverseBF);
 
@@ -165,6 +172,7 @@ export function getFolderStructure() {
 
           // add remaining folders in a loop
           t.contains(node => {
+            var a;
 
             // found condition
             // TODO: check if node.data.id is included in the list of parents of nodes[4][index]
@@ -172,7 +180,7 @@ export function getFolderStructure() {
             if (nodes[4][index] && _.contains(nodes[4][index].parents, node.data.id)) {
 
               // remove node from the remaining folders
-              var a = nodes[4].splice(index, 1);
+              a = nodes[4].splice(index, 1);
 
               // update length
               len = len - 1;
@@ -186,6 +194,19 @@ export function getFolderStructure() {
                 t.add(a[0], node.data.id, t.traverseBF);
               } catch (e) {
                 console.log(e, index, a[0], node);
+              }
+            } else {
+              if (!nodes[4][index].hasOwnProperty('parents')) {
+                a = nodes[4].splice(index, 1);
+
+                try {
+
+                  // add node to the tree
+                  t.add(a[0], 'root', t.traverseBF);
+                  len = len - 1;
+                } catch (e) {
+                  console.log(e, index, a[0], node);
+                }
               }
             }
 
