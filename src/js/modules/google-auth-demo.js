@@ -300,7 +300,7 @@ function getSharedPdfFiles(nextPageToken, files = []) {
 function getRemainingFolders(nextPageToken, folders = []) {
   // return getChunkFiles('mimeType = "application/vnd.google-apps.folder"', nextPageToken)
   // visibility = "limited" -> private folders
-  return getChunkFiles('mimeType = "application/vnd.google-apps.folder" and visibility = "limited" and not ("root" in parents)', nextPageToken)
+  return getChunkFiles('mimeType = "application/vnd.google-apps.folder" and trashed = false and visibility = "limited" and not ("root" in parents)', nextPageToken)
     .then(res => {
 
       if (res.files) {
@@ -340,7 +340,7 @@ function getChunkFiles(q, nextPageToken) {
   let opt = {
     q,
     // fields: 'nextPageToken, files(id, name, parents, webContentLink)',
-    fields: 'nextPageToken, files(id, name, trashed, parents, shared)',
+    fields: 'nextPageToken, files(id, name, shared, trashed, parents)',
     spaces: 'drive', // not necessary
     trashed: false // not necessary
     // useDomainAdminAccess: true, // not necessary
