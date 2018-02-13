@@ -139,6 +139,7 @@ export function getFolderStructure() {
           // do not handle trashed nodes
           if (nodes[2][index].trashed) return;
 
+          // found condition
           if (node.data.id && nodes[2][index].parents && node.data.id === nodes[2][index].parents[0]) {
 
             // remove node from the remaining folders
@@ -147,8 +148,13 @@ export function getFolderStructure() {
             // console.log(nodes[2][index]);
             console.log(JSON.stringify(a[0]));
 
-            // add node to the tree
-            t.add(a[0], node, t.traverseBF);
+            try {
+
+              // add node to the tree
+              t.add(a[0], node, t.traverseBF);
+            } catch (e) {
+              console.log(e, index, a[0], node);
+            }
           }
         }, t.traverseBF);
       }
