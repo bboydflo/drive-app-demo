@@ -129,56 +129,57 @@ export function getFolderStructure() {
       // traverse tree
       // t.traverseBF(node => { console.log(node.data); });
 
-      // add remaining folders
-      // while (nodes[2].length > 0) {}
-
       // skip
       // let skip = true;
       // if (skip) return;
 
       var len = nodes[2].length;
 
-      // insert remaining nodes and remove them while they are added to the tree
-      for (index = 0; index < len; index++) {
+      // add remaining folders
+      while (len > 0) {
 
-        // add remaining folders in a loop
-        t.contains(node => {
-          // try {} catch (e) {console.log(e);}
+        // insert remaining nodes and remove them while they are added to the tree
+        for (index = 0; index < len; index++) {
 
-          // do not handle trashed nodes
-          // if (nodes[2][index] && nodes[2][index].trashed) return;
+          // add remaining folders in a loop
+          t.contains(node => {
+            // try {} catch (e) {console.log(e);}
 
-          // remove node if doesn't have any parents
-          if ((nodes[2][index] && nodes[2][index].trashed) || !(nodes[2][index] && nodes[2][index].hasOwnProperty('parents'))) {
-            nodes[2].splice(index, 1);
-            len = len - 1;
-          } else {
+            // do not handle trashed nodes
+            // if (nodes[2][index] && nodes[2][index].trashed) return;
 
-            // found condition
-            if (node.data.id && node.data.id === nodes[2][index].parents[0]) {
-
-              // remove node from the remaining folders
-              var a = nodes[2].splice(index, 1);
-
-              // update length
+            // remove node if doesn't have any parents
+            if ((nodes[2][index] && nodes[2][index].trashed) || !(nodes[2][index] && nodes[2][index].hasOwnProperty('parents'))) {
+              nodes[2].splice(index, 1);
               len = len - 1;
+            } else {
 
-              // console.log(nodes[2][index]);
-              console.log(JSON.stringify(a[0]));
+              // found condition
+              if (node.data.id && node.data.id === nodes[2][index].parents[0]) {
 
-              try {
+                // remove node from the remaining folders
+                var a = nodes[2].splice(index, 1);
 
-                // add node to the tree
-                t.add(a[0], node.data.id, t.traverseBF);
-              } catch (e) {
-                console.log(e, index, a[0], node);
+                // update length
+                len = len - 1;
+
+                // console.log(nodes[2][index]);
+                // console.log(JSON.stringify(a[0]));
+
+                try {
+
+                  // add node to the tree
+                  t.add(a[0], node.data.id, t.traverseBF);
+                } catch (e) {
+                  console.log(e, index, a[0], node);
+                }
               }
             }
-          }
-        }, t.traverseBF);
+          }, t.traverseBF);
+        }
       }
 
-      t.traverseBF(node => { console.log(node.data); });
+      t.traverseBF(node => { console.log(node); });
     });
 }
 
