@@ -1,4 +1,5 @@
 import _ from 'underscore';
+import Tree from './simple-tree';
 // tutorial here: https://developers.google.com/drive/v3/web/quickstart/js
 
 // Client ID and API key from the Developer Console
@@ -119,15 +120,40 @@ export function getFolderStructure() {
 
   Promise.all([getRootPdfFiles(), getRootFolders()])
     .then((rootPdfs, rootFolders) => {
+
+      // create a new tree
+      var t = new Tree('root');
+
+      // reset index
+      var index = 0;
+
+      while (index < rootPdfs.length) {
+        t.add(rootFolders[index], 'root', Tree.traverseBF);
+        index++;
+      }
+
+      // reset index
+      index = 0;
+
+      while (index < rootPdfs.length) {
+        t.add(rootPdfs[index], 'root', Tree.traverseBF);
+        index++;
+      }
+
+      t.traverseBF(function (node) {
+        console.log(node.data);
+      });
+
       // log
-      console.log(rootPdfs);
-      console.log(rootFolders);
+      // console.log(rootPdfs);
+      // console.log(rootFolders);
     });
 }
 
-// get all pdf files recursively
+// get all pdf files recursively not in the root folder
 export function getPdfFiles(nextPageToken, files = []) {
-  return getChunkFiles('mimeType = "application/pdf"', nextPageToken)
+  // return getChunkFiles('mimeType = "application/pdf"', nextPageToken)
+  return getChunkFiles('mimeType = "application/pdf" and "root" not in parents', nextPageToken)
     .then(res => {
 
       if (res.files) {
