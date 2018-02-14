@@ -110,12 +110,13 @@ export function getFolderStructure() {
         return smartQuery()
           .then(nodes => {
 
+            // log
+            console.log(JSON.parse(JSON.stringify(nodes)));
+
             // create files and folders tree
             var t = new Tree({ id: rootId, name: 'root' });
 
             // add 2 children to the root node
-            // t.add({ id: 'drive' }, 'root', t.traverseBF);
-            // t.add({ id: 'shared' }, 'root', t.traverseBF);
             t.add({ id: 'drive' }, rootId, t.traverseBF);
             t.add({ id: 'shared' }, rootId, t.traverseBF);
 
