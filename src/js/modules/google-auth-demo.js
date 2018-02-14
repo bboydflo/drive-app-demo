@@ -109,12 +109,12 @@ export function getFolderStructure() {
         // minimal id validation
         if (typeof rootId === 'undefined' || chromeSyncFileSysId === 'undefined') return;
 
-        return smartQuery()
+        return Promise.all([smartQuery(), getSharedFolders(), getSharedPdfFiles()])
           .then(nodes => {
 
-            // log
-            console.log(filteredItems);
-            console.log(JSON.parse(JSON.stringify(nodes)));
+            // nodes[0] = all files and folders that aren't shared
+            // nodes[1] = all shared folders
+            // nodes[1] = all shared pdf files
 
             // create files and folders tree
             var t = new Tree({ id: rootId, name: 'root' });
@@ -125,9 +125,9 @@ export function getFolderStructure() {
             t.add({ id: chromeSyncFileSysId }, rootId, t.traverseBF);
 
             let index;
-            let len = nodes.length;
+            let len = nodes[0].length;
 
-            // add remaining nodes
+            // add files and folders that are not shared with me
             // while (nodes.length > 0) {
             while (len > 0) {
 
@@ -139,16 +139,16 @@ export function getFolderStructure() {
                   var a;
 
                   // check if node.data.id is included in the list of parents of nodes[index]
-                  if (nodes[index] && _.contains(nodes[index].parents, node.data.id)) {
+                  if (nodes[0][index] && _.contains(nodes[0][index].parents, node.data.id)) {
 
                     // get exact parent id index
-                    let parentIdIdx = nodes[index].parents.indexOf(node.data.id);
+                    let parentIdIdx = nodes[0][index].parents.indexOf(node.data.id);
 
                     // get parent id
-                    let parentId = nodes[index].parents[parentIdIdx];
+                    let parentId = nodes[0][index].parents[parentIdIdx];
 
                     // remove node from the remaining folders
-                    a = nodes.splice(index, 1);
+                    a = nodes[0].splice(index, 1);
 
                     // update length
                     len = len - 1;
@@ -161,12 +161,82 @@ export function getFolderStructure() {
               }
             }
 
+            // add shared folders
+            for (index = 0; index < nodes[1].length; index++) {
+              t.add(nodes[1][index], 'shared', t.traverseBF);
+            }
+
+            // add shared pdf files
+            for (index = 0; index < nodes[2].length; index++) {
+              t.add(nodes[2][index], 'shared', t.traverseBF);
+            }
+
             // render the tree structure
             t.traverseBF(node => {
-              if (node && node.data && node.data.name === 'root') {
+              if (node && node.data && node.data.id === 'root') {
                 renderStructure(node);
               }
             });
+
+            /* return smartQuery()
+              .then(nodes => {
+
+                // log
+                console.log(filteredItems);
+                console.log(JSON.parse(JSON.stringify(nodes)));
+
+                // create files and folders tree
+                var t = new Tree({ id: rootId, name: 'root' });
+
+                // add 2 children to the root node
+                t.add({ id: 'drive' }, rootId, t.traverseBF);
+                t.add({ id: 'shared' }, rootId, t.traverseBF);
+                t.add({ id: chromeSyncFileSysId }, rootId, t.traverseBF);
+
+                let index;
+                let len = nodes.length;
+
+                // add remaining nodes
+                // while (nodes.length > 0) {
+                while (len > 0) {
+
+                  // insert remaining nodes and remove them while they are added to the tree
+                  for (index = 0; index < nodes.length; index++) {
+
+                    // add remaining folders in a loop
+                    t.contains(node => {
+                      var a;
+
+                      // check if node.data.id is included in the list of parents of nodes[index]
+                      if (nodes[index] && _.contains(nodes[index].parents, node.data.id)) {
+
+                        // get exact parent id index
+                        let parentIdIdx = nodes[index].parents.indexOf(node.data.id);
+
+                        // get parent id
+                        let parentId = nodes[index].parents[parentIdIdx];
+
+                        // remove node from the remaining folders
+                        a = nodes.splice(index, 1);
+
+                        // update length
+                        len = len - 1;
+
+                        // add node to the tree
+                        // t.add(a[0], node.data.id, t.traverseBF);
+                        t.add(a[0], parentId, t.traverseBF);
+                      }
+                    }, t.traverseBF);
+                  }
+                }
+
+                // render the tree structure
+                t.traverseBF(node => {
+                  if (node && node.data && node.data.name === 'root') {
+                    renderStructure(node);
+                  }
+                });
+              }); */
           });
       });
   }
@@ -595,7 +665,7 @@ export function smartQuery(nextPageToken, files = []) {
    * get all folders and pdf files
    */
   return getList({
-    q: 'mimeType = "application/pdf" or mimeType = "application/vnd.google-apps.folder" and trashed = false and visibility = "limited"',
+    q: 'mimeType = "application/pdf" or mimeType = "application/vnd.google-apps.folder" and trashed = false',
     fields: 'nextPageToken, files(id, name, shared, trashed, owners, ownedByMe, mimeType, fileExtension, parents)'
   }, nextPageToken)
     .then(res => {
@@ -606,7 +676,7 @@ export function smartQuery(nextPageToken, files = []) {
         // filter removed items or items that do not have any parents
         // also for now filter shared nodes as well (|| node.shared)
         files = files.filter(node => {
-          if (node && (node.trashed || !node.hasOwnProperty('parents') || node.parents.length === 0)) {
+          if (node && (node.trashed || node.shared || !node.hasOwnProperty('parents') || node.parents.length === 0)) {
             filteredItems.push(JSON.parse(JSON.stringify(node)));
             return false;
           }
