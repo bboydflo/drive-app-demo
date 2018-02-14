@@ -62,7 +62,7 @@ export function signOut() {
 function renderStructure(node, indentation = '') {
   let i, fileType;
   if (node && node.data && node.data.id) {
-    if (node.fileExtension && node.fileExtension === 'pdf') {
+    if (node.data.fileExtension && node.data.fileExtension === 'pdf') {
       fileType = '▬';
     } else {
       fileType = '►';

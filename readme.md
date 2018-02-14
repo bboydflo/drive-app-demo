@@ -8,7 +8,7 @@ use `// eslint-disable-next-line` to disable `eslint` for the next line
 
 ```sh
 $ npm install
-$ npm tun build
+$ npm run build
 ```
 
 ### To open a local server
@@ -17,8 +17,11 @@ $ npm tun build
 $ npm run serve
 ```
 
+> This demo needs to run inside github pages because it's using google api which cannot be used from `localhost`
+
 ### TODO's
 
-- [ ] add pdf.js
-- [ ] add integration with google drive api
-- [ ] implement new route to be able to open files from google drive
+- [x] add pdf.js
+- [x] add integration with google drive api
+- [x] implement new route to be able to open files from google drive
+- [ ] add custom widget to see folders and files from google drive
