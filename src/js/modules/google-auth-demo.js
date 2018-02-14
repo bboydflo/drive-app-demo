@@ -354,7 +354,7 @@ export function smartQuery(nextPageToken, files = []) {
         // shared nodes as well (|| node.shared)
         files = files.filter(node => {
           if (node && !node.hasOwnProperty('parents')) {
-            console.warning('does not have parents: ' + JSON.stringify(node));
+            console.warn('does not have parents: ' + JSON.stringify(node));
           }
           if (node && (node.trashed || !node.ownedByMe || (node.parents && node.parents.length === 0))) {
             return false;
