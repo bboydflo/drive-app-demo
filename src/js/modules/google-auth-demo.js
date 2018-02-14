@@ -328,8 +328,6 @@ export function getFileById(fileId) {
   // .then(blob => URL.createObjectURL(blob));
 }
 
-// var filteredItems = [];
-
 // fetch all folders and pdf files that are not in root, not trashed
 export function smartQuery(nextPageToken, files = []) {
 
@@ -343,7 +341,7 @@ export function smartQuery(nextPageToken, files = []) {
    * get all folders and pdf files
    */
   return getList({
-    q: 'mimeType = "application/pdf" or mimeType = "application/vnd.google-apps.folder" and trashed = false and sharedWithMe = false',
+    q: 'mimeType = "application/pdf" or mimeType = "application/vnd.google-apps.folder" and trashed = false and "me" in owners',
     fields: 'nextPageToken, files(id, name, shared, trashed, owners, ownedByMe, mimeType, fileExtension, parents)',
     corpora: 'user'
   }, nextPageToken)
@@ -353,10 +351,12 @@ export function smartQuery(nextPageToken, files = []) {
       if (res.files) {
 
         // filter removed items or items that do not have any parents
-        // also for now filter shared nodes as well (|| node.shared)
+        // shared nodes as well (|| node.shared)
         files = files.filter(node => {
-          if (node && (node.trashed || node.shared || !node.hasOwnProperty('parents') || node.parents.length === 0)) {
-            // filteredItems.push(JSON.parse(JSON.stringify(node)));
+          if (node && !node.hasOwnProperty('parents')) {
+            console.warning('does not have parents: ' + JSON.stringify(node));
+          }
+          if (node && (node.trashed || !node.ownedByMe || (node.parents && node.parents.length === 0))) {
             return false;
           }
           return true;
@@ -425,49 +425,19 @@ export function getFolderStructure() {
         // minimal id validation
         if (typeof rootId === 'undefined' || chromeSyncFileSysId === 'undefined') return;
 
-        return Promise.all([smartQuery(), getSharedFolders(), getSharedPdfFiles()])
+        smartQuery()
           .then(nodes => {
 
             // log
             console.log(JSON.parse(JSON.stringify(nodes)));
 
-            // nodes[0] = all files and folders that aren't shared
-            // nodes[1] = all shared folders
-            // nodes[1] = all shared pdf files
-
             // create files and folders tree
             var t = new Tree({ id: rootId, name: 'root' });
 
-            // add 2 children to the root node
-            t.add({ id: 'drive' }, rootId, t.traverseBF);
-            t.add({ id: 'shared' }, rootId, t.traverseBF);
+            // add children to the root node
             t.add({ id: chromeSyncFileSysId }, rootId, t.traverseBF);
 
             let index;
-
-            // add shared folders
-            for (index = 0; index < nodes[1].length; index++) {
-              t.add(nodes[1][index], 'shared', t.traverseBF);
-            }
-
-            // add shared pdf files
-            for (index = 0; index < nodes[2].length; index++) {
-              t.add(nodes[2][index], 'shared', t.traverseBF);
-            }
-
-            let sk = false;
-            if (sk) {
-
-              // render the tree structure
-              t.traverseBF(node => {
-                // if (node && node.data && node.data.id === rootId) {
-                if (node && node.data && node.data.name === 'root') {
-                  renderStructure(node);
-                }
-              });
-              return;
-            }
-
             let len = nodes[0].length;
 
             // add files and folders that are not shared with me
