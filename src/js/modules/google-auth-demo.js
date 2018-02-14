@@ -207,13 +207,20 @@ export function getFolderStructure() {
       }
 
       function renderStructure (node, indentation = '') {
-        var i;
+        let i, log;
         if (node && node.data && node.data.id) {
-          console.log(indentation + node.data.id + '\n');
+          if (node.children && node.children.length) {
+            log = '►';
+          } else {
+            log = '▬';
+          }
+
+          // log
+          console.log(log + indentation + (node.data.name || node.data.id) + '\n');
 
           if (node.children && node.children.length) {
             for (i = 0; i < node.children.length; i++) {
-              renderStructure(node.children[i], indentation + '-');
+              renderStructure(node.children[i], indentation + ' ');
             }
           }
         }
@@ -486,6 +493,15 @@ export function getFileById(fileId) {
 
 // fetch all folders and pdf files that are not in root, not trashed
 export function smartQuery(nextPageToken, files = []) {
+
+  /**
+   * observations about this query
+   * trashed nodes still appear -> filter trashed nodes
+   * files with mimeType = "application/pdf" also have fileExtension = "pdf"
+   * files with mimeType = "application/vnd.google-apps.folder" do not have fileExtension attribute
+   * every node that has attribute ownedByMe = false and shared = true should go into shared with me branch
+   * some nodes do not have any parents -> add them to the root folder
+   */
   return getList({
     q: 'mimeType = "application/pdf" or mimeType = "application/vnd.google-apps.folder" and trashed = false and not ("root" in parents)',
     fields: 'nextPageToken, files(id, name, shared, trashed, owners, ownedByMe, mimeType, fileExtension, parents)'
