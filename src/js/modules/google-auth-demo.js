@@ -364,6 +364,9 @@ export function getFolderStructure() {
 
   if (skipOld) {
 
+    // TODO:
+    console.warn('remove empty folders and create the actual widget');
+
     // get ids
     return Promise.all([getRootId(), getChromeFileSysId()])
       .then(ids => {
@@ -428,67 +431,6 @@ export function getFolderStructure() {
                 renderStructure(node);
               }
             });
-
-            /* return smartQuery()
-              .then(nodes => {
-
-                // log
-                console.log(filteredItems);
-                console.log(JSON.parse(JSON.stringify(nodes)));
-
-                // create files and folders tree
-                var t = new Tree({ id: rootId, name: 'root' });
-
-                // add 2 children to the root node
-                t.add({ id: 'drive' }, rootId, t.traverseBF);
-                t.add({ id: 'shared' }, rootId, t.traverseBF);
-                t.add({ id: chromeSyncFileSysId }, rootId, t.traverseBF);
-
-                let index;
-                let len = nodes.length;
-
-                // add remaining nodes
-                // while (nodes.length > 0) {
-                while (len > 0) {
-
-                  // insert remaining nodes and remove them while they are added to the tree
-                  for (index = 0; index < nodes.length; index++) {
-
-                    // add remaining folders in a loop
-                    t.contains(node => {
-                      var a;
-
-                      // check if node.data.id is included in the list of parents of nodes[index]
-                      if (nodes[index] && _.contains(nodes[index].parents, node.data.id)) {
-
-                        // get exact parent id index
-                        let parentIdIdx = nodes[index].parents.indexOf(node.data.id);
-
-                        // get parent id
-                        let parentId = nodes[index].parents[parentIdIdx];
-
-                        // remove node from the remaining folders
-                        a = nodes.splice(index, 1);
-
-                        // update length
-                        len = len - 1;
-
-                        // add node to the tree
-                        // t.add(a[0], node.data.id, t.traverseBF);
-                        t.add(a[0], parentId, t.traverseBF);
-                      }
-                    }, t.traverseBF);
-                  }
-                }
-
-                // render the tree structure
-                t.traverseBF(node => {
-                  if (node && node.data && node.data.name === 'root') {
-                    renderStructure(node);
-                  }
-                });
-              });
-            */
           });
       });
   }
