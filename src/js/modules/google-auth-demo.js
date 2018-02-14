@@ -158,7 +158,7 @@ export function getFolderStructure() {
 
             // render the tree structure
             t.traverseBF(node => {
-              if (node && node.data && node.data.id === 'root') {
+              if (node && node.data && node.data.name === 'root') {
                 renderStructure(node);
               }
             });
