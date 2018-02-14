@@ -217,11 +217,11 @@ export function getFolderStructure() {
 
       t.traverseBF(node => {
         console.log(node.data);
-        if (node.children.length) {
+        /* if (node.children.length) {
           node.children.forEach(element => {
             console.log(element);
           });
-        }
+        } */
       });
     });
 }
@@ -451,8 +451,8 @@ export function smartQuery(nextPageToken, files) {
       }
 
       if (res.nextPageToken) {
-        // return Promise.resolve(smartQuery(res.nextPageToken, files));
-        files.push(...Promise.resolve(smartQuery(res.nextPageToken, files)));
+        return Promise.resolve(smartQuery(res.nextPageToken, files));
+        // files.push(...Promise.resolve(smartQuery(res.nextPageToken, files)));
       }
 
       return files;
