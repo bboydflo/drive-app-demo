@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import clone from 'clone';
+// import clone from 'clone';
 import Tree from './simple-tree';
 import isPojo from 'is-pojo';
 
@@ -102,46 +102,24 @@ export function getFolderStructure() {
 
       // TOOD: change while to for loops
 
-      var index = 0;
+      var index;
 
-      /* // add root folders
-      while (index < nodes[0].length) {
-        t.add(nodes[0][index], 'root', t.traverseBF);
-        index++;
-      } */
+      // add root folders
       for (index = 0; index < nodes[0].length; index++) {
         t.add(nodes[0][index], 'root', t.traverseBF);
       }
 
-      /* // add root pdf files
-      index = 0;
-      while (index < nodes[1].length) {
-        // if (!nodes[1][index].trashed) {
-        //   t.add(nodes[1][index], 'root', t.traverseBF);
-        // }
-        t.add(nodes[1][index], 'root', t.traverseBF);
-        index++;
-      } */
+      // add root pdf files
       for (index = 0; index < nodes[1].length; index++) {
         t.add(nodes[1][index], 'root', t.traverseBF);
       }
 
-      /* // add shared folders
-      index = 0;
-      while (index < nodes[2].length) {
-        t.add(nodes[2][index], 'shared', t.traverseBF);
-        index++;
-      } */
+      // add shared folders
       for (index = 0; index < nodes[2].length; index++) {
         t.add(nodes[2][index], 'shared', t.traverseBF);
       }
 
-      /* // add shared pdf files
-      index = 0;
-      while (index < nodes[3].length) {
-        t.add(nodes[3][index], 'shared', t.traverseBF);
-        index++;
-      } */
+      // add shared pdf files
       for (index = 0; index < nodes[3].length; index++) {
         t.add(nodes[3][index], 'shared', t.traverseBF);
       }
@@ -165,9 +143,7 @@ export function getFolderStructure() {
           t.contains(node => {
             var a;
 
-            // found condition
-            // TODO: check if node.data.id is included in the list of parents of nodes[4][index]
-            // if (node.data.id && node.data.id === nodes[4][index].parents[0]) {
+            // check if node.data.id is included in the list of parents of nodes[4][index]
             if (nodes[4][index] && _.contains(nodes[4][index].parents, node.data.id)) {
 
               // remove node from the remaining folders
@@ -200,12 +176,41 @@ export function getFolderStructure() {
                 }
               }
             }
+          }, t.traverseBF);
+        }
+      }
 
-            /* // remove node if doesn't have any parents
-            if (!nodes[4][index].hasOwnProperty('parents')) {
-              nodes[4].splice(index, 1);
+      len = nodes[5].length;
+
+      // add remaining pdf files
+      while (len > 0) {
+
+        // insert remaining nodes and remove them while they are added to the tree
+        for (index = 0; index < nodes[5].length; index++) {
+
+          // add remaining pdf files
+          t.contains(node => {
+            var a;
+
+            // check if node.data.id is included in the list of parents of nodes[5][index]
+            if (nodes[5][index] && _.contains(nodes[5][index].parents, node.data.id)) {
+
+              // remove node from the list
+              a = nodes[5].splice(index, 1);
+
+              // update length
               len = len - 1;
-            } */
+
+              // add node to the tree
+              t.add(a[0], node.data.id, t.traverseBF);
+            } else {
+              if (isPojo(nodes[5][index]) && !nodes[5][index].hasOwnProperty('parents')) {
+                a = nodes[5].splice(index, 1);
+
+                // add node to the tree as a child of the root node
+                t.add(a[0], 'root', t.traverseBF);
+              }
+            }
           }, t.traverseBF);
         }
       }

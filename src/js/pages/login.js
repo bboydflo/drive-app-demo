@@ -1,6 +1,6 @@
 import { h, Component } from 'preact';
 import { connect } from 'preact-redux';
-import { runSmartQuery, getFolderStructure } from '../modules/google-auth-demo';
+import { smartQuery, getFolderStructure } from '../modules/google-auth-demo';
 
 import Navbar from '../components/navbar';
 
@@ -88,7 +88,7 @@ class IndexPage extends Component {
   }
 
   smartQuery = () => {
-    runSmartQuery().then(files => {
+    smartQuery().then(files => {
       console.log(files);
     });
   }
