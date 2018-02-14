@@ -111,6 +111,7 @@ export function getFolderStructure() {
           .then(nodes => {
 
             // log
+            console.log(filteredItems);
             console.log(JSON.parse(JSON.stringify(nodes)));
 
             // create files and folders tree
@@ -122,6 +123,19 @@ export function getFolderStructure() {
 
             let index;
             let len = nodes.length;
+
+            let skip = true;
+            if (skip) {
+
+              // render the tree structure
+              t.traverseBF(node => {
+                if (node && node.data && node.data.name === 'root') {
+                  renderStructure(node);
+                }
+              });
+
+              return;
+            }
 
             // add remaining nodes
             while (len > 0) {
@@ -561,6 +575,8 @@ export function getFileById(fileId) {
   // .then(blob => URL.createObjectURL(blob));
 }
 
+var filteredItems = [];
+
 // fetch all folders and pdf files that are not in root, not trashed
 export function smartQuery(nextPageToken, files = []) {
 
@@ -583,7 +599,10 @@ export function smartQuery(nextPageToken, files = []) {
 
         // filter removed items or items that do not have any parents
         files = files.filter(node => {
-          if (node && (node.trashed || !node.hasOwnProperty('parents') || node.parents.length === 0)) return false;
+          if (node && (node.trashed || !node.hasOwnProperty('parents') || node.parents.length === 0)) {
+            filteredItems.push(JSON.parse(JSON.stringify(node)));
+            return false;
+          }
           return true;
         });
 
