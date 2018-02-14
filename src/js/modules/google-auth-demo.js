@@ -120,11 +120,11 @@ export function getFolderStructure() {
             t.add({ id: 'shared' }, rootId, t.traverseBF);
 
             let index;
-            // let len = nodes.length;
+            let len = nodes.length;
 
             // add remaining nodes
-            // while (len > 0) {
-            while (nodes.length > 0) {
+            while (len > 0) {
+            // while (nodes.length > 0) {
 
               // insert remaining nodes and remove them while they are added to the tree
               for (index = 0; index < nodes.length; index++) {
@@ -146,7 +146,7 @@ export function getFolderStructure() {
                     a = nodes.splice(index, 1);
 
                     // update length
-                    // len = len - 1;
+                    len = len - 1;
 
                     // add node to the tree
                     // t.add(a[0], node.data.id, t.traverseBF);
