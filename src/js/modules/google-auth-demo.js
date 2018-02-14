@@ -71,168 +71,172 @@ export function getFolderStructure() {
   /* // get all folders from google drive
   gapi.client.drive.files.list({ q: 'mimeType = "application/vnd.google-apps.folder"', fields: 'nextPageToken, files(id, name, parents)', spaces: 'drive'}); */
 
-  Promise.all([
-    getRootFolders(),
-    getRootPdfFiles(),
-    getSharedFolders(),
-    getSharedPdfFiles(),
-    getRemainingFolders(),
-    getRemainingPdfFiles()
-  ])
-    .then(nodes => {
+  // skip old implementation
+  let skip = true;
+  if (skip) {
+    return Promise.all([
+      getRootFolders(),
+      getRootPdfFiles(),
+      getSharedFolders(),
+      getSharedPdfFiles(),
+      getRemainingFolders(),
+      getRemainingPdfFiles()
+    ])
+      .then(nodes => {
 
-      // create files and folders tree
-      var t = new Tree({ id: 'root' });
+        // create files and folders tree
+        var t = new Tree({ id: 'root' });
 
-      // add 2 children to the root node
-      t.add({ id: 'drive' }, 'root', t.traverseBF);
-      t.add({ id: 'shared' }, 'root', t.traverseBF);
+        // add 2 children to the root node
+        t.add({ id: 'drive' }, 'root', t.traverseBF);
+        t.add({ id: 'shared' }, 'root', t.traverseBF);
 
-      // nodes[0] = root folders
-      // nodes[1] = root pdf files
-      // nodes[2] = shared folders
-      // nodes[3] = get shared pdf files
-      // nodes[4] = remaining folders (not directly inside root folder)
-      // nodes[5] = remaining pdf files (not directly inside root folder) and not shared with anyone (visibility = "limited")
+        // nodes[0] = root folders
+        // nodes[1] = root pdf files
+        // nodes[2] = shared folders
+        // nodes[3] = get shared pdf files
+        // nodes[4] = remaining folders (not directly inside root folder)
+        // nodes[5] = remaining pdf files (not directly inside root folder) and not shared with anyone (visibility = "limited")
 
-      var len, index;
+        var len, index;
 
-      // add root folders
-      for (index = 0; index < nodes[0].length; index++) {
-        t.add(nodes[0][index], 'root', t.traverseBF);
-      }
+        // add root folders
+        for (index = 0; index < nodes[0].length; index++) {
+          t.add(nodes[0][index], 'root', t.traverseBF);
+        }
 
-      // add root pdf files
-      for (index = 0; index < nodes[1].length; index++) {
-        t.add(nodes[1][index], 'root', t.traverseBF);
-      }
+        // add root pdf files
+        for (index = 0; index < nodes[1].length; index++) {
+          t.add(nodes[1][index], 'root', t.traverseBF);
+        }
 
-      // add shared folders
-      for (index = 0; index < nodes[2].length; index++) {
-        t.add(nodes[2][index], 'shared', t.traverseBF);
-      }
+        // add shared folders
+        for (index = 0; index < nodes[2].length; index++) {
+          t.add(nodes[2][index], 'shared', t.traverseBF);
+        }
 
-      // add shared pdf files
-      for (index = 0; index < nodes[3].length; index++) {
-        t.add(nodes[3][index], 'shared', t.traverseBF);
-      }
+        // add shared pdf files
+        for (index = 0; index < nodes[3].length; index++) {
+          t.add(nodes[3][index], 'shared', t.traverseBF);
+        }
 
-      // get initial length of remaining folders
-      len = nodes[4].length;
+        // get initial length of remaining folders
+        len = nodes[4].length;
 
-      // add remaining folders
-      while (len > 0) {
+        // add remaining folders
+        while (len > 0) {
 
-        // insert remaining nodes and remove them while they are added to the tree
-        for (index = 0; index < nodes[4].length; index++) {
+          // insert remaining nodes and remove them while they are added to the tree
+          for (index = 0; index < nodes[4].length; index++) {
 
-          // add remaining folders in a loop
-          t.contains(node => {
-            var a;
+            // add remaining folders in a loop
+            t.contains(node => {
+              var a;
 
-            // check if node.data.id is included in the list of parents of nodes[4][index]
-            if (nodes[4][index] && _.contains(nodes[4][index].parents, node.data.id)) {
+              // check if node.data.id is included in the list of parents of nodes[4][index]
+              if (nodes[4][index] && _.contains(nodes[4][index].parents, node.data.id)) {
 
-              // remove node from the remaining folders
-              a = nodes[4].splice(index, 1);
-
-              // update length
-              len = len - 1;
-
-              // console.log(nodes[4][index]);
-              // console.log(JSON.stringify(a[0]));
-
-              try {
-
-                // add node to the tree
-                t.add(a[0], node.data.id, t.traverseBF);
-              } catch (e) {
-                console.log(e, index, a[0], node);
-              }
-            } else {
-              if (isPojo(nodes[4][index]) && !nodes[4][index].hasOwnProperty('parents')) {
+                // remove node from the remaining folders
                 a = nodes[4].splice(index, 1);
+
+                // update length
+                len = len - 1;
+
+                // console.log(nodes[4][index]);
+                // console.log(JSON.stringify(a[0]));
 
                 try {
 
                   // add node to the tree
-                  t.add(a[0], 'root', t.traverseBF);
-                  len = len - 1;
+                  t.add(a[0], node.data.id, t.traverseBF);
                 } catch (e) {
                   console.log(e, index, a[0], node);
                 }
+              } else {
+                if (isPojo(nodes[4][index]) && !nodes[4][index].hasOwnProperty('parents')) {
+                  a = nodes[4].splice(index, 1);
+
+                  try {
+
+                    // add node to the tree
+                    t.add(a[0], 'root', t.traverseBF);
+                    len = len - 1;
+                  } catch (e) {
+                    console.log(e, index, a[0], node);
+                  }
+                }
               }
-            }
-          }, t.traverseBF);
+            }, t.traverseBF);
+          }
         }
-      }
 
-      // get initial length of remaining pdf files
-      len = nodes[5].length;
+        // get initial length of remaining pdf files
+        len = nodes[5].length;
 
-      // add remaining pdf files
-      while (len > 0) {
+        // add remaining pdf files
+        while (len > 0) {
 
-        // insert remaining nodes and remove them while they are added to the tree
-        for (index = 0; index < nodes[5].length; index++) {
+          // insert remaining nodes and remove them while they are added to the tree
+          for (index = 0; index < nodes[5].length; index++) {
 
-          // add remaining pdf files
-          t.contains(node => {
-            var a;
+            // add remaining pdf files
+            t.contains(node => {
+              var a;
 
-            // check if node.data.id is included in the list of parents of nodes[5][index]
-            if (nodes[5][index] && _.contains(nodes[5][index].parents, node.data.id)) {
+              // check if node.data.id is included in the list of parents of nodes[5][index]
+              if (nodes[5][index] && _.contains(nodes[5][index].parents, node.data.id)) {
 
-              // remove node from the list
-              a = nodes[5].splice(index, 1);
-
-              // update length
-              len = len - 1;
-
-              // add node to the tree
-              t.add(a[0], node.data.id, t.traverseBF);
-            } else {
-              if (isPojo(nodes[5][index]) && !nodes[5][index].hasOwnProperty('parents')) {
+                // remove node from the list
                 a = nodes[5].splice(index, 1);
 
-                // add node to the tree as a child of the root node
-                t.add(a[0], 'root', t.traverseBF);
+                // update length
+                len = len - 1;
+
+                // add node to the tree
+                t.add(a[0], node.data.id, t.traverseBF);
+              } else {
+                if (isPojo(nodes[5][index]) && !nodes[5][index].hasOwnProperty('parents')) {
+                  a = nodes[5].splice(index, 1);
+
+                  // add node to the tree as a child of the root node
+                  t.add(a[0], 'root', t.traverseBF);
+                }
+              }
+            }, t.traverseBF);
+          }
+        }
+
+        function renderStructure (node, indentation = '') {
+          let i, fileType;
+          if (node && node.data && node.data.id) {
+            if (node.children && node.children.length) {
+              fileType = '►';
+            } else {
+              fileType = '▬';
+            }
+
+            if (node.data.id !== 'root') {
+
+              // log
+              console.log(indentation + fileType + (node.data.name || node.data.id) + '\n');
+            }
+
+            if (node.children && node.children.length) {
+              for (i = 0; i < node.children.length; i++) {
+                renderStructure(node.children[i], indentation + ' ');
               }
             }
-          }, t.traverseBF);
-        }
-      }
-
-      function renderStructure (node, indentation = '') {
-        let i, fileType;
-        if (node && node.data && node.data.id) {
-          if (node.children && node.children.length) {
-            fileType = '►';
-          } else {
-            fileType = '▬';
-          }
-
-          if (node.data.id !== 'root') {
-
-            // log
-            console.log(indentation + fileType + (node.data.name || node.data.id) + '\n');
-          }
-
-          if (node.children && node.children.length) {
-            for (i = 0; i < node.children.length; i++) {
-              renderStructure(node.children[i], indentation + ' ');
-            }
           }
         }
-      }
 
-      // render the tree structure
-      t.traverseBF(node => {
-        if (node && node.data && node.data.id === 'root') {
-          renderStructure(node);
-        }
+        // render the tree structure
+        t.traverseBF(node => {
+          if (node && node.data && node.data.id === 'root') {
+            renderStructure(node);
+          }
+        });
       });
-    });
+  }
 }
 
 function getRootFolders(nextPageToken, rootFolders = []) {
@@ -406,6 +410,7 @@ function getList(opt, nextPageToken) {
     opt.pageToken = nextPageToken;
   }
 
+  // update default options
   let o = Object.assign({
     q: '"root" in parents',
     fields: 'nextPageToken, files(id, name, parents)'
@@ -420,7 +425,18 @@ function getList(opt, nextPageToken) {
         return resp.result;
       }
     });
+}
 
+function getRootId() {
+
+  // send google drive api v3 request
+  return gapi.client.drive.files.get({ fileId: 'root' }).then(resp => {
+
+    // do some validation
+    if (resp && resp.status && resp.status === 200 && resp.result && resp.result.id) {
+      return resp.result.id;
+    }
+  });
 }
 
 export function getAccessToken() {
