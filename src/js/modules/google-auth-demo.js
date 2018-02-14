@@ -377,7 +377,7 @@ export function getFolderStructure() {
           .then(nodes => {
 
             // log
-            console.log(JSON.parse(JSON.stringify(nodes)));
+            // console.log(JSON.parse(JSON.stringify(nodes)));
 
             // create files and folders tree
             var t = new Tree({ id: rootId, name: 'root' });
