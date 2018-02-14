@@ -208,8 +208,8 @@ export function getFolderStructure() {
 
       function renderStructure (node, indentation = '') {
         var i;
-        if (node && node.data && node.data.name) {
-          console.log(indentation + node.data.name + '\n');
+        if (node && node.data && node.data.id) {
+          console.log(indentation + node.data.id + '\n');
 
           if (node.children && node.children.length) {
             for (i = 0; i < node.children.length; i++) {
@@ -416,7 +416,7 @@ function getList(opt, nextPageToken) {
 
   let o = Object.assign({
     q: '"root" in parents',
-    fields: 'nextPageToken, files(id, name, shared, trashed, owners, ownedByMe, mimeType, fileExtension, parents)'
+    fields: 'nextPageToken, files(id, name, parents)'
   }, opt);
 
   // send google drive api v3 request
@@ -488,8 +488,7 @@ export function getFileById(fileId) {
 export function smartQuery(nextPageToken, files = []) {
   return getList({
     q: 'mimeType = "application/pdf" or mimeType = "application/vnd.google-apps.folder" and trashed = false and not ("root" in parents)',
-    fields: 'nextPageToken, files(id, name, parents)'
-
+    fields: 'nextPageToken, files(id, name, shared, trashed, owners, ownedByMe, mimeType, fileExtension, parents)'
   }, nextPageToken)
     .then(res => {
       if (typeof res === 'undefined') return files;
