@@ -231,7 +231,7 @@ export function getFolderStructure() {
 
       // render the tree structure
       t.traverseBF(node => {
-        if (node && node.data && node.data.name === 'root') {
+        if (node && node.data && node.data.id === 'root') {
           renderStructure(node);
         }
         /* if (node.children.length) {
@@ -409,6 +409,28 @@ function getChunkFiles(q, nextPageToken) {
     });
 }
 
+function getList(opt, nextPageToken) {
+  if (nextPageToken) {
+    opt.pageToken = nextPageToken;
+  }
+
+  let o = Object.assign({
+    q: '"root" in parents',
+    fields: 'nextPageToken, files(id, name, shared, trashed, owners, ownedByMe, mimeType, fileExtension, parents)'
+  }, opt);
+
+  // send google drive api v3 request
+  return gapi.client.drive.files.list(o)
+    .then(resp => {
+
+      // do some validation
+      if (resp && resp.status && resp.status === 200 && resp.result && resp.result.files && resp.result.files.length) {
+        return resp.result;
+      }
+    });
+
+}
+
 export function getAccessToken() {
   return gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
 }
@@ -464,7 +486,11 @@ export function getFileById(fileId) {
 
 // fetch all folders and pdf files that are not in root, not trashed
 export function smartQuery(nextPageToken, files = []) {
-  return getChunkFiles('mimeType = "application/pdf" or mimeType = "application/vnd.google-apps.folder" and trashed = false and not ("root" in parents)', nextPageToken)
+  return getList({
+    q: 'mimeType = "application/pdf" or mimeType = "application/vnd.google-apps.folder" and trashed = false and not ("root" in parents)',
+    fields: 'nextPageToken, files(id, name, parents)'
+
+  }, nextPageToken)
     .then(res => {
       if (typeof res === 'undefined') return files;
 
