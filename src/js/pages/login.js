@@ -1,6 +1,6 @@
 import { h, Component } from 'preact';
 import { connect } from 'preact-redux';
-import { getFolderStructure } from '../modules/google-auth-demo';
+import { runSmartQuery, getFolderStructure } from '../modules/google-auth-demo';
 
 import Navbar from '../components/navbar';
 
@@ -45,9 +45,12 @@ class IndexPage extends Component {
         />
         <div id='page-content' class='container' style={pageContentStyles}>
           <div class='row'>
-            <button type='button' class='btn btn-default' id='authorize-button' style={signedIn ? 'display: none;' : 'display: block;'} onClick={this.handleAuth}>Sign in</button>
-            <button type='button' class='btn btn-default' id='signout-button' style={signedIn ? 'display: block;' : 'display: none;'} onClick={this.handleSignOut}>Sign Out</button>
-            <button type='button' class='btn btn-default' id='drive-button' onClick={this.getFolderStructure}>Get Folder structure</button>
+            <button type='button' class='btn btn-default' style={signedIn ? 'display: none;' : 'display: block;'} onClick={this.handleAuth}>Sign in</button>
+            <button type='button' class='btn btn-default' style={signedIn ? 'display: block;' : 'display: none;'} onClick={this.handleSignOut}>Sign Out</button>
+            <button type='button' class='btn btn-default' onClick={this.getFolderStructure}>Get Folder structure</button>
+          </div>
+          <div class='row'>
+            <button type='button' class='btn btn-default' onClick={this.smartQuery}>Run smart query</button>
           </div>
           {isChrome && !isAppInstalled && <div class='row'>
             <button type='button' class='btn btn-success' id='install-button' onClick={this.handleInstall}>Add to Chrome</button>
@@ -82,6 +85,12 @@ class IndexPage extends Component {
 
   getFolderStructure = () => {
     getFolderStructure();
+  }
+
+  smartQuery = () => {
+    runSmartQuery().then(files => {
+      console.log(files);
+    });
   }
 };
 

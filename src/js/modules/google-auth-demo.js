@@ -59,16 +59,6 @@ export function signOut() {
   gapi.auth2.getAuthInstance().signOut();
 }
 
-/**
- * Print files.
- */
-export function getFiles(pageSize) {
-  return gapi.client.drive.files.list({
-    'pageSize': pageSize,
-    'fields': 'nextPageToken, files(id, name)'
-  });
-}
-
 export function getFolderStructure() {
   // gapi.client.drive.files.list({ q: "'appDataFolder' in parents" }).then(resp => console.log(resp));
   // gapi.client.drive.files.list({ q: "mimeType = 'application/vnd.google-apps.folder' trashed=false", spaces: 'drive' });
@@ -79,11 +69,7 @@ export function getFolderStructure() {
   // gapi.client.drive.files.list({ 'fields': "nextPageToken, files(id, name)" }).execute();
 
   /* // get all folders from google drive
-  gapi.client.drive.files.list({
-    q: 'mimeType = "application/vnd.google-apps.folder"',
-    fields: 'nextPageToken, files(id, name, parents)',
-    spaces: 'drive'
-  }); */
+  gapi.client.drive.files.list({ q: 'mimeType = "application/vnd.google-apps.folder"', fields: 'nextPageToken, files(id, name, parents)', spaces: 'drive'}); */
 
   Promise.all([
     getRootFolders(),
@@ -93,17 +79,17 @@ export function getFolderStructure() {
     getRemainingFolders(),
     getRemainingPdfFiles()
   ])
-    .then(n => {
+    // .then(n => {
+    .then(nodes => {
 
       // log
       // console.log(n);
-
-      var nodes = clone(n);
+      // var nodes = clone(n);
 
       // create a new tree
       var t = new Tree({ id: 'root' });
 
-      // add shared with me node
+      // add 2 children to the root node
       t.add({ id: 'drive' }, 'root', t.traverseBF);
       t.add({ id: 'shared' }, 'root', t.traverseBF);
 
@@ -118,37 +104,46 @@ export function getFolderStructure() {
 
       var index = 0;
 
-      // add root folders
+      /* // add root folders
       while (index < nodes[0].length) {
         t.add(nodes[0][index], 'root', t.traverseBF);
         index++;
+      } */
+      for (index = 0; index < nodes[0].length; index++) {
+        t.add(nodes[0][index], 'root', t.traverseBF);
       }
 
+      /* // add root pdf files
       index = 0;
-
-      // add root pdf files
       while (index < nodes[1].length) {
         // if (!nodes[1][index].trashed) {
         //   t.add(nodes[1][index], 'root', t.traverseBF);
         // }
         t.add(nodes[1][index], 'root', t.traverseBF);
         index++;
+      } */
+      for (index = 0; index < nodes[1].length; index++) {
+        t.add(nodes[1][index], 'root', t.traverseBF);
       }
 
+      /* // add shared folders
       index = 0;
-
-      // add shared folders
       while (index < nodes[2].length) {
         t.add(nodes[2][index], 'shared', t.traverseBF);
         index++;
+      } */
+      for (index = 0; index < nodes[2].length; index++) {
+        t.add(nodes[2][index], 'shared', t.traverseBF);
       }
 
+      /* // add shared pdf files
       index = 0;
-
-      // add shared pdf files
       while (index < nodes[3].length) {
         t.add(nodes[3][index], 'shared', t.traverseBF);
         index++;
+      } */
+      for (index = 0; index < nodes[3].length; index++) {
+        t.add(nodes[3][index], 'shared', t.traverseBF);
       }
 
       // traverse tree
@@ -361,14 +356,14 @@ function getRemainingPdfFiles(nextPageToken, files = []) {
     });
 }
 
-// get all files[id, name, parents, webContentLink] by query string from drive
+// get all files[id, name, parents, shared, trashed, webContentLink] by query string from drive
 function getChunkFiles(q, nextPageToken) {
   let opt = {
     q,
     // fields: 'nextPageToken, files(id, name, parents, webContentLink)',
-    fields: 'nextPageToken, files(id, name, shared, trashed, parents)',
-    spaces: 'drive', // not necessary
-    trashed: false // not necessary
+    fields: 'nextPageToken, files(id, name, shared, trashed, owners, parents)'
+    // spaces: 'drive', // not necessary
+    // trashed: false // not necessary
     // useDomainAdminAccess: true, // not necessary
   };
 
@@ -439,4 +434,22 @@ export function getFileById(fileId) {
     // .then(response => response.blob());
     .then(response => new Blob([response], { type: 'application/pdf' }));
   // .then(blob => URL.createObjectURL(blob));
+}
+
+// fetch all folders and pdf files that are not in root, not trashed
+export function smartQuery(nextPageToken, files) {
+  return getChunkFiles('mimeType = "application/pdf" and mimeType = "application/vnd.google-apps.folder" and trashed = false and not ("root" in parents)', nextPageToken)
+    .then(res => {
+
+      if (res.files) {
+        files.push(...res.files);
+      }
+
+      if (res.nextPageToken) {
+        // return Promise.resolve(smartQuery(res.nextPageToken, files));
+        files.push(...Promise.resolve(smartQuery(res.nextPageToken, files)));
+      }
+
+      return files;
+    });
 }
