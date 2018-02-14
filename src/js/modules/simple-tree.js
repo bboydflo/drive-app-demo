@@ -1,24 +1,3 @@
-// import isPojo from 'is-pojo';
-// import _ from 'underscore';
-/**
- * Queue
- */
-// function Queue() {
-//   this.dataStore = [];
-//   this.enqueue = function enqueue(element) {
-//     this.dataStore.push(element);
-//   };
-//   this.dequeue = function dequeue() {
-//     return this.dataStore.shift();
-//   };
-//   this.front = function front() {
-//     return this.dataStore[0];
-//   };
-//   this.back = function back() {
-//     return this.dataStore[this.dataStore.length - 1];
-//   };
-// }
-
 function Queue() {
   this._oldestIndex = 1;
   this._newestIndex = 1;
