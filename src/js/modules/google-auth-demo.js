@@ -203,10 +203,11 @@ function getChunkFiles(q, nextPageToken) {
   let opt = {
     q,
     // fields: 'nextPageToken, files(id, name, parents, webContentLink)',
-    fields: 'nextPageToken, files(id, name, shared, trashed, owners, fileExtension, parents)'
+    fields: 'nextPageToken, files(id, name, shared, trashed, owners, fileExtension, parents)',
     // spaces: 'drive', // not necessary
     // trashed: false // not necessary
     // useDomainAdminAccess: true, // not necessary
+    corpora: 'user'
   };
 
   // has next page token
@@ -343,7 +344,8 @@ export function smartQuery(nextPageToken, files = []) {
    */
   return getList({
     q: 'mimeType = "application/pdf" or mimeType = "application/vnd.google-apps.folder" and trashed = false',
-    fields: 'nextPageToken, files(id, name, shared, trashed, owners, ownedByMe, mimeType, fileExtension, parents)'
+    fields: 'nextPageToken, files(id, name, shared, trashed, owners, ownedByMe, mimeType, fileExtension, parents)',
+    corpora: 'user'
   }, nextPageToken)
     .then(res => {
       if (typeof res === 'undefined') return files;
