@@ -79,14 +79,9 @@ export function getFolderStructure() {
     getRemainingFolders(),
     getRemainingPdfFiles()
   ])
-    // .then(n => {
     .then(nodes => {
 
-      // log
-      // console.log(n);
-      // var nodes = clone(n);
-
-      // create a new tree
+      // create files and folders tree
       var t = new Tree({ id: 'root' });
 
       // add 2 children to the root node
@@ -100,9 +95,7 @@ export function getFolderStructure() {
       // nodes[4] = remaining folders (not directly inside root folder)
       // nodes[5] = remaining pdf files (not directly inside root folder) and not shared with anyone (visibility = "limited")
 
-      // TOOD: change while to for loops
-
-      var index;
+      var len, index;
 
       // add root folders
       for (index = 0; index < nodes[0].length; index++) {
@@ -128,10 +121,7 @@ export function getFolderStructure() {
       // t.traverseBF(node => { console.log(node.data); });
 
       // get initial length of remaining folders
-      var len = nodes[4].length;
-
-      // log
-      // console.log(JSON.parse(JSON.stringify(nodes[4])));
+      len = nodes[4].length;
 
       // add remaining folders
       while (len > 0) {
@@ -180,6 +170,7 @@ export function getFolderStructure() {
         }
       }
 
+      // get initial length of remaining pdf files
       len = nodes[5].length;
 
       // add remaining pdf files
@@ -215,8 +206,27 @@ export function getFolderStructure() {
         }
       }
 
+      function renderStructure (node, indentation = '') {
+        var i;
+        if (node && node.children && node.children.length) {
+          for (i = 0; i < node.children.length; i++) {
+            return renderStructure(node.children[i], indentation + '-');
+          }
+        }
+        if (node && node.data && node.data.name) {
+          return indentation + node.data.name + '\n';
+        }
+
+        return '';
+      };
+
+      // let indentation = '';
+
+      // render the tree structure
       t.traverseBF(node => {
-        console.log(node.data);
+        if (node && node.data && node.data.name === 'root') {
+          renderStructure(node);
+        }
         /* if (node.children.length) {
           node.children.forEach(element => {
             console.log(element);
@@ -237,6 +247,7 @@ function getRootFolders(nextPageToken, rootFolders = []) {
   // add `and visibility = "limited"` to see only the private folders
   return getChunkFiles('"root" in parents and mimeType = "application/vnd.google-apps.folder" and trashed = false', nextPageToken)
     .then(res => {
+      if (typeof res === 'undefined') return rootFolders;
 
       if (res.files) {
         rootFolders.push(...res.files);
@@ -264,6 +275,7 @@ function getRootPdfFiles(nextPageToken, rootPdfs = []) {
   }; */
   return getChunkFiles('"root" in parents and mimeType = "application/pdf" and trashed = false', nextPageToken)
     .then(res => {
+      if (typeof res === 'undefined') return rootPdfs;
 
       if (res.files) {
         rootPdfs.push(...res.files);
@@ -278,10 +290,9 @@ function getRootPdfFiles(nextPageToken, rootPdfs = []) {
 }
 
 function getSharedFolders(nextPageToken, sharedFolders = []) {
-
-  // and trashed = false
   return getChunkFiles('sharedWithMe and mimeType = "application/vnd.google-apps.folder" and trashed = false', nextPageToken)
     .then(res => {
+      if (typeof res === 'undefined') return sharedFolders;
 
       if (res.files) {
         sharedFolders.push(...res.files);
@@ -303,6 +314,7 @@ function getSharedPdfFiles(nextPageToken, files = []) {
   // 'sharedWithMe and mimeType = "application/pdf" and not ("root" in parents)'
   return getChunkFiles('sharedWithMe and mimeType = "application/pdf" and trashed = false and not ("root" in parents)', nextPageToken)
     .then(res => {
+      if (typeof res === 'undefined') return files;
 
       if (res.files) {
         files.push(...res.files);
@@ -328,6 +340,7 @@ function getRemainingFolders(nextPageToken, folders = []) {
   // }
   return getChunkFiles('mimeType = "application/vnd.google-apps.folder" and trashed = false and "me" in owners and not ("root" in parents)', nextPageToken)
     .then(res => {
+      if (typeof res === 'undefined') return folders;
 
       if (res.files) {
         folders.push(...res.files);
@@ -348,6 +361,7 @@ function getRemainingPdfFiles(nextPageToken, files = []) {
   // visibility = "limited" -> private pdf files
   return getChunkFiles('mimeType = "application/pdf" and trashed = false and visibility = "limited" and "me" in owners and not ("root" in parents)', nextPageToken)
     .then(res => {
+      if (typeof res === 'undefined') return files;
 
       if (res.files) {
         files.push(...res.files);
@@ -442,9 +456,10 @@ export function getFileById(fileId) {
 }
 
 // fetch all folders and pdf files that are not in root, not trashed
-export function smartQuery(nextPageToken, files) {
-  return getChunkFiles('mimeType = "application/pdf" and mimeType = "application/vnd.google-apps.folder" and trashed = false and not ("root" in parents)', nextPageToken)
+export function smartQuery(nextPageToken, files = []) {
+  return getChunkFiles('mimeType = "application/pdf" or mimeType = "application/vnd.google-apps.folder" and trashed = false and not ("root" in parents)', nextPageToken)
     .then(res => {
+      if (typeof res === 'undefined') return files;
 
       if (res.files) {
         files.push(...res.files);
@@ -452,7 +467,6 @@ export function smartQuery(nextPageToken, files) {
 
       if (res.nextPageToken) {
         return Promise.resolve(smartQuery(res.nextPageToken, files));
-        // files.push(...Promise.resolve(smartQuery(res.nextPageToken, files)));
       }
 
       return files;
