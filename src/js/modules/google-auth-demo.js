@@ -100,18 +100,14 @@ export function getFolderStructure() {
 
   if (skipOld) {
 
-    // new implementation
-    return getRootId()
-      .then(rootId => {
+    // get ids
+    return Promise.all([getRootId(), getChromeFileSysId()])
+      .then(ids => {
+        let rootId = ids[0];
+        let chromeSyncFileSysId = ids[1];
 
-        // minimal root id validation
-        if (typeof rootId === 'undefined') return;
-
-        /* return Promise.all([
-          smartQuery()
-          getSharedFolders(),
-          getSharedPdfFiles()
-        ]); */
+        // minimal id validation
+        if (typeof rootId === 'undefined' || chromeSyncFileSysId === 'undefined') return;
 
         return smartQuery()
           .then(nodes => {
@@ -126,13 +122,14 @@ export function getFolderStructure() {
             // add 2 children to the root node
             t.add({ id: 'drive' }, rootId, t.traverseBF);
             t.add({ id: 'shared' }, rootId, t.traverseBF);
+            t.add({ id: chromeSyncFileSysId }, rootId, t.traverseBF);
 
             let index;
             let len = nodes.length;
 
             // add remaining nodes
-            while (len > 0) {
             // while (nodes.length > 0) {
+            while (len > 0) {
 
               // insert remaining nodes and remove them while they are added to the tree
               for (index = 0; index < nodes.length; index++) {
@@ -140,51 +137,6 @@ export function getFolderStructure() {
                 // add remaining folders in a loop
                 t.contains(node => {
                   var a;
-
-                  /* // handle chrome syncable filesystem
-                  if (nodes[index] && (nodes[index].parents, node.data.id)) {
-
-                    // get exact parent id index
-                    let parentIdIdx = nodes[index].parents.indexOf(node.data.id);
-
-                    // get parent id
-                    let parentId = nodes[index].parents[parentIdIdx];
-
-                    // remove node from the remaining folders
-                    a = nodes.splice(index, 1);
-
-                    // update length
-                    len = len - 1;
-
-                    // add node to the tree
-                    // t.add(a[0], node.data.id, t.traverseBF);
-                    t.add(a[0], parentId, t.traverseBF);
-                  }
-
-                  // is a shared with me item
-                  if (nodes[index] && nodes[index].shared) {
-
-                    // check if node.data.id is included in the list of parents of nodes[index]
-                    if (nodes[index] && _.contains(nodes[index].parents, node.data.id)) {
-
-                      // get exact parent id index
-                      let parentIdIdx = nodes[index].parents.indexOf(node.data.id);
-
-                      // get parent id
-                      let parentId = nodes[index].parents[parentIdIdx];
-
-                      // remove node from the remaining folders
-                      a = nodes.splice(index, 1);
-
-                      // update length
-                      len = len - 1;
-
-                      // add node to the tree
-                      // t.add(a[0], node.data.id, t.traverseBF);
-                      t.add(a[0], parentId, t.traverseBF);
-                    }
-
-                  } */
 
                   // check if node.data.id is included in the list of parents of nodes[index]
                   if (nodes[index] && _.contains(nodes[index].parents, node.data.id)) {
@@ -560,6 +512,21 @@ function getRootId() {
   });
 }
 
+// gets Chrome Syncable FileSystem node id
+function getChromeFileSysId() {
+  return getList({
+    q: 'name contains "syncable"',
+    fields: 'files(id, name, parents)'
+  }).then(res => {
+    if (typeof res === 'undefined') return;
+
+    // if (res.files && res.files.length === 1) {
+    if (res.files && res.files.length) {
+      return res.files[0].id;
+    }
+  });
+}
+
 export function getAccessToken() {
   return gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
 }
@@ -637,9 +604,9 @@ export function smartQuery(nextPageToken, files = []) {
       if (res.files) {
 
         // filter removed items or items that do not have any parents
-        // also for now filter shared nodes as well
+        // also for now filter shared nodes as well (|| node.shared)
         files = files.filter(node => {
-          if (node && (node.trashed || node.shared || !node.hasOwnProperty('parents') || node.parents.length === 0)) {
+          if (node && (node.trashed || !node.hasOwnProperty('parents') || node.parents.length === 0)) {
             filteredItems.push(JSON.parse(JSON.stringify(node)));
             return false;
           }
