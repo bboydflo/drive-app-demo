@@ -62,10 +62,10 @@ export function signOut() {
 function renderStructure(node, indentation = '') {
   let i, fileType;
   if (node && node.data && node.data.id) {
-    if (node.children && node.children.length) {
-      fileType = '►';
-    } else {
+    if (node.fileExtension && node.fileExtension === 'pdf') {
       fileType = '▬';
+    } else {
+      fileType = '►';
     }
 
     // if (node.data.id !== 'root') {
@@ -526,7 +526,7 @@ function getChunkFiles(q, nextPageToken) {
   let opt = {
     q,
     // fields: 'nextPageToken, files(id, name, parents, webContentLink)',
-    fields: 'nextPageToken, files(id, name, shared, trashed, owners, parents)'
+    fields: 'nextPageToken, files(id, name, shared, trashed, owners, fileExtension, parents)'
     // spaces: 'drive', // not necessary
     // trashed: false // not necessary
     // useDomainAdminAccess: true, // not necessary
