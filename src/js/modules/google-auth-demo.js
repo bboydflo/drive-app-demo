@@ -599,8 +599,9 @@ export function smartQuery(nextPageToken, files = []) {
       if (res.files) {
 
         // filter removed items or items that do not have any parents
+        // also for now filter shared nodes as well
         files = files.filter(node => {
-          if (node && (node.trashed || !node.hasOwnProperty('parents') || node.parents.length === 0)) {
+          if (node && (node.trashed || node.shared || !node.hasOwnProperty('parents') || node.parents.length === 0)) {
             filteredItems.push(JSON.parse(JSON.stringify(node)));
             return false;
           }
