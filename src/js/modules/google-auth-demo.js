@@ -124,7 +124,7 @@ export function getFolderStructure() {
             let index;
             let len = nodes.length;
 
-            let skip = true;
+            let skip = false;
             if (skip) {
 
               // render the tree structure
@@ -587,9 +587,10 @@ export function smartQuery(nextPageToken, files = []) {
    * files with mimeType = "application/vnd.google-apps.folder" do not have fileExtension attribute
    * every node that has attribute ownedByMe = false and shared = true should go into shared with me branch
    * some nodes do not have any parents -> add them to the root folder
+   * get all folders and pdf files
    */
   return getList({
-    q: 'mimeType = "application/pdf" or mimeType = "application/vnd.google-apps.folder" and trashed = false and not ("root" in parents)',
+    q: 'mimeType = "application/pdf" or mimeType = "application/vnd.google-apps.folder" and trashed = false',
     fields: 'nextPageToken, files(id, name, shared, trashed, owners, ownedByMe, mimeType, fileExtension, parents)'
   }, nextPageToken)
     .then(res => {
