@@ -208,16 +208,23 @@ export function getFolderStructure() {
 
       function renderStructure (node, indentation = '') {
         var i;
-        if (node && node.children && node.children.length) {
+        if (node && node.data && node.data.name) {
+          console.log(indentation + node.data.name + '\n');
+
+          if (node.children && node.children.length) {
+            for (i = 0; i < node.children.length; i++) {
+              renderStructure(node.children[i], indentation + '-');
+            }
+          }
+        }
+        /* if (node && node.children && node.children.length) {
           for (i = 0; i < node.children.length; i++) {
-            return renderStructure(node.children[i], indentation + '-');
+            return console.log(renderStructure(node.children[i], indentation + '-'));
           }
         }
         if (node && node.data && node.data.name) {
-          return indentation + node.data.name + '\n';
-        }
-
-        return '';
+          return console.log(indentation + node.data.name + '\n');
+        } */
       };
 
       // let indentation = '';
