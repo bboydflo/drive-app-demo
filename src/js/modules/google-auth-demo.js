@@ -328,7 +328,7 @@ export function getFileById(fileId) {
   // .then(blob => URL.createObjectURL(blob));
 }
 
-var filteredItems = [];
+// var filteredItems = [];
 
 // fetch all folders and pdf files that are not in root, not trashed
 export function smartQuery(nextPageToken, files = []) {
@@ -343,7 +343,7 @@ export function smartQuery(nextPageToken, files = []) {
    * get all folders and pdf files
    */
   return getList({
-    q: 'mimeType = "application/pdf" or mimeType = "application/vnd.google-apps.folder" and trashed = false',
+    q: 'mimeType = "application/pdf" or mimeType = "application/vnd.google-apps.folder" and trashed = false and sharedWithMe = false',
     fields: 'nextPageToken, files(id, name, shared, trashed, owners, ownedByMe, mimeType, fileExtension, parents)',
     corpora: 'user'
   }, nextPageToken)
@@ -356,7 +356,7 @@ export function smartQuery(nextPageToken, files = []) {
         // also for now filter shared nodes as well (|| node.shared)
         files = files.filter(node => {
           if (node && (node.trashed || node.shared || !node.hasOwnProperty('parents') || node.parents.length === 0)) {
-            filteredItems.push(JSON.parse(JSON.stringify(node)));
+            // filteredItems.push(JSON.parse(JSON.stringify(node)));
             return false;
           }
           return true;
