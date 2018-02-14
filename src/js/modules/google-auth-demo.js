@@ -207,22 +207,26 @@ export function getFolderStructure() {
       }
 
       function renderStructure (node, indentation = '') {
-        let i, log;
+        let i, fileType;
         if (node && node.data && node.data.id) {
           if (node.children && node.children.length) {
-            log = '►';
+            fileType = '►';
           } else {
-            log = '▬';
+            fileType = '▬';
           }
 
-          // log
-          console.log(log + indentation + (node.data.name || node.data.id) + '\n');
+          if (node.data.id !== 'root') {
 
-          if (node.children && node.children.length) {
-            for (i = 0; i < node.children.length; i++) {
-              renderStructure(node.children[i], indentation + ' ');
+            // log
+            console.log(indentation + fileType + (node.data.name || node.data.id) + '\n');
+
+            if (node.children && node.children.length) {
+              for (i = 0; i < node.children.length; i++) {
+                renderStructure(node.children[i], indentation + ' ');
+              }
             }
           }
+
         }
         /* if (node && node.children && node.children.length) {
           for (i = 0; i < node.children.length; i++) {
@@ -234,18 +238,11 @@ export function getFolderStructure() {
         } */
       };
 
-      // let indentation = '';
-
       // render the tree structure
       t.traverseBF(node => {
         if (node && node.data && node.data.id === 'root') {
           renderStructure(node);
         }
-        /* if (node.children.length) {
-          node.children.forEach(element => {
-            console.log(element);
-          });
-        } */
       });
     });
 }
@@ -510,7 +507,16 @@ export function smartQuery(nextPageToken, files = []) {
       if (typeof res === 'undefined') return files;
 
       if (res.files) {
-        files.push(...res.files);
+
+        // filter removed items or items that do not have any parents
+        files = files.filter(node => {
+          if (node && (node.trashed || !node.hasOwnProperty('parents') || node.parents.length === 0)) return false;
+          return true;
+        });
+
+        // save correct list items
+        // files.push(...res.files);
+        files = files.concat(res.files);
       }
 
       if (res.nextPageToken) {
