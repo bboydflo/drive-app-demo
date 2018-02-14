@@ -96,7 +96,7 @@ export function getFolderStructure() {
   gapi.client.drive.files.list({ q: 'mimeType = "application/vnd.google-apps.folder"', fields: 'nextPageToken, files(id, name, parents)', spaces: 'drive'}); */
 
   // skip old implementation
-  let skipOld = true;
+  let skipOld = false;
 
   if (skipOld) {
 
