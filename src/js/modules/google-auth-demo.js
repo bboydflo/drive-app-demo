@@ -68,7 +68,8 @@ function renderStructure(node, indentation = '') {
       fileType = '▬';
     }
 
-    if (node.data.id !== 'root') {
+    // if (node.data.id !== 'root') {
+    if (node.data.name !== 'root') {
 
       // log
       console.log(indentation + fileType + ' ' + (node.data.name || node.data.id) + '\n');
@@ -113,14 +114,17 @@ export function getFolderStructure() {
             var t = new Tree({ id: rootId, name: 'root' });
 
             // add 2 children to the root node
-            t.add({ id: 'drive' }, 'root', t.traverseBF);
-            t.add({ id: 'shared' }, 'root', t.traverseBF);
+            // t.add({ id: 'drive' }, 'root', t.traverseBF);
+            // t.add({ id: 'shared' }, 'root', t.traverseBF);
+            t.add({ id: 'drive' }, rootId, t.traverseBF);
+            t.add({ id: 'shared' }, rootId, t.traverseBF);
 
             let index;
-            let len = nodes.length;
+            // let len = nodes.length;
 
             // add remaining nodes
-            while (len > 0) {
+            // while (len > 0) {
+            while (nodes.length > 0) {
 
               // insert remaining nodes and remove them while they are added to the tree
               for (index = 0; index < nodes.length; index++) {
@@ -132,14 +136,21 @@ export function getFolderStructure() {
                   // check if node.data.id is included in the list of parents of nodes[index]
                   if (nodes[index] && _.contains(nodes[index].parents, node.data.id)) {
 
+                    // get exact parent id index
+                    let parentIdIdx = nodes[index].parents.indexOf(node.data.id);
+
+                    // get parent id
+                    let parentId = nodes[index].parents[parentIdIdx];
+
                     // remove node from the remaining folders
                     a = nodes.splice(index, 1);
 
                     // update length
-                    len = len - 1;
+                    // len = len - 1;
 
                     // add node to the tree
-                    t.add(a[0], node.data.id, t.traverseBF);
+                    // t.add(a[0], node.data.id, t.traverseBF);
+                    t.add(a[0], parentId, t.traverseBF);
                   }
                 }, t.traverseBF);
               }
