@@ -117,9 +117,6 @@ export function getFolderStructure() {
         t.add(nodes[3][index], 'shared', t.traverseBF);
       }
 
-      // traverse tree
-      // t.traverseBF(node => { console.log(node.data); });
-
       // get initial length of remaining folders
       len = nodes[4].length;
 
@@ -219,24 +216,15 @@ export function getFolderStructure() {
 
             // log
             console.log(indentation + fileType + (node.data.name || node.data.id) + '\n');
+          }
 
-            if (node.children && node.children.length) {
-              for (i = 0; i < node.children.length; i++) {
-                renderStructure(node.children[i], indentation + ' ');
-              }
+          if (node.children && node.children.length) {
+            for (i = 0; i < node.children.length; i++) {
+              renderStructure(node.children[i], indentation + ' ');
             }
           }
-
         }
-        /* if (node && node.children && node.children.length) {
-          for (i = 0; i < node.children.length; i++) {
-            return console.log(renderStructure(node.children[i], indentation + '-'));
-          }
-        }
-        if (node && node.data && node.data.name) {
-          return console.log(indentation + node.data.name + '\n');
-        } */
-      };
+      }
 
       // render the tree structure
       t.traverseBF(node => {
