@@ -453,7 +453,7 @@ export function getFolderStructure() {
               t.add(nodes[2][index], 'shared', t.traverseBF);
             }
 
-            let sk = true;
+            let sk = false;
             if (sk) {
 
               // render the tree structure
@@ -473,7 +473,7 @@ export function getFolderStructure() {
             while (len > 0) {
 
               // insert remaining nodes and remove them while they are added to the tree
-              for (index = 0; index < nodes.length; index++) {
+              for (index = 0; index < nodes[0].length; index++) {
 
                 // add remaining folders in a loop
                 t.contains(node => {
