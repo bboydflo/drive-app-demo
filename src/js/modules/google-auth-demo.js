@@ -107,6 +107,12 @@ export function getFolderStructure() {
         // minimal root id validation
         if (typeof rootId === 'undefined') return;
 
+        /* return Promise.all([
+          smartQuery()
+          getSharedFolders(),
+          getSharedPdfFiles()
+        ]); */
+
         return smartQuery()
           .then(nodes => {
 
@@ -124,19 +130,6 @@ export function getFolderStructure() {
             let index;
             let len = nodes.length;
 
-            let skip = false;
-            if (skip) {
-
-              // render the tree structure
-              t.traverseBF(node => {
-                if (node && node.data && node.data.name === 'root') {
-                  renderStructure(node);
-                }
-              });
-
-              return;
-            }
-
             // add remaining nodes
             while (len > 0) {
             // while (nodes.length > 0) {
@@ -147,6 +140,51 @@ export function getFolderStructure() {
                 // add remaining folders in a loop
                 t.contains(node => {
                   var a;
+
+                  /* // handle chrome syncable filesystem
+                  if (nodes[index] && (nodes[index].parents, node.data.id)) {
+
+                    // get exact parent id index
+                    let parentIdIdx = nodes[index].parents.indexOf(node.data.id);
+
+                    // get parent id
+                    let parentId = nodes[index].parents[parentIdIdx];
+
+                    // remove node from the remaining folders
+                    a = nodes.splice(index, 1);
+
+                    // update length
+                    len = len - 1;
+
+                    // add node to the tree
+                    // t.add(a[0], node.data.id, t.traverseBF);
+                    t.add(a[0], parentId, t.traverseBF);
+                  }
+
+                  // is a shared with me item
+                  if (nodes[index] && nodes[index].shared) {
+
+                    // check if node.data.id is included in the list of parents of nodes[index]
+                    if (nodes[index] && _.contains(nodes[index].parents, node.data.id)) {
+
+                      // get exact parent id index
+                      let parentIdIdx = nodes[index].parents.indexOf(node.data.id);
+
+                      // get parent id
+                      let parentId = nodes[index].parents[parentIdIdx];
+
+                      // remove node from the remaining folders
+                      a = nodes.splice(index, 1);
+
+                      // update length
+                      len = len - 1;
+
+                      // add node to the tree
+                      // t.add(a[0], node.data.id, t.traverseBF);
+                      t.add(a[0], parentId, t.traverseBF);
+                    }
+
+                  } */
 
                   // check if node.data.id is included in the list of parents of nodes[index]
                   if (nodes[index] && _.contains(nodes[index].parents, node.data.id)) {
@@ -590,7 +628,7 @@ export function smartQuery(nextPageToken, files = []) {
    * get all folders and pdf files
    */
   return getList({
-    q: 'mimeType = "application/pdf" or mimeType = "application/vnd.google-apps.folder" and trashed = false',
+    q: 'mimeType = "application/pdf" or mimeType = "application/vnd.google-apps.folder" and trashed = false and visibility = "limited"',
     fields: 'nextPageToken, files(id, name, shared, trashed, owners, ownedByMe, mimeType, fileExtension, parents)'
   }, nextPageToken)
     .then(res => {
