@@ -279,55 +279,6 @@ export function getAccessToken() {
   return gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
 }
 
-/**
- * get single file by id
- * nodejs example url: https://developers.google.com/drive/v3/web/manage-downloads
- */
-export function getFileById(fileId) {
-
-  // or this: gapi.auth.getToken().access_token;
-  const accessToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
-
-  // ?access_token = ' + encodeURIComponent(oauthToken))
-  // return gapi.client.drive.files.get({
-  //   fileId: fileId,
-  //   alt: 'media'
-  // });
-
-  // example here: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-  return fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&&access_token=${accessToken}`)
-    .then(response => {
-      if (response.ok) {
-        console.log(response);
-        // response.body
-        // example here: https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams
-        const reader = response.body.getReader();
-        return new ReadableStream({
-          start(controller) {
-            return pump();
-            function pump() {
-              return reader.read().then(({ done, value }) => {
-                // When no more data needs to be consumed, close the stream
-                if (done) {
-                  controller.close();
-                  return;
-                }
-                // Enqueue the next data chunk into our target stream
-                controller.enqueue(value);
-                return pump();
-              });
-            }
-          }
-        });
-      }
-      throw new Error('Network response was not ok.');
-    })
-    .then(stream => new Response(stream))
-    // .then(response => response.blob());
-    .then(response => new Blob([response], { type: 'application/pdf' }));
-  // .then(blob => URL.createObjectURL(blob));
-}
-
 // fetch all folders and pdf files that are not in root, not trashed
 export function smartQuery(nextPageToken, files = []) {
 
@@ -353,10 +304,7 @@ export function smartQuery(nextPageToken, files = []) {
         // filter removed items or items that do not have any parents
         // shared nodes as well (|| node.shared)
         files = files.filter(node => {
-          if (node && !node.hasOwnProperty('parents')) {
-            console.warn('does not have parents: ' + JSON.stringify(node));
-          }
-          if (node && (node.trashed || !node.ownedByMe || (node.parents && node.parents.length === 0))) {
+          if (node && (node.trashed || !node.ownedByMe || !node.hasOwnProperty('parents') || node.parents.length === 0)) {
             return false;
           }
           return true;
