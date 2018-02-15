@@ -451,20 +451,26 @@ export function getFolderStructure() {
               }
             }
 
-            /*
+            let n;
             let condition = true;
-            while(condition) {
+            while (condition) {
+
+              // reset condition
+              n = false;
 
               // remove empty folders
               t.traverseBF(node => {
-                // if (node && node.data && node.data.name === 'root') {
-                if (node && node.data && node.data.id === rootId) {
-                  // removeEmptyFolders(t, node, rootId);
-                  // removeEmptyFolders(t, rootId);
-                  removeEmptyFolders(t, node, null);
+
+                if (!n && !node.hasOwnProperty('fileExtension') && node.children && node.children.length === 0) {
+
+                  // update condition
+                  n = t.remove(node.data, node.parent || node.data.parents[0], t.traverseBF);
                 }
               });
-            } */
+
+              // set condition
+              condition = n;
+            }
 
             // render the tree structure
             t.traverseBF(node => {
