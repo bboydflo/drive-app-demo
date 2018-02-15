@@ -462,9 +462,14 @@ export function getFolderStructure() {
               t.traverseBF(node => {
 
                 if (!n && !node.hasOwnProperty('fileExtension') && node.children && node.children.length === 0) {
+                  try {
 
-                  // update condition
-                  n = t.remove(node.data, node.parent || node.data.parents[0], t.traverseBF);
+                    // update condition
+                    n = t.remove(node.data, node.parent || node.data.parents[0], t.traverseBF);
+                  } catch (e) {
+                    console.log('parent could not be removed');
+                    console.log(JSON.parse(JSON.stringify(node)));
+                  }
                 }
               });
 
@@ -474,6 +479,7 @@ export function getFolderStructure() {
 
             // render the tree structure
             t.traverseBF(node => {
+
               // if (node && node.data && node.data.name === 'root') {
               if (node && node.data && node.data.id === rootId) {
                 renderStructure(node);
