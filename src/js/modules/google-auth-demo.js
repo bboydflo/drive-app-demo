@@ -347,6 +347,22 @@ function renderStructure(node, indentation = '') {
   }
 }
 
+/* function removeEmptyFolders(tree, node, parentId) {
+  let i, n;
+  if (node.children && node.children.length) {
+    for (i = 0; i < node.children.length; i++) {
+      if (!node.children[i].hasOwnProperty('fileExtension')) {
+        n = removeEmptyFolders(tree, node.children[i], node.data.id);
+      }
+    }
+  } else {
+    if (!node.hasOwnProperty('fileExtension')) {
+      n = tree.remove(node.data, parentId, tree.traverseBF);
+    }
+  }
+  return n;
+} */
+
 export function getFolderStructure() {
   // gapi.client.drive.files.list({ q: "'appDataFolder' in parents" }).then(resp => console.log(resp));
   // gapi.client.drive.files.list({ q: "mimeType = 'application/vnd.google-apps.folder' trashed=false", spaces: 'drive' });
@@ -398,6 +414,7 @@ export function getFolderStructure() {
               // insert remaining nodes and remove them while they are added to the tree
               for (index = 0; index < nodes.length; index++) {
 
+                /* // TODO: improve this method using only add
                 // add remaining folders in a loop
                 t.contains(node => {
                   var a;
@@ -421,13 +438,35 @@ export function getFolderStructure() {
                     // t.add(a[0], node.data.id, t.traverseBF);
                     t.add(a[0], parentId, t.traverseBF);
                   }
-                }, t.traverseBF);
+                }, t.traverseBF); */
+
+                try {
+                  t.add(nodes[index], nodes[index].parents[0], t.traverseBF);
+                  nodes.splice(index, 1);
+                  len -= 1;
+                } catch (e) {}
               }
             }
 
+            /*
+            let condition = true;
+            while(condition) {
+
+              // remove empty folders
+              t.traverseBF(node => {
+                // if (node && node.data && node.data.name === 'root') {
+                if (node && node.data && node.data.id === rootId) {
+                  // removeEmptyFolders(t, node, rootId);
+                  // removeEmptyFolders(t, rootId);
+                  removeEmptyFolders(t, node, null);
+                }
+              });
+            } */
+
             // render the tree structure
             t.traverseBF(node => {
-              if (node && node.data && node.data.name === 'root') {
+              // if (node && node.data && node.data.name === 'root') {
+              if (node && node.data && node.data.id === rootId) {
                 renderStructure(node);
               }
             });

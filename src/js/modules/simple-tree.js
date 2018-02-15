@@ -110,7 +110,7 @@ function findIndex(arr, data) {
   var index;
 
   for (var i = 0; i < arr.length; i++) {
-    if (arr[i].data === data) {
+    if (arr[i].data.id === data.id) {
       index = i;
     }
   }
@@ -118,14 +118,18 @@ function findIndex(arr, data) {
   return index;
 }
 
-Tree.prototype.remove = function (data, fromData, traversal) {
+Tree.prototype.remove = function (data, parentId, traversal) {
   // var tree = this;
   var parent = null;
   var childToRemove = null;
   var index;
 
   var callback = function (node) {
-    if (node.data === fromData) {
+    // if (node.data === fromData) {
+    //   parent = node;
+    // }
+
+    if (node.data.id === parentId) {
       parent = node;
     }
   };
