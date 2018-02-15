@@ -414,8 +414,17 @@ export function getFolderStructure() {
               // insert remaining nodes and remove them while they are added to the tree
               for (index = 0; index < nodes.length; index++) {
 
-                /* // TODO: improve this method using only add
-                // add remaining folders in a loop
+                // new add node
+                try {
+                  a = nodes.splice(index, 1);
+                  len -= 1;
+                  t.add(a[0], a[0].parents[0], t.traverseBF);
+                } catch (e) {
+                  nodes.push(a[0]);
+                  len += 1;
+                }
+
+                /* // add remaining folders in a loop
                 t.contains(node => {
                   var a;
 
@@ -439,15 +448,6 @@ export function getFolderStructure() {
                     t.add(a[0], parentId, t.traverseBF);
                   }
                 }, t.traverseBF); */
-
-                try {
-                  a = nodes.splice(index, 1);
-                  len -= 1;
-                  t.add(a[0], a[0].parents[0], t.traverseBF);
-                } catch (e) {
-                  nodes.push(a[0]);
-                  len += 1;
-                }
               }
             }
 
@@ -460,6 +460,9 @@ export function getFolderStructure() {
 
               // remove empty folders
               t.traverseBF(node => {
+
+                // skip over root node (cannot remove root node)
+                if (node.data.id === rootId) return;
 
                 if (!n && !node.hasOwnProperty('fileExtension') && node.children && node.children.length === 0) {
                   try {
