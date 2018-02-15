@@ -327,7 +327,8 @@ function renderStructure(node, indentation = '') {
   let i, fileType;
   if (node && node.data && node.data.id) {
     if (node.data.fileExtension && node.data.fileExtension === 'pdf') {
-      fileType = '▬';
+      // fileType = '▬';
+      fileType = '•';
     } else {
       fileType = '►';
     }
@@ -347,22 +348,6 @@ function renderStructure(node, indentation = '') {
   }
 }
 
-/* function removeEmptyFolders(tree, node, parentId) {
-  let i, n;
-  if (node.children && node.children.length) {
-    for (i = 0; i < node.children.length; i++) {
-      if (!node.children[i].hasOwnProperty('fileExtension')) {
-        n = removeEmptyFolders(tree, node.children[i], node.data.id);
-      }
-    }
-  } else {
-    if (!node.hasOwnProperty('fileExtension')) {
-      n = tree.remove(node.data, parentId, tree.traverseBF);
-    }
-  }
-  return n;
-} */
-
 export function getFolderStructure() {
   // gapi.client.drive.files.list({ q: "'appDataFolder' in parents" }).then(resp => console.log(resp));
   // gapi.client.drive.files.list({ q: "mimeType = 'application/vnd.google-apps.folder' trashed=false", spaces: 'drive' });
@@ -380,20 +365,26 @@ export function getFolderStructure() {
 
   if (skipOld) {
 
-    // TODO:
-    console.warn('remove empty folders and create the actual widget');
+    // log
+    console.warn('TODO: create the actual widget');
+
+    // save timestamp
+    var t0 = performance.now();
 
     // get ids
     return Promise.all([getRootId(), getChromeFileSysId()])
       .then(ids => {
         let rootId = ids[0];
-        let chromeSyncFileSysId = ids[1];
+        let chromeFileSysId = ids[1];
 
         // minimal id validation
-        if (typeof rootId === 'undefined' || chromeSyncFileSysId === 'undefined') return;
+        if (typeof rootId === 'undefined' || chromeFileSysId === 'undefined') return;
 
         smartQuery()
           .then(nodes => {
+
+            // save timestamp
+            var t1 = performance.now();
 
             // log
             // console.log(JSON.parse(JSON.stringify(nodes)));
@@ -402,7 +393,7 @@ export function getFolderStructure() {
             var t = new Tree({ id: rootId, name: 'root' });
 
             // add children to the root node
-            t.add({ id: chromeSyncFileSysId }, rootId, t.traverseBF);
+            t.add({ id: chromeFileSysId }, rootId, t.traverseBF);
 
             let a, index;
             // let len = nodes.length;
@@ -454,6 +445,8 @@ export function getFolderStructure() {
 
             let n;
             let continueToRemove = true;
+
+            // continue to remove as long as there were any empty folders
             while (continueToRemove) {
 
               // removed node
@@ -468,18 +461,26 @@ export function getFolderStructure() {
                 if (!n && !node.data.hasOwnProperty('fileExtension') && node.children && node.children.length === 0) {
                   try {
 
-                    // update condition
+                    // removed node
                     n = t.remove(node.data, node.parent.data.id || node.data.parents[0], t.traverseBF);
                   } catch (e) {
-                    console.log('parent could not be removed');
-                    console.log(JSON.parse(JSON.stringify(node.data)));
+                    // console.log('parent could not be removed');
+                    // console.log(JSON.parse(JSON.stringify(node.data)));
                   }
                 }
               });
 
-              // set condition
+              // convert to boolean
               continueToRemove = !!n;
             }
+
+            // save timestamp
+            var t2 = performance.now();
+
+            // logs
+            console.log(`it took ${t1 - t0} miliseconds to fetch data`);
+            console.log(`it took ${t2 - t1} miliseconds to build the folder structure`);
+            console.log(`it took ${t2 - t0} miliseconds to fetch data and build the folder structure`);
 
             // render the tree structure
             t.traverseBF(node => {
