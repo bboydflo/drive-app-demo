@@ -464,7 +464,7 @@ export function getFolderStructure() {
                 // skip over root node (cannot remove root node)
                 if (node.data.id === rootId) return;
 
-                if (!n && !node.hasOwnProperty('fileExtension') && node.children && node.children.length === 0) {
+                if (!n && !node.data.hasOwnProperty('fileExtension') && node.children && node.children.length === 0) {
                   try {
 
                     // update condition
