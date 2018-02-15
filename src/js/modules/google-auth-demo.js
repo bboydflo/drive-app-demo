@@ -465,10 +465,10 @@ export function getFolderStructure() {
                   try {
 
                     // update condition
-                    n = t.remove(node.data, node.parent || node.data.parents[0], t.traverseBF);
+                    n = t.remove(node.data, node.parent.data.id || node.data.parents[0], t.traverseBF);
                   } catch (e) {
                     console.log('parent could not be removed');
-                    console.log(JSON.parse(JSON.stringify(node)));
+                    console.log(JSON.parse(JSON.stringify(node.data)));
                   }
                 }
               });
