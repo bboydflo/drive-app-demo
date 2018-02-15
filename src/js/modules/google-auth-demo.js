@@ -404,7 +404,7 @@ export function getFolderStructure() {
             // add children to the root node
             t.add({ id: chromeSyncFileSysId }, rootId, t.traverseBF);
 
-            let index;
+            let a, index;
             let len = nodes.length;
 
             // add files and folders that are not shared with me
@@ -441,10 +441,13 @@ export function getFolderStructure() {
                 }, t.traverseBF); */
 
                 try {
-                  t.add(nodes[index], nodes[index].parents[0], t.traverseBF);
-                  nodes.splice(index, 1);
+                  a = nodes.splice(index, 1);
                   len -= 1;
-                } catch (e) {}
+                  t.add(a[0], a[0].parents[0], t.traverseBF);
+                } catch (e) {
+                  nodes.push(a[0]);
+                  len += 1;
+                }
               }
             }
 
