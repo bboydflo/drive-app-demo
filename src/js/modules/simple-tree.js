@@ -1,3 +1,5 @@
+// see tree implementation here: https://code.tutsplus.com/articles/data-structures-with-javascript-tree--cms-23393
+
 function Queue() {
   this._oldestIndex = 1;
   this._newestIndex = 1;
