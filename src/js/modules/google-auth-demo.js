@@ -405,23 +405,24 @@ export function getFolderStructure() {
             t.add({ id: chromeSyncFileSysId }, rootId, t.traverseBF);
 
             let a, index;
-            let len = nodes.length;
+            // let len = nodes.length;
 
             // add files and folders that are not shared with me
-            // while (nodes.length > 0) {
-            while (len > 0) {
+            while (nodes.length > 0) {
+            // while (len > 0) {
 
               // insert remaining nodes and remove them while they are added to the tree
               for (index = 0; index < nodes.length; index++) {
+              // for (index = 0; index < len; index++) {
 
                 // new add node
                 try {
                   a = nodes.splice(index, 1);
-                  len -= 1;
+                  // len -= 1;
                   t.add(a[0], a[0].parents[0], t.traverseBF);
                 } catch (e) {
                   nodes.push(a[0]);
-                  len += 1;
+                  // len += 1;
                 }
 
                 /* // add remaining folders in a loop
@@ -452,11 +453,11 @@ export function getFolderStructure() {
             }
 
             let n;
-            let condition = true;
-            while (condition) {
+            let continueToRemove = true;
+            while (continueToRemove) {
 
-              // reset condition
-              n = false;
+              // removed node
+              n = null;
 
               // remove empty folders
               t.traverseBF(node => {
@@ -477,7 +478,7 @@ export function getFolderStructure() {
               });
 
               // set condition
-              condition = n;
+              continueToRemove = !!n;
             }
 
             // render the tree structure
