@@ -329,7 +329,8 @@ export function smartQuery(nextPageToken, files = []) {
 function renderStructure(node, indentation = '') {
   let i, fileType;
   if (node && node.data && node.data.id) {
-    if (node.data.fileExtension && node.data.fileExtension === 'pdf') {
+    // if (node.data.fileExtension && node.data.fileExtension === 'pdf') {
+    if (node.data.fileExtension) {
       // fileType = '▬';
       fileType = '•';
     } else {
@@ -352,17 +353,12 @@ function renderStructure(node, indentation = '') {
 }
 
 function sortNodeNames(a, b) {
-  try {
-    var aName = a.data.name.toLowerCase();
-    var bName = b.data.name.toLowerCase();
-    if (aName < bName) return -1;
-    if (aName > bName) return 1;
-    return 0;
-  } catch (e) {
-    console.error(a, b);
-    var vals = [0, 1, 2];
-    return vals[Math.floor(Math.random() * vals.length)];
-  }
+  if (!a.data.name || !b.data.name) return -1;
+  var aName = a.data.name.toLowerCase();
+  var bName = b.data.name.toLowerCase();
+  if (aName < bName) return -1;
+  if (aName > bName) return 1;
+  return 0;
 }
 
 export function getFolderStructure() {
