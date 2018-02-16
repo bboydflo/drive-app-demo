@@ -365,7 +365,7 @@ export function getFolderStructure() {
   if (skipOld) {
 
     // log
-    console.warn('TODO: create the actual widget');
+    console.warn('TODO: create the actual widget, disable buttons if the client library is not loaded');
 
     // save timestamp
     var t0 = performance.now();
@@ -473,8 +473,11 @@ export function getFolderStructure() {
             // sort children alphabetically and by type
             t.traverseBF(node => {
               if (node && node.children && node.children.length) {
-                node.children.sort((x, y) => {
-                  if (x.data && x.data.fileExtension && y.data && !y.data.fileExtension) {
+                let fileChildrens = node.children.filter(c => !!c.data.fileExtension);
+                let folderChildrens = node.children.filter(c => !c.data.fileExtension);
+                node.children = folderChildrens.sort().concat[fileChildrens.sort()];
+                /* node.children.sort((x, y) => {
+                  if (x.data && y.data && x.data.fileExtension && !y.data.fileExtension) {
                     return 1;
                   }
                   if (x.data && !x.data.fileExtension && y.data && y.data.fileExtension) {
@@ -488,7 +491,7 @@ export function getFolderStructure() {
                   // }
                   // return x.data.name.toLwerCase().localeCompare(y.data.name.toLowerCase());
                   return x.data.name.toLowerCase() > y.data.name.toLowerCase();
-                });
+                }); */
               }
             });
 
