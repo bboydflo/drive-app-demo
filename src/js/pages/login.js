@@ -1,10 +1,8 @@
+import 'material-design-lite';
 import { h, Component } from 'preact';
 import { connect } from 'preact-redux';
 import { smartQuery, getFolderStructure } from '../modules/google-auth-demo';
-
 import Navbar from '../components/navbar';
-
-// import 'pdfjs-dist';
 
 class IndexPage extends Component {
 
