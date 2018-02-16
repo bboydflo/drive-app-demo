@@ -23,16 +23,7 @@ class IndexPage extends Component {
     if (bootstrapTheme) {
       return bootstrapRender(props, state);
     }
-
-    let { version } = props;
-
-    return (
-      <div class='mdl-layout mdl-js-layout'>
-        <p>DemoApp {version}</p>
-        <button class='mdl-button mdl-js-button mdl-button--raised'>Sign In</button>
-        <button class='mdl-button mdl-js-button mdl-button--raised'>Open File</button>
-      </div>
-    );
+    return materialRender(props, state);
   }
 
   handleAuth = (ev) => {
@@ -70,11 +61,10 @@ class IndexPage extends Component {
 };
 
 const bootstrapRender = (props, state) => {
-  let { version } = props;
+  let { version, signedIn, isAppInstalled } = props;
   let brand = <p class='navbar-text'>DriveApiDemo <code> {version}</code></p>;
 
   let pageContentStyles = 'padding-bottom: 51px';
-  let { signedIn, isAppInstalled } = props;
 
   let isChrome = false;
   try {
@@ -103,6 +93,38 @@ const bootstrapRender = (props, state) => {
         </div>
         {isChrome && !isAppInstalled && <div class='row'>
           <button type='button' class='btn btn-success' id='install-button' onClick={this.handleInstall}>Add to Chrome</button>
+        </div>}
+      </div>
+    </div>
+  );
+};
+
+const materialRender = (props, state) => {
+  let { version, signedIn, isAppInstalled } = props;
+
+  let isChrome = false;
+  try {
+    if (chrome) {
+      isChrome = true;
+    }
+  } catch (e) {
+    console.log('not chrome');
+  }
+
+  // {signedIn ? <button class='mdl-button mdl-js-button mdl-button--raised' onClick={this.handleSignOut}>Sign Out</button> : <button class='mdl-button mdl-js-button mdl-button--raised' onClick={this.handleAuth}>Sign in</button>}
+
+  return (
+    <div class='mdl-layout mdl-js-layout'>
+      <p>DemoApp {version}</p>
+      <div class='mdl-grid'>
+        <div class='mdl-cell mdl-cell-4-col'>
+          <button class='mdl-button mdl-js-button mdl-button--raised' onClick={signedIn ? this.handleSignOut : this.handleAuth}>{signedIn ? 'Sign Out' : 'Sign In'}</button>
+        </div>
+        <div class='mdl-cell mdl-cell-4-col'>
+          <button class='mdl-button mdl-js-button mdl-button--raised'>Open File</button>
+        </div>
+        {isChrome && !isAppInstalled && <div class='mdl-cell mdl-cell-4-col'>
+          <button class='mdl-button mdl-js-button mdl-button--raised'>Add to Chrome</button>
         </div>}
       </div>
     </div>
