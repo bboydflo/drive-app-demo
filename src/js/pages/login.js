@@ -32,13 +32,15 @@ class IndexPage extends Component {
       return materialRender.call(this, props, state);
     }
 
+    var el = null;
+
     // render the tree structure (if any)
     if (state.t) {
       state.t.traverseBF(node => {
 
         // if (node && node.data && node.data.id === rootId) {
         if (node && node.data && node.data.name === 'root') {
-          return (
+          el = (
             <div class='container'>
               <div class='row'>
                 {createNestedList(node)}
@@ -47,9 +49,11 @@ class IndexPage extends Component {
           );
         }
       });
+
+      return el;
     }
 
-    return materializeRender.call(this, props, state);
+    // return materializeRender.call(this, props, state);
   }
 
   handleAuth = (ev) => {
@@ -226,7 +230,7 @@ const mapDispatchToProps = dispatch => ({
 </ul> */
 
 function createNestedList(node) {
-  let i, item, fileType;
+  let i, item; // fileType;
   let items = null;
   if (node.children && node.children.length) {
     items = [];
