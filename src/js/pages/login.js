@@ -32,10 +32,10 @@ class IndexPage extends Component {
     }
 
     // render the tree structure
-    state.tree.traverseBF(node => {
+    state.t.traverseBF(node => {
 
-      if (node && node.data && node.data.name === 'root') {
       // if (node && node.data && node.data.id === rootId) {
+      if (node && node.data && node.data.name === 'root') {
         renderStructure(node);
       }
     });
