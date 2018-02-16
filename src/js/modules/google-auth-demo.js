@@ -396,24 +396,19 @@ export function getFolderStructure() {
             t.add({ id: chromeFileSysId }, rootId, t.traverseBF);
 
             let a, index;
-            // let len = nodes.length;
 
             // add files and folders that are not shared with me
-            while (nodes.length > 0) {
-            // while (len > 0) {
+            while (nodes.length > 0 && index < nodes.length) {
 
               // insert remaining nodes and remove them while they are added to the tree
               for (index = 0; index < nodes.length; index++) {
-              // for (index = 0; index < len; index++) {
 
                 // new add node
                 try {
                   a = nodes.splice(index, 1);
-                  // len -= 1;
                   t.add(a[0], a[0].parents[0], t.traverseBF);
                 } catch (e) {
                   nodes.push(a[0]);
-                  // len += 1;
                 }
 
                 /* // add remaining folders in a loop
@@ -500,7 +495,8 @@ export function getFolderStructure() {
                   // if (x.data && !x.data.fileExtension && y.data && !y.data.fileExtension) {
                   //   return x.data.name < y.data.name;
                   // }
-                  return x.data.name > y.data.name;
+                  // return x.data.name.toLwerCase().localeCompare(y.data.name.toLowerCase());
+                  return x.data.name.toLowerCase() > y.data.name.toLowerCase();
                 });
               }
             });
