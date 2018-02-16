@@ -293,7 +293,7 @@ export function smartQuery(nextPageToken, files = []) {
   return getList({
     // q: 'mimeType = "application/pdf" or mimeType = "application/vnd.google-apps.folder" and trashed = false and "me" in owners',
     q: '"me" in owners and trashed = false',
-    fields: 'nextPageToken, files(id, name, shared, trashed, owners, ownedByMe, sharedWithMe, mimeType, fileExtension, parents)',
+    fields: 'nextPageToken, files(id, name, shared, trashed, owners, ownedByMe, mimeType, fileExtension, parents)',
     corpora: 'user'
   }, nextPageToken)
     .then(res => {
@@ -306,7 +306,8 @@ export function smartQuery(nextPageToken, files = []) {
         files = files.filter(node => {
 
           // node.hasOwnProperty('parents')
-          if (!node || node.trashed || node.sharedWithMe || !node.ownedByMe || !('parents' in node) || node.parents.length === 0) {
+          // node.sharedWithMe
+          if (!node || node.trashed || !node.ownedByMe || !('parents' in node) || node.parents.length === 0) {
             return false;
           }
           return true;
@@ -405,17 +406,14 @@ export function getFolderStructure() {
             // add children to the root node
             t.add({ id: chromeFileSysId }, rootId, t.traverseBF);
 
-            let a, index;
+            let a, j, index;
 
             // number of loops
-            // j = nodes.length;
+            j = 0;
 
             // add files and folders that are not shared with me
             // && index < nodes.length
-            while (nodes.length > 0) {
-
-              // update number of loops
-              // j = j - 1;
+            while (nodes.length > 0 && j < nodes.length) {
 
               // insert remaining nodes and remove them while they are added to the tree
               for (index = 0; index < nodes.length; index++) {
@@ -424,8 +422,14 @@ export function getFolderStructure() {
                 try {
                   a = nodes.splice(index, 1);
                   t.add(a[0], a[0].parents[0], t.traverseBF);
+
+                  // reset number of loops
+                  j = 0;
                 } catch (e) {
                   nodes.push(a[0]);
+
+                  // update number of loops
+                  j = j + 1;
                 }
 
                 /* // add remaining folders in a loop
