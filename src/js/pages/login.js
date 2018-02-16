@@ -39,9 +39,11 @@ class IndexPage extends Component {
         // if (node && node.data && node.data.id === rootId) {
         if (node && node.data && node.data.name === 'root') {
           return (
-            <ul class='collapsible'>
-              {createNestedList(node)}
-            </ul>
+            <div class='container'>
+              <div class='row'>
+                {createNestedList(node)}
+              </div>
+            </div>
           );
         }
       });
@@ -208,96 +210,118 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-function createNestedList(node) {
-  let i, fileType;
-  let list = null;
-  if (node && node.data && node.data.id) {
-    /* <ul class='collapsible'>
-      <li>
-        <div class='collapsible-header'><i class='material-icons'>filter_drama</i>First</div>
-        <div class='collapsible-body'><span>Lorem ipsum dolor sit amet.</span></div>
-      </li>
-      <li>
-        <div class='collapsible-header'><i class='material-icons'>place</i>Second</div>
-        <div class='collapsible-body'><span>Lorem ipsum dolor sit amet.</span></div>
-      </li>
-      <li>
-        <div class='collapsible-header'><i class='material-icons'>whatshot</i>Third</div>
-        <div class='collapsible-body'><span>Lorem ipsum dolor sit amet.</span></div>
-      </li>
-    </ul> */
+/* <ul class='collapsible'>
+  <li>
+    <div class='collapsible-header'><i class='material-icons'>filter_drama</i>First</div>
+    <div class='collapsible-body'><span>Lorem ipsum dolor sit amet.</span></div>
+  </li>
+  <li>
+    <div class='collapsible-header'><i class='material-icons'>place</i>Second</div>
+    <div class='collapsible-body'><span>Lorem ipsum dolor sit amet.</span></div>
+  </li>
+  <li>
+    <div class='collapsible-header'><i class='material-icons'>whatshot</i>Third</div>
+    <div class='collapsible-body'><span>Lorem ipsum dolor sit amet.</span></div>
+  </li>
+</ul> */
 
-    if (node.children && node.children.length) {
-      list = [];
-      for (i = 0; i < node.children.length; i++) {
-        list.push(
-          <ul class='collection'>
-            {createNestedList(node.children[i])}
-          </ul>
+function createNestedList(node) {
+  let i, item, fileType;
+  let items = null;
+  if (node.children && node.children.length) {
+    items = [];
+    for (i = 0; i < node.children.length; i++) {
+      if (node.children[i].data.fileExtension) {
+        item = (
+          <li>
+            <div class='collapsible-header'><i class='material-icons'>insert_drive_file</i>
+              {node.children[i].data.name || node.children[i].data.id}
+            </div>
+          </li>
+        );
+      } else {
+        item = (
+          <li>
+            <div class='collapsible-header'><i class='material-icons'>folder</i>
+              {node.children[i].data.name || node.children[i].data.id}
+            </div>
+            <div class='collapsible-body'>
+              <span>
+                {createNestedList(node.children[i])}
+              </span>
+            </div>
+          </li>
         );
       }
+      items.push(item);
     }
+    return (
+      <ul class='collapsible' data-collapsible='accordion'>
+        {items.map(item => item)}
+      </ul>
+    );
+  }
 
-    // if (node.data.id !== rootId) {
-    if (node.data.name !== 'root') {
+  // if (node.data.id !== rootId) {
+  if (node.data.name !== 'root') {
 
-      // if (node.data.fileExtension && node.data.fileExtension === 'pdf') {
-      if (node.data.fileExtension) {
-        // fileType = '▬';
-        // fileType = '•';
-        fileType = <i class='material-icons circle'>picture_as_pdf</i>;
-      } else {
-        // fileType = '►';
-        fileType = <i class='material-icons circle'>folder</i>;
-      }
+    /* // if (node.data.fileExtension && node.data.fileExtension === 'pdf') {
+    if (node.data.fileExtension) {
+      fileType = <i class='material-icons circle'>picture_as_pdf</i>;
 
-      // log
-      // console.log(indentation + fileType + ' ' + (node.data.name || node.data.id) + '\n');
+      // <li>
+      //   <div class='collapsible-header'><i class='material-icons'>filter_drama</i>First</div>
+      // </li>
+    } else {
+      // fileType = '►';
+      fileType = <i class='material-icons circle'>folder</i>;
+    } */
 
-      list = (
+    // log
+    // console.log(indentation + fileType + ' ' + (node.data.name || node.data.id) + '\n');
+
+    // list = (
+    //   <li class='collection-item avatar'>
+    //     {fileType}
+    //     <span class='title'>{node.data.name || node.data.id}</span>
+    //     <a href='#!' class='secondary-content'><i class='material-icons'>chevron_right</i></a>
+    //   </li>
+    // );
+
+    /* list = (
+      <ul class='collection'>
         <li class='collection-item avatar'>
           {fileType}
-          <span class='title'>{node.data.name || node.data.id}</span>
+          <span class='title'>Title</span>
           <a href='#!' class='secondary-content'><i class='material-icons'>chevron_right</i></a>
         </li>
-      );
-
-      /* list = (
-        <ul class='collection'>
-          <li class='collection-item avatar'>
-            {fileType}
-            <span class='title'>Title</span>
-            <a href='#!' class='secondary-content'><i class='material-icons'>chevron_right</i></a>
-          </li>
-          <li class='collection-item avatar'>
-            <i class='material-icons circle'>folder</i>
-            <span class='title'>Title</span>
-            <p>First Line <br />
-              Second Line
-            </p>
-            <a href='#!' class='secondary-content'><i class='material-icons'>grade</i></a>
-          </li>
-          <li class='collection-item avatar'>
-            <i class='material-icons circle green'>insert_chart</i>
-            <span class='title'>Title</span>
-            <p>First Line <br />
-              Second Line
-            </p>
-            <a href='#!' class='secondary-content'><i class='material-icons'>grade</i></a>
-          </li>
-          <li class='collection-item avatar'>
-            <i class='material-icons circle red'>play_arrow</i>
-            <span class='title'>Title</span>
-            <p>First Line <br />
-              Second Line
-            </p>
-            <a href='#!' class='secondary-content'><i class='material-icons'>grade</i></a>
-          </li>
-        </ul>
-      ); */
-    }
+        <li class='collection-item avatar'>
+          <i class='material-icons circle'>folder</i>
+          <span class='title'>Title</span>
+          <p>First Line <br />
+            Second Line
+          </p>
+          <a href='#!' class='secondary-content'><i class='material-icons'>grade</i></a>
+        </li>
+        <li class='collection-item avatar'>
+          <i class='material-icons circle green'>insert_chart</i>
+          <span class='title'>Title</span>
+          <p>First Line <br />
+            Second Line
+          </p>
+          <a href='#!' class='secondary-content'><i class='material-icons'>grade</i></a>
+        </li>
+        <li class='collection-item avatar'>
+          <i class='material-icons circle red'>play_arrow</i>
+          <span class='title'>Title</span>
+          <p>First Line <br />
+            Second Line
+          </p>
+          <a href='#!' class='secondary-content'><i class='material-icons'>grade</i></a>
+        </li>
+      </ul>
+    ); */
   }
-  return list;
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(IndexPage);

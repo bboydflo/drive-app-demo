@@ -413,8 +413,7 @@ export function getFolderStructure() {
             // number of loops
             j = 0;
 
-            // add files and folders that are not shared with me
-            // && index < nodes.length
+            // add files and folders to the tree
             while (nodes.length > 0 && j < nodes.length) {
 
               // insert remaining nodes and remove them while they are added to the tree
@@ -433,31 +432,6 @@ export function getFolderStructure() {
                   // update number of loops
                   j = j + 1;
                 }
-
-                /* // add remaining folders in a loop
-                t.contains(node => {
-                  var a;
-
-                  // check if node.data.id is included in the list of parents of nodes[index]
-                  if (nodes[index] && _.contains(nodes[index].parents, node.data.id)) {
-
-                    // get exact parent id index
-                    let parentIdIdx = nodes[index].parents.indexOf(node.data.id);
-
-                    // get parent id
-                    let parentId = nodes[index].parents[parentIdIdx];
-
-                    // remove node from the remaining folders
-                    a = nodes.splice(index, 1);
-
-                    // update length
-                    len = len - 1;
-
-                    // add node to the tree
-                    // t.add(a[0], node.data.id, t.traverseBF);
-                    t.add(a[0], parentId, t.traverseBF);
-                  }
-                }, t.traverseBF); */
               }
             }
 
@@ -498,23 +472,10 @@ export function getFolderStructure() {
               if (node && node.children && node.children.length) {
                 let fileChildrens = node.children.filter(c => !!c.data.fileExtension);
                 let folderChildrens = node.children.filter(c => !c.data.fileExtension);
-                node.children = [].concat(folderChildrens.sort(sortNodeNames), fileChildrens.sort(sortNodeNames));
-                /* node.children.sort((x, y) => {
-                  if (x.data && y.data && x.data.fileExtension && !y.data.fileExtension) {
-                    return 1;
-                  }
-                  if (x.data && !x.data.fileExtension && y.data && y.data.fileExtension) {
-                    return -1;
-                  }
-                  // if (x.data && x.data.fileExtension && y.data && y.data.fileExtension) {
-                  //   return x.data.name < y.data.name;
-                  // }
-                  // if (x.data && !x.data.fileExtension && y.data && !y.data.fileExtension) {
-                  //   return x.data.name < y.data.name;
-                  // }
-                  // return x.data.name.toLwerCase().localeCompare(y.data.name.toLowerCase());
-                  return x.data.name.toLowerCase() > y.data.name.toLowerCase();
-                }); */
+                node.children = [].concat(
+                  folderChildrens.sort(sortNodeNames),
+                  fileChildrens.sort(sortNodeNames)
+                );
               }
             });
 
