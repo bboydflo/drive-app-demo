@@ -482,6 +482,29 @@ export function getFolderStructure() {
             console.log(`it took ${t2 - t1} miliseconds to build the folder structure`);
             console.log(`it took ${t2 - t0} miliseconds to fetch data and build the folder structure`);
 
+            // sort children alphabetically and by type
+            t.traverseBF(node => {
+
+              // if (node && node.data && node.data.name === 'root') {
+              if (node && node.children && node.children.length) {
+                node.children.sort((x, y) => {
+                  if (x.data && x.data.fileExtension && y.data && !y.data.fileExtension) {
+                    return 1;
+                  }
+                  if (x.data && !x.data.fileExtension && y.data && y.data.fileExtension) {
+                    return -1;
+                  }
+                  // if (x.data && x.data.fileExtension && y.data && y.data.fileExtension) {
+                  //   return x.data.name < y.data.name;
+                  // }
+                  // if (x.data && !x.data.fileExtension && y.data && !y.data.fileExtension) {
+                  //   return x.data.name < y.data.name;
+                  // }
+                  return x.data.name < y.data.name;
+                });
+              }
+            });
+
             // render the tree structure
             t.traverseBF(node => {
 
