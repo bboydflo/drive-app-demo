@@ -293,7 +293,7 @@ export function smartQuery(nextPageToken, files = []) {
   return getList({
     // q: 'mimeType = "application/pdf" or mimeType = "application/vnd.google-apps.folder" and trashed = false and "me" in owners',
     q: '"me" in owners and trashed = false',
-    fields: 'nextPageToken, files(id, name, shared, trashed, owners, ownedByMe, mimeType, fileExtension, parents)',
+    fields: 'nextPageToken, files(id, name, shared, trashed, owners, ownedByMe, sharedWithMe, mimeType, fileExtension, parents)',
     corpora: 'user'
   }, nextPageToken)
     .then(res => {
@@ -304,7 +304,9 @@ export function smartQuery(nextPageToken, files = []) {
         // filter removed items or items that do not have any parents
         // shared nodes as well (|| node.shared)
         files = files.filter(node => {
-          if (node && (node.trashed || !node.ownedByMe || !node.hasOwnProperty('parents') || node.parents.length === 0)) {
+
+          // node.hasOwnProperty('parents')
+          if (!node || node.trashed || node.sharedWithMe || !node.ownedByMe || !('parents' in node) || node.parents.length === 0) {
             return false;
           }
           return true;
@@ -349,8 +351,10 @@ function renderStructure(node, indentation = '') {
 }
 
 function sortNodeNames(a, b) {
-  if (a.data.name < b.data.name) return -1;
-  if (a.data.name > b.data.name) return 1;
+  var aName = a.data.name.toLowerCase();
+  var bName = b.data.name.toLowerCase();
+  if (aName < bName) return -1;
+  if (aName > bName) return 1;
   return 0;
 }
 
@@ -403,9 +407,15 @@ export function getFolderStructure() {
 
             let a, index;
 
+            // number of loops
+            // j = nodes.length;
+
             // add files and folders that are not shared with me
             // && index < nodes.length
             while (nodes.length > 0) {
+
+              // update number of loops
+              // j = j - 1;
 
               // insert remaining nodes and remove them while they are added to the tree
               for (index = 0; index < nodes.length; index++) {
