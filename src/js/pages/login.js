@@ -2,7 +2,8 @@
 import 'materialize-css';
 import { h, Component } from 'preact';
 import { connect } from 'preact-redux';
-import { renderStructure, getFolderStructure } from '../modules/google-auth-demo';
+import { getFolderStructure } from '../modules/google-auth-demo';
+// import { renderStructure } from '../modules/google-auth-demo';
 import Navbar from '../components/navbar';
 import { toggleSpinner } from '../redux/actions';
 
@@ -37,7 +38,11 @@ class IndexPage extends Component {
 
         // if (node && node.data && node.data.id === rootId) {
         if (node && node.data && node.data.name === 'root') {
-          renderStructure(node);
+          return (
+            <ul class='collapsible'>
+              {createNestedList(node)}
+            </ul>
+          );
         }
       });
     }
@@ -202,6 +207,98 @@ const mapDispatchToProps = dispatch => ({
     dispatch(toggleSpinner());
   }
 });
+
+function createNestedList(node) {
+  let i, fileType;
+  let list = null;
+  if (node && node.data && node.data.id) {
+    /* <ul class='collapsible'>
+      <li>
+        <div class='collapsible-header'><i class='material-icons'>filter_drama</i>First</div>
+        <div class='collapsible-body'><span>Lorem ipsum dolor sit amet.</span></div>
+      </li>
+      <li>
+        <div class='collapsible-header'><i class='material-icons'>place</i>Second</div>
+        <div class='collapsible-body'><span>Lorem ipsum dolor sit amet.</span></div>
+      </li>
+      <li>
+        <div class='collapsible-header'><i class='material-icons'>whatshot</i>Third</div>
+        <div class='collapsible-body'><span>Lorem ipsum dolor sit amet.</span></div>
+      </li>
+    </ul> */
+
+    if (node.children && node.children.length) {
+      list = [];
+      for (i = 0; i < node.children.length; i++) {
+        list.push(
+          <ul class='collection'>
+            {createNestedList(node.children[i])}
+          </ul>
+        );
+      }
+    }
+
+    // if (node.data.id !== rootId) {
+    if (node.data.name !== 'root') {
+
+      // if (node.data.fileExtension && node.data.fileExtension === 'pdf') {
+      if (node.data.fileExtension) {
+        // fileType = '▬';
+        // fileType = '•';
+        fileType = <i class='material-icons circle'>picture_as_pdf</i>;
+      } else {
+        // fileType = '►';
+        fileType = <i class='material-icons circle'>folder</i>;
+      }
+
+      // log
+      // console.log(indentation + fileType + ' ' + (node.data.name || node.data.id) + '\n');
+
+      list = (
+        <li class='collection-item avatar'>
+          {fileType}
+          <span class='title'>{node.data.name || node.data.id}</span>
+          <a href='#!' class='secondary-content'><i class='material-icons'>chevron_right</i></a>
+        </li>
+      );
+
+      /* list = (
+        <ul class='collection'>
+          <li class='collection-item avatar'>
+            {fileType}
+            <span class='title'>Title</span>
+            <a href='#!' class='secondary-content'><i class='material-icons'>chevron_right</i></a>
+          </li>
+          <li class='collection-item avatar'>
+            <i class='material-icons circle'>folder</i>
+            <span class='title'>Title</span>
+            <p>First Line <br />
+              Second Line
+            </p>
+            <a href='#!' class='secondary-content'><i class='material-icons'>grade</i></a>
+          </li>
+          <li class='collection-item avatar'>
+            <i class='material-icons circle green'>insert_chart</i>
+            <span class='title'>Title</span>
+            <p>First Line <br />
+              Second Line
+            </p>
+            <a href='#!' class='secondary-content'><i class='material-icons'>grade</i></a>
+          </li>
+          <li class='collection-item avatar'>
+            <i class='material-icons circle red'>play_arrow</i>
+            <span class='title'>Title</span>
+            <p>First Line <br />
+              Second Line
+            </p>
+            <a href='#!' class='secondary-content'><i class='material-icons'>grade</i></a>
+          </li>
+        </ul>
+      ); */
+    }
+  }
+  return list;
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(IndexPage);
 
