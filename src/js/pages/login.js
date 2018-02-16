@@ -1,5 +1,5 @@
 // import 'material-design-lite';
-import 'materialize-css';
+import M from 'materialize-css';
 import { h, Component } from 'preact';
 import { connect } from 'preact-redux';
 import { getFolderStructure } from '../modules/google-auth-demo';
@@ -58,7 +58,10 @@ class IndexPage extends Component {
 
   componentDidUpdate() {
     if (this.state.t) {
-      $('.collapsible').collapsible();
+      var elem = document.querySelector('.collapsible');
+      // var instance = M.Collapsible.init(elem, options);
+      M.Collapsible.init(elem);
+      // $('.collapsible').collapsible();
     }
   }
 
