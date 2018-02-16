@@ -53,7 +53,7 @@ class IndexPage extends Component {
       return el;
     }
 
-    // return materializeRender.call(this, props, state);
+    return materializeRender.call(this, props, state);
   }
 
   handleAuth = (ev) => {
