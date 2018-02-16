@@ -398,7 +398,8 @@ export function getFolderStructure() {
             let a, index;
 
             // add files and folders that are not shared with me
-            while (nodes.length > 0 && index < nodes.length) {
+            // && index < nodes.length
+            while (nodes.length > 0) {
 
               // insert remaining nodes and remove them while they are added to the tree
               for (index = 0; index < nodes.length; index++) {
@@ -479,8 +480,6 @@ export function getFolderStructure() {
 
             // sort children alphabetically and by type
             t.traverseBF(node => {
-
-              // if (node && node.data && node.data.name === 'root') {
               if (node && node.children && node.children.length) {
                 node.children.sort((x, y) => {
                   if (x.data && x.data.fileExtension && y.data && !y.data.fileExtension) {
