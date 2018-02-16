@@ -30,9 +30,7 @@ class IndexPage extends Component {
       <div class='demo-layout-transparent mdl-layout mdl-js-layout'>
         <header class='mdl-layout__header mdl-layout__header--transparent'>
           <div class='mdl-layout__header-row'>
-            {/* Title */}
             <span class='mdl-layout-title'>DriveApiDemo {version}</span>
-            {/* Add spacer, to align navigation to the right */}
             <div class='mdl-layout-spacer' />
             <nav class='mdl-navigation'>
               <a class='mdl-navigation__link' href='#'>Sign in</a>
@@ -46,11 +44,7 @@ class IndexPage extends Component {
           </nav>
         </div>
         <main class='mdl-layout__content'>
-          <a href='#' target='_blank' id='open-file' class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast' data-upgraded=',MaterialButton,MaterialRipple'>Open File
-          <span class='mdl-button__ripple-container'>
-            <span class='mdl-ripple is-animating' style='width: 255.962px; height: 255.962px; transform: translate(-50%, -50%) translate(34px, 15px);' />
-          </span>
-          </a>
+          <a href='#' target='_blank' id='open-file' class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast' data-upgraded=',MaterialButton,MaterialRipple'>Open File<span class='mdl-button__ripple-container'><span class='mdl-ripple is-animating' style='width: 255.962px; height: 255.962px; transform: translate(-50%, -50%) translate(34px, 15px);' /></span></a>
         </main>
       </div>
     );
