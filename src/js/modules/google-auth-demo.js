@@ -291,7 +291,8 @@ export function smartQuery(nextPageToken, files = []) {
    * get all folders and pdf files
    */
   return getList({
-    q: 'mimeType = "application/pdf" or mimeType = "application/vnd.google-apps.folder" and trashed = false and "me" in owners',
+    // q: 'mimeType = "application/pdf" or mimeType = "application/vnd.google-apps.folder" and trashed = false and "me" in owners',
+    q: '"me" in owners and trashed = false',
     fields: 'nextPageToken, files(id, name, shared, trashed, owners, ownedByMe, mimeType, fileExtension, parents)',
     corpora: 'user'
   }, nextPageToken)
