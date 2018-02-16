@@ -481,7 +481,7 @@ export function getFolderStructure() {
               if (node && node.children && node.children.length) {
                 let fileChildrens = node.children.filter(c => !!c.data.fileExtension);
                 let folderChildrens = node.children.filter(c => !c.data.fileExtension);
-                node.children = folderChildrens.sort(sortNodeNames).concat[fileChildrens.sort(sortNodeNames)];
+                node.children = [].concat(folderChildrens.sort(sortNodeNames), fileChildrens.sort(sortNodeNames));
                 /* node.children.sort((x, y) => {
                   if (x.data && y.data && x.data.fileExtension && !y.data.fileExtension) {
                     return 1;
