@@ -4,6 +4,7 @@ import { h, Component } from 'preact';
 import { connect } from 'preact-redux';
 import { renderStructure, getFolderStructure } from '../modules/google-auth-demo';
 import Navbar from '../components/navbar';
+import { toggleSpinner } from '../redux/actions';
 
 class IndexPage extends Component {
 
@@ -66,10 +67,11 @@ class IndexPage extends Component {
   }
 
   getFolderStructure = () => {
+    this.props.toggleSpinner();
     getFolderStructure().then(tree => {
 
       // update tree structure
-      this.setState({ t: tree });
+      this.setState({ t: tree }, () => this.props.toggleSpinner());
     });
   }
 };
@@ -193,6 +195,9 @@ const mapDispatchToProps = dispatch => ({
 
     // TODO: improve navbar click handling
     dispatch({ type: 'IS_APP_INSTALLED' });
+  },
+  toggleSpinner: () => {
+    dispatch(toggleSpinner());
   }
 });
 
