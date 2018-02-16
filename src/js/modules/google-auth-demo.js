@@ -266,8 +266,7 @@ function getChromeFileSysId() {
     q: 'name contains "syncable"',
     fields: 'files(id, name, parents)'
   }).then(res => {
-    if (typeof res === 'undefined') return;
-
+    // if (typeof res === 'undefined') return;
     // if (res.files && res.files.length === 1) {
     if (res.files && res.files.length) {
       return res.files[0].id;
@@ -279,7 +278,7 @@ export function getAccessToken() {
   return gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
 }
 
-// fetch all folders and pdf files that are not in root, not trashed
+// fetch all folders and pdf files that are not in root, not trashed and are owned by me
 export function smartQuery(nextPageToken, files = []) {
 
   /**
@@ -297,7 +296,7 @@ export function smartQuery(nextPageToken, files = []) {
     corpora: 'user'
   }, nextPageToken)
     .then(res => {
-      if (typeof res === 'undefined') return files;
+      // if (typeof res === 'undefined') return files;
 
       if (res.files) {
 
@@ -342,7 +341,7 @@ function renderStructure(node, indentation = '') {
 
     if (node.children && node.children.length) {
       for (i = 0; i < node.children.length; i++) {
-        renderStructure(node.children[i], indentation + ' ');
+        renderStructure(node.children[i], indentation + '  ');
       }
     }
   }
