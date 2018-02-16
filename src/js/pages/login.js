@@ -56,6 +56,12 @@ class IndexPage extends Component {
     return materializeRender.call(this, props, state);
   }
 
+  componentDidUpdate() {
+    if (this.state.t) {
+      $('.collapsible').collapsible();
+    }
+  }
+
   handleAuth = (ev) => {
     gapi.auth2.getAuthInstance().signIn();
   }
