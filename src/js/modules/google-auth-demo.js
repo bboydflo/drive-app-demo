@@ -500,7 +500,7 @@ export function getFolderStructure() {
                   // if (x.data && !x.data.fileExtension && y.data && !y.data.fileExtension) {
                   //   return x.data.name < y.data.name;
                   // }
-                  return x.data.name < y.data.name;
+                  return x.data.name > y.data.name;
                 });
               }
             });
