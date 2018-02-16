@@ -1,4 +1,5 @@
-import 'material-design-lite';
+// import 'material-design-lite';
+import 'materialize-css';
 import { h, Component } from 'preact';
 import { connect } from 'preact-redux';
 import { smartQuery, getFolderStructure } from '../modules/google-auth-demo';
@@ -20,10 +21,14 @@ class IndexPage extends Component {
 
   render (props, state) {
     let bootstrapTheme = false;
+    let materialLiteTheme = false;
     if (bootstrapTheme) {
       return bootstrapRender.call(this, props, state);
     }
-    return materialRender.call(this, props, state);
+    if (materialLiteTheme) {
+      return materialRender.call(this, props, state);
+    }
+    return materializeRender.call(this, props, state);
   }
 
   handleAuth = (ev) => {
@@ -125,6 +130,54 @@ function materialRender (props, state) {
         {isChrome && !isAppInstalled && <div class='mdl-cell mdl-cell-4-col'>
           <button class='mdl-button mdl-js-button mdl-button--raised'>Add to Chrome</button>
         </div>}
+      </div>
+    </div>
+  );
+}
+
+function materializeRender (props, state) {
+  let { signedIn, isAppInstalled } = props;
+
+  let isChrome = false;
+  try {
+    if (chrome) {
+      isChrome = true;
+    }
+  } catch (e) {
+    console.log('not chrome');
+  }
+
+  // {signedIn ? <button class='mdl-button mdl-js-button mdl-button--raised' onClick={this.handleSignOut}>Sign Out</button> : <button class='mdl-button mdl-js-button mdl-button--raised' onClick={this.handleAuth}>Sign in</button>}
+
+  return (
+    <div class='container'>
+      <nav>
+        <div class='nav-wrapper'>
+          <a href='#' class='brand-logo'>Logo</a>
+          <ul id='nav-mobile' class='right hide-on-med-and-down'>
+            <li><a href='sass.html'>Sass</a></li>
+            <li><a href='badges.html'>Components</a></li>
+            <li><a href='collapsible.html'>JavaScript</a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class='row'>
+        <div class='col s4'>
+          <button class='btn waves-effect waves-light' type='submit' onClick={signedIn ? this.handleSignOut : this.handleAuth} name='action'>{signedIn ? 'Sign Out' : 'Sign In'}
+            <i class='material-icons right'>send</i>
+          </button>
+        </div>
+        <div class='col s4'>
+          <button class='btn waves-effect waves-light' type='submit' onClick={getFolderStructure} name='action'>Open File
+          <i class='material-icons right'>send</i>
+          </button>
+        </div>
+        <div class='col s4'>
+          {isChrome && !isAppInstalled && <button class='btn waves-effect waves-light' type='submit' onClick={getFolderStructure} name='action'>Open File
+          <i class='material-icons right'>send</i>
+          </button>}
+        </div>
       </div>
     </div>
   );

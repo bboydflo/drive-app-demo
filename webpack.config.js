@@ -119,10 +119,10 @@ let webpackConfig = {
   // convention by default so if a directory contains *index.js*,
   // it resolves to that.
   entry: {
-    app: path.join(__dirname, 'src', 'js', 'index.js'),
+    app: path.join(__dirname, 'src', 'js', 'index.js')
     // core: path.join(__dirname, 'src', 'sass', 'core.scss'),
     // 'index': path.join(__dirname, 'src', 'sass', 'smartpigs-main.scss')
-    'm-custom': path.join(__dirname, 'src', 'sass', 'm-custom.scss')
+    // 'm-custom': path.join(__dirname, 'src', 'sass', 'm-custom.scss')
   },
 
   output: {
