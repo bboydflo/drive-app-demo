@@ -120,8 +120,9 @@ let webpackConfig = {
   // it resolves to that.
   entry: {
     app: path.join(__dirname, 'src', 'js', 'index.js'),
-    core: path.join(__dirname, 'src', 'sass', 'core.scss'),
-    'index': path.join(__dirname, 'src', 'sass', 'smartpigs-main.scss')
+    // core: path.join(__dirname, 'src', 'sass', 'core.scss'),
+    // 'index': path.join(__dirname, 'src', 'sass', 'smartpigs-main.scss')
+    'm-custom': path.join(__dirname, 'src', 'sass', 'm-custom.scss')
   },
 
   output: {

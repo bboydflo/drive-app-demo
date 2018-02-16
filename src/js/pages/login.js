@@ -21,41 +21,37 @@ class IndexPage extends Component {
   };
 
   render (props, state) {
-    let { version } = props;
-    let brand = <p class='navbar-text'>DriveApiDemo <code> {version}</code></p>;
-
-    let pageContentStyles = 'padding-bottom: 51px';
-    let { signedIn, isAppInstalled } = props;
-
-    let isChrome = false;
-    try {
-      if (chrome) {
-        isChrome = true;
-      }
-    } catch (e) {
-      console.log('not chrome');
+    let bootstrapTheme = false;
+    if (bootstrapTheme) {
+      return bootstrapRender(props, state);
     }
 
+    let { version } = props;
+
     return (
-      <div class='index-view'>
-        <Navbar
-          theme='inverse'
-          brand={brand}
-          menuType={0}
-        />
-        <div id='page-content' class='container' style={pageContentStyles}>
-          <div class='row'>
-            <button type='button' class='btn btn-default' style={signedIn ? 'display: none;' : 'display: block;'} onClick={this.handleAuth}>Sign in</button>
-            <button type='button' class='btn btn-default' style={signedIn ? 'display: block;' : 'display: none;'} onClick={this.handleSignOut}>Sign Out</button>
-            <button type='button' class='btn btn-default' onClick={this.getFolderStructure}>Get Folder structure</button>
+      <div class='demo-layout-transparent mdl-layout mdl-js-layout'>
+        <header class='mdl-layout__header mdl-layout__header--transparent'>
+          <div class='mdl-layout__header-row'>
+            {/* Title */}
+            <span class='mdl-layout-title'>DriveApiDemo {version}</span>
+            {/* Add spacer, to align navigation to the right */}
+            <div class='mdl-layout-spacer' />
+            <nav class='mdl-navigation'>
+              <a class='mdl-navigation__link' href='#'>Sign in</a>
+              <a class='mdl-navigation__link' href='#'>Open File</a>
+            </nav>
           </div>
-          <div class='row'>
-            <button type='button' class='btn btn-default' onClick={this.smartQuery}>Run smart query</button>
-          </div>
-          {isChrome && !isAppInstalled && <div class='row'>
-            <button type='button' class='btn btn-success' id='install-button' onClick={this.handleInstall}>Add to Chrome</button>
-          </div>}
+        </header>
+        <div class='mdl-layout__drawer'>
+          <span class='mdl-layout-title'>DriveApiDemo {version}</span>
+          <nav class='mdl-navigation'>
+            <a class='mdl-navigation__link' href='#'>Sign In</a>
+            <a class='mdl-navigation__link' href='#'>Open File</a>
+          </nav>
         </div>
+        <main class='mdl-layout__content'>
+          Hello material!
+        </main>
       </div>
     );
   }
@@ -92,6 +88,46 @@ class IndexPage extends Component {
       console.log(files);
     });
   }
+};
+
+const bootstrapRender = (props, state) => {
+  let { version } = props;
+  let brand = <p class='navbar-text'>DriveApiDemo <code> {version}</code></p>;
+
+  let pageContentStyles = 'padding-bottom: 51px';
+  let { signedIn, isAppInstalled } = props;
+
+  let isChrome = false;
+  try {
+    if (chrome) {
+      isChrome = true;
+    }
+  } catch (e) {
+    console.log('not chrome');
+  }
+
+  return (
+    <div class='index-view'>
+      <Navbar
+        theme='inverse'
+        brand={brand}
+        menuType={0}
+      />
+      <div id='page-content' class='container' style={pageContentStyles}>
+        <div class='row'>
+          <button type='button' class='btn btn-default' style={signedIn ? 'display: none;' : 'display: block;'} onClick={this.handleAuth}>Sign in</button>
+          <button type='button' class='btn btn-default' style={signedIn ? 'display: block;' : 'display: none;'} onClick={this.handleSignOut}>Sign Out</button>
+          <button type='button' class='btn btn-default' onClick={this.getFolderStructure}>Get Folder structure</button>
+        </div>
+        <div class='row'>
+          <button type='button' class='btn btn-default' onClick={this.smartQuery}>Run smart query</button>
+        </div>
+        {isChrome && !isAppInstalled && <div class='row'>
+          <button type='button' class='btn btn-success' id='install-button' onClick={this.handleInstall}>Add to Chrome</button>
+        </div>}
+      </div>
+    </div>
+  );
 };
 
 const mapStateToProps = state => ({

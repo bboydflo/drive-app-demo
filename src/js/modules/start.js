@@ -14,6 +14,7 @@ import AppRouterFactory from '../routes/global';
 import { STORAGE_KEY, SIGNED_IN } from '../redux/types';
 
 import pdfjsLib from 'pdfjs-dist';
+import 'material-design-lite';
 
 export default () => {
 
