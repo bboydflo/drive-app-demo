@@ -100,7 +100,7 @@ function bootstrapRender (props, state) {
 }
 
 function materialRender (props, state) {
-  let { version, signedIn, isAppInstalled } = props;
+  let { signedIn, isAppInstalled } = props;
 
   let isChrome = false;
   try {
@@ -115,13 +115,12 @@ function materialRender (props, state) {
 
   return (
     <div class='mdl-layout mdl-js-layout'>
-      <p>DemoApp {version}</p>
       <div class='mdl-grid'>
         <div class='mdl-cell mdl-cell-4-col'>
           <button class='mdl-button mdl-js-button mdl-button--raised' onClick={signedIn ? this.handleSignOut : this.handleAuth}>{signedIn ? 'Sign Out' : 'Sign In'}</button>
         </div>
         <div class='mdl-cell mdl-cell-4-col'>
-          <button class='mdl-button mdl-js-button mdl-button--raised'>Open File</button>
+          <button class='mdl-button mdl-js-button mdl-button--raised' onClick={getFolderStructure}>Open File</button>
         </div>
         {isChrome && !isAppInstalled && <div class='mdl-cell mdl-cell-4-col'>
           <button class='mdl-button mdl-js-button mdl-button--raised'>Add to Chrome</button>
