@@ -21,9 +21,9 @@ class IndexPage extends Component {
   render (props, state) {
     let bootstrapTheme = false;
     if (bootstrapTheme) {
-      return bootstrapRender.bind(this, [props, state]);
+      return bootstrapRender.call(this, props, state);
     }
-    return materialRender.bind(this, [props, state]);
+    return materialRender.call(this, props, state);
   }
 
   handleAuth = (ev) => {
@@ -60,7 +60,7 @@ class IndexPage extends Component {
   }
 };
 
-const bootstrapRender = (props, state) => {
+function bootstrapRender (props, state) {
   let { version, signedIn, isAppInstalled } = props;
   let brand = <p class='navbar-text'>DriveApiDemo <code> {version}</code></p>;
 
@@ -97,9 +97,9 @@ const bootstrapRender = (props, state) => {
       </div>
     </div>
   );
-};
+}
 
-const materialRender = (props, state) => {
+function materialRender (props, state) {
   let { version, signedIn, isAppInstalled } = props;
 
   let isChrome = false;
@@ -129,7 +129,7 @@ const materialRender = (props, state) => {
       </div>
     </div>
   );
-};
+}
 
 const mapStateToProps = state => ({
   lang: state.ui.lang,
