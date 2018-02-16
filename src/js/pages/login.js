@@ -21,9 +21,9 @@ class IndexPage extends Component {
   render (props, state) {
     let bootstrapTheme = false;
     if (bootstrapTheme) {
-      return bootstrapRender(props, state);
+      return bootstrapRender.call(this, props, state);
     }
-    return materialRender(props, state);
+    return materialRender.call(this, props, state);
   }
 
   handleAuth = (ev) => {
