@@ -58,10 +58,10 @@ class IndexPage extends Component {
 
   componentDidUpdate() {
     if (this.state.t) {
-      var elem = document.querySelector('.collapsible');
+      /* var elem = document.querySelector('.collapsible');
       // var instance = M.Collapsible.init(elem, options);
-      M.Collapsible.init(elem);
-      // $('.collapsible').collapsible();
+      M.Collapsible.init(elem); */
+      $('.collapsible').collapsible();
     }
   }
 
