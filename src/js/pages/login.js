@@ -27,25 +27,10 @@ class IndexPage extends Component {
     let { version } = props;
 
     return (
-      <div class='demo-layout-transparent mdl-layout mdl-js-layout'>
-        <header class='mdl-layout__header mdl-layout__header--transparent'>
-          <div class='mdl-layout__header-row'>
-            <span class='mdl-layout-title'>DriveApiDemo {version}</span>
-            <div class='mdl-layout-spacer' />
-            <nav class='mdl-navigation'>
-              <a class='mdl-navigation__link' href='#'>Sign in</a>
-            </nav>
-          </div>
-        </header>
-        <div class='mdl-layout__drawer'>
-          <span class='mdl-layout-title'>DriveApiDemo {version}</span>
-          <nav class='mdl-navigation'>
-            <a class='mdl-navigation__link' href='#'>Sign In</a>
-          </nav>
-        </div>
-        <main class='mdl-layout__content'>
-          <a href='#' target='_blank' id='open-file' class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast' data-upgraded=',MaterialButton,MaterialRipple'>Open File<span class='mdl-button__ripple-container'><span class='mdl-ripple is-animating' style='width: 255.962px; height: 255.962px; transform: translate(-50%, -50%) translate(34px, 15px);' /></span></a>
-        </main>
+      <div class='mdl-layout mdl-js-layout'>
+        <p>DemoApp {version}</p>
+        <button class='mdl-button mdl-js-button mdl-button--raised'>Sign In</button>
+        <button class='mdl-button mdl-js-button mdl-button--raised'>Open File</button>
       </div>
     );
   }
@@ -142,3 +127,26 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(IndexPage);
+
+/*
+  <div class='demo-layout-transparent mdl-layout mdl-js-layout'>
+    <header class='mdl-layout__header mdl-layout__header--transparent'>
+      <div class='mdl-layout__header-row'>
+        <span class='mdl-layout-title'>DriveApiDemo {version}</span>
+        <div class='mdl-layout-spacer' />
+        <nav class='mdl-navigation'>
+          <a class='mdl-navigation__link' href='#'>Sign in</a>
+        </nav>
+      </div>
+    </header>
+    <div class='mdl-layout__drawer'>
+      <span class='mdl-layout-title'>DriveApiDemo {version}</span>
+      <nav class='mdl-navigation'>
+        <a class='mdl-navigation__link' href='#'>Sign In</a>
+      </nav>
+    </div>
+    <main class='mdl-layout__content'>
+      <a href='#' id='open-file' class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast' data-upgraded=',MaterialButton,MaterialRipple'>Open File<span class='mdl-button__ripple-container'><span class='mdl-ripple is-animating' style='width: 255.962px; height: 255.962px; transform: translate(-50%, -50%) translate(34px, 15px);' /></span></a>
+    </main>
+  </div>
+*/
