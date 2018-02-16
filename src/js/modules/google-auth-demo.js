@@ -347,6 +347,12 @@ function renderStructure(node, indentation = '') {
   }
 }
 
+function sortNodeNames(a, b) {
+  if (a.data.name < b.data.name) return -1;
+  if (a.data.name > b.data.name) return 1;
+  return 0;
+}
+
 export function getFolderStructure() {
   // gapi.client.drive.files.list({ q: "'appDataFolder' in parents" }).then(resp => console.log(resp));
   // gapi.client.drive.files.list({ q: "mimeType = 'application/vnd.google-apps.folder' trashed=false", spaces: 'drive' });
@@ -475,7 +481,7 @@ export function getFolderStructure() {
               if (node && node.children && node.children.length) {
                 let fileChildrens = node.children.filter(c => !!c.data.fileExtension);
                 let folderChildrens = node.children.filter(c => !c.data.fileExtension);
-                node.children = folderChildrens.sort().concat[fileChildrens.sort()];
+                node.children = folderChildrens.sort(sortNodeNames).concat[fileChildrens.sort(sortNodeNames)];
                 /* node.children.sort((x, y) => {
                   if (x.data && y.data && x.data.fileExtension && !y.data.fileExtension) {
                     return 1;
