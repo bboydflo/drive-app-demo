@@ -31,14 +31,16 @@ class IndexPage extends Component {
       return materialRender.call(this, props, state);
     }
 
-    // render the tree structure
-    state.t.traverseBF(node => {
+    // render the tree structure (if any)
+    if (state.t) {
+      state.t.traverseBF(node => {
 
-      // if (node && node.data && node.data.id === rootId) {
-      if (node && node.data && node.data.name === 'root') {
-        renderStructure(node);
-      }
-    });
+        // if (node && node.data && node.data.id === rootId) {
+        if (node && node.data && node.data.name === 'root') {
+          renderStructure(node);
+        }
+      });
+    }
 
     return materializeRender.call(this, props, state);
   }
