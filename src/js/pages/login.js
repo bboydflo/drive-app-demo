@@ -2,12 +2,13 @@
 import 'materialize-css';
 import { h, Component } from 'preact';
 import { connect } from 'preact-redux';
-import { smartQuery, getFolderStructure } from '../modules/google-auth-demo';
+import { renderStructure, getFolderStructure } from '../modules/google-auth-demo';
 import Navbar from '../components/navbar';
 
 class IndexPage extends Component {
 
   state = {
+    t: null,
     files: [],
     pdfData: null,
 
@@ -28,6 +29,16 @@ class IndexPage extends Component {
     if (materialLiteTheme) {
       return materialRender.call(this, props, state);
     }
+
+    // render the tree structure
+    state.tree.traverseBF(node => {
+
+      if (node && node.data && node.data.name === 'root') {
+      // if (node && node.data && node.data.id === rootId) {
+        renderStructure(node);
+      }
+    });
+
     return materializeRender.call(this, props, state);
   }
 
@@ -55,12 +66,10 @@ class IndexPage extends Component {
   }
 
   getFolderStructure = () => {
-    getFolderStructure();
-  }
+    getFolderStructure().then(tree => {
 
-  smartQuery = () => {
-    smartQuery().then(files => {
-      console.log(files);
+      // update tree structure
+      this.setState({ t: tree });
     });
   }
 };
@@ -147,21 +156,8 @@ function materializeRender (props, state) {
     console.log('not chrome');
   }
 
-  // {signedIn ? <button class='mdl-button mdl-js-button mdl-button--raised' onClick={this.handleSignOut}>Sign Out</button> : <button class='mdl-button mdl-js-button mdl-button--raised' onClick={this.handleAuth}>Sign in</button>}
-
   return (
     <div class='container'>
-      <nav>
-        <div class='nav-wrapper'>
-          <a href='#' class='brand-logo'>Logo</a>
-          <ul id='nav-mobile' class='right hide-on-med-and-down'>
-            <li><a href='sass.html'>Sass</a></li>
-            <li><a href='badges.html'>Components</a></li>
-            <li><a href='collapsible.html'>JavaScript</a></li>
-          </ul>
-        </div>
-      </nav>
-
       <div class='row'>
         <div class='col s4'>
           <button class='btn waves-effect waves-light' type='submit' onClick={signedIn ? this.handleSignOut : this.handleAuth} name='action'>{signedIn ? 'Sign Out' : 'Sign In'}

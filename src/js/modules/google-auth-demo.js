@@ -326,7 +326,7 @@ export function smartQuery(nextPageToken, files = []) {
     });
 }
 
-function renderStructure(node, indentation = '') {
+export function renderStructure(node, indentation = '') {
   let i, fileType;
   if (node && node.data && node.data.id) {
     // if (node.data.fileExtension && node.data.fileExtension === 'pdf') {
@@ -393,7 +393,7 @@ export function getFolderStructure() {
         // minimal id validation
         if (typeof rootId === 'undefined' || chromeFileSysId === 'undefined') return;
 
-        smartQuery()
+        return smartQuery()
           .then(nodes => {
 
             // save timestamp
@@ -526,14 +526,7 @@ export function getFolderStructure() {
             console.log(`it took ${t2 - t1} miliseconds to build the folder structure`);
             console.log(`it took ${t2 - t0} miliseconds to fetch data and build the folder structure`);
 
-            // render the tree structure
-            t.traverseBF(node => {
-
-              // if (node && node.data && node.data.name === 'root') {
-              if (node && node.data && node.data.id === rootId) {
-                renderStructure(node);
-              }
-            });
+            return t;
           });
       });
   }
@@ -676,5 +669,7 @@ export function getFolderStructure() {
           renderStructure(node);
         }
       });
+
+      return t;
     });
 }
