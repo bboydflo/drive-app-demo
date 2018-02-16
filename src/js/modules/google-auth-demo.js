@@ -443,6 +443,7 @@ export function getFolderStructure() {
             let continueToRemove = true;
 
             // continue to remove as long as there were any empty folders
+            // TODO: change this loop to be a `do while` loop
             while (continueToRemove) {
 
               // removed node
@@ -470,14 +471,6 @@ export function getFolderStructure() {
               continueToRemove = !!n;
             }
 
-            // save timestamp
-            var t2 = performance.now();
-
-            // logs
-            console.log(`it took ${t1 - t0} miliseconds to fetch data`);
-            console.log(`it took ${t2 - t1} miliseconds to build the folder structure`);
-            console.log(`it took ${t2 - t0} miliseconds to fetch data and build the folder structure`);
-
             // sort children alphabetically and by type
             t.traverseBF(node => {
               if (node && node.children && node.children.length) {
@@ -499,6 +492,14 @@ export function getFolderStructure() {
                 });
               }
             });
+
+            // save timestamp
+            var t2 = performance.now();
+
+            // logs
+            console.log(`it took ${t1 - t0} miliseconds to fetch data`);
+            console.log(`it took ${t2 - t1} miliseconds to build the folder structure`);
+            console.log(`it took ${t2 - t0} miliseconds to fetch data and build the folder structure`);
 
             // render the tree structure
             t.traverseBF(node => {
