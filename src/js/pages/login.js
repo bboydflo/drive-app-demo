@@ -169,12 +169,12 @@ function materializeRender (props, state) {
           </button>
         </div>
         <div class='col s4'>
-          <button class='btn waves-effect waves-light' type='submit' onClick={getFolderStructure} name='action'>Open File
+          <button class='btn waves-effect waves-light' type='submit' onClick={this.getFolderStructure} name='action'>Open File
           <i class='material-icons right'>send</i>
           </button>
         </div>
         <div class='col s4'>
-          {isChrome && !isAppInstalled && <button class='btn waves-effect waves-light' type='submit' onClick={getFolderStructure} name='action'>Open File
+          {isChrome && !isAppInstalled && <button class='btn waves-effect waves-light' type='submit' onClick={this.getFolderStructure} name='action'>Open File
           <i class='material-icons right'>send</i>
           </button>}
         </div>
