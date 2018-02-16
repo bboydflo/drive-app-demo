@@ -36,7 +36,6 @@ class IndexPage extends Component {
             <div class='mdl-layout-spacer' />
             <nav class='mdl-navigation'>
               <a class='mdl-navigation__link' href='#'>Sign in</a>
-              <a class='mdl-navigation__link' href='#'>Open File</a>
             </nav>
           </div>
         </header>
@@ -44,13 +43,14 @@ class IndexPage extends Component {
           <span class='mdl-layout-title'>DriveApiDemo {version}</span>
           <nav class='mdl-navigation'>
             <a class='mdl-navigation__link' href='#'>Sign In</a>
-            <a class='mdl-navigation__link' href='#'>Open File</a>
           </nav>
         </div>
         <main class='mdl-layout__content'>
-          <p>Content</p>
-          <p>Goes</p>
-          <p>Here</p>
+          <a href='#' target='_blank' id='open-file' class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast' data-upgraded=',MaterialButton,MaterialRipple'>Open File
+          <span class='mdl-button__ripple-container'>
+            <span class='mdl-ripple is-animating' style='width: 255.962px; height: 255.962px; transform: translate(-50%, -50%) translate(34px, 15px);' />
+          </span>
+          </a>
         </main>
       </div>
     );
