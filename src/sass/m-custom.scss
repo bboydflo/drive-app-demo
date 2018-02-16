@@ -1,3 +1,6 @@
+// use dialog polyfill styles
+@import "libs/dialog-polyfill";
+
 /* Uses a transparent header that draws on top of the layout's background */
 .demo-layout-transparent {
   background: url('../images/material-bg-cover-transparent.jpg') center / cover;

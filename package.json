@@ -58,6 +58,7 @@
   "dependencies": {
     "clone": "^2.1.1",
     "date-format": "^1.1.0",
+    "dialog-polyfill": "^0.4.9",
     "domready": "^1.0.8",
     "fecha": "^2.3.1",
     "flagstrap-preact": "0.0.1",

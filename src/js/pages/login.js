@@ -48,7 +48,9 @@ class IndexPage extends Component {
           </nav>
         </div>
         <main class='mdl-layout__content'>
-          Hello material!
+          <p>Content</p>
+          <p>Goes</p>
+          <p>Here</p>
         </main>
       </div>
     );
