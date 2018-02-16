@@ -352,11 +352,17 @@ function renderStructure(node, indentation = '') {
 }
 
 function sortNodeNames(a, b) {
-  var aName = a.data.name.toLowerCase();
-  var bName = b.data.name.toLowerCase();
-  if (aName < bName) return -1;
-  if (aName > bName) return 1;
-  return 0;
+  try {
+    var aName = a.data.name.toLowerCase();
+    var bName = b.data.name.toLowerCase();
+    if (aName < bName) return -1;
+    if (aName > bName) return 1;
+    return 0;
+  } catch (e) {
+    console.error(a, b);
+    var vals = [0, 1, 2];
+    return vals[Math.floor(Math.random() * vals.length)];
+  }
 }
 
 export function getFolderStructure() {
