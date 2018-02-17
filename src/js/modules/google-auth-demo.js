@@ -331,7 +331,6 @@ export function renderStructure(node, indentation = '') {
   if (node && node.data && node.data.id) {
     // if (node.data.fileExtension && node.data.fileExtension === 'pdf') {
     if (node.data.fileExtension) {
-      // fileType = '▬';
       fileType = '•';
     } else {
       fileType = '►';

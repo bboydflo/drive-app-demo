@@ -223,23 +223,8 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-/* <ul class='collapsible'>
-  <li>
-    <div class='collapsible-header'><i class='material-icons'>filter_drama</i>First</div>
-    <div class='collapsible-body'><span>Lorem ipsum dolor sit amet.</span></div>
-  </li>
-  <li>
-    <div class='collapsible-header'><i class='material-icons'>place</i>Second</div>
-    <div class='collapsible-body'><span>Lorem ipsum dolor sit amet.</span></div>
-  </li>
-  <li>
-    <div class='collapsible-header'><i class='material-icons'>whatshot</i>Third</div>
-    <div class='collapsible-body'><span>Lorem ipsum dolor sit amet.</span></div>
-  </li>
-</ul> */
-
 function createNestedList(node) {
-  let i, item; // fileType;
+  let i, item;
   let items = null;
   if (node.children && node.children.length) {
     items = [];
@@ -274,90 +259,6 @@ function createNestedList(node) {
       </ul>
     );
   }
-
-  // if (node.data.id !== rootId) {
-  if (node.data.name !== 'root') {
-
-    /* // if (node.data.fileExtension && node.data.fileExtension === 'pdf') {
-    if (node.data.fileExtension) {
-      fileType = <i class='material-icons circle'>picture_as_pdf</i>;
-
-      // <li>
-      //   <div class='collapsible-header'><i class='material-icons'>filter_drama</i>First</div>
-      // </li>
-    } else {
-      // fileType = '►';
-      fileType = <i class='material-icons circle'>folder</i>;
-    } */
-
-    // log
-    // console.log(indentation + fileType + ' ' + (node.data.name || node.data.id) + '\n');
-
-    // list = (
-    //   <li class='collection-item avatar'>
-    //     {fileType}
-    //     <span class='title'>{node.data.name || node.data.id}</span>
-    //     <a href='#!' class='secondary-content'><i class='material-icons'>chevron_right</i></a>
-    //   </li>
-    // );
-
-    /* list = (
-      <ul class='collection'>
-        <li class='collection-item avatar'>
-          {fileType}
-          <span class='title'>Title</span>
-          <a href='#!' class='secondary-content'><i class='material-icons'>chevron_right</i></a>
-        </li>
-        <li class='collection-item avatar'>
-          <i class='material-icons circle'>folder</i>
-          <span class='title'>Title</span>
-          <p>First Line <br />
-            Second Line
-          </p>
-          <a href='#!' class='secondary-content'><i class='material-icons'>grade</i></a>
-        </li>
-        <li class='collection-item avatar'>
-          <i class='material-icons circle green'>insert_chart</i>
-          <span class='title'>Title</span>
-          <p>First Line <br />
-            Second Line
-          </p>
-          <a href='#!' class='secondary-content'><i class='material-icons'>grade</i></a>
-        </li>
-        <li class='collection-item avatar'>
-          <i class='material-icons circle red'>play_arrow</i>
-          <span class='title'>Title</span>
-          <p>First Line <br />
-            Second Line
-          </p>
-          <a href='#!' class='secondary-content'><i class='material-icons'>grade</i></a>
-        </li>
-      </ul>
-    ); */
-  }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(IndexPage);
-
-/*
-  <div class='demo-layout-transparent mdl-layout mdl-js-layout'>
-    <header class='mdl-layout__header mdl-layout__header--transparent'>
-      <div class='mdl-layout__header-row'>
-        <span class='mdl-layout-title'>DriveApiDemo {version}</span>
-        <div class='mdl-layout-spacer' />
-        <nav class='mdl-navigation'>
-          <a class='mdl-navigation__link' href='#'>Sign in</a>
-        </nav>
-      </div>
-    </header>
-    <div class='mdl-layout__drawer'>
-      <span class='mdl-layout-title'>DriveApiDemo {version}</span>
-      <nav class='mdl-navigation'>
-        <a class='mdl-navigation__link' href='#'>Sign In</a>
-      </nav>
-    </div>
-    <main class='mdl-layout__content'>
-      <a href='#' id='open-file' class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast' data-upgraded=',MaterialButton,MaterialRipple'>Open File<span class='mdl-button__ripple-container'><span class='mdl-ripple is-animating' style='width: 255.962px; height: 255.962px; transform: translate(-50%, -50%) translate(34px, 15px);' /></span></a>
-    </main>
-  </div>
-*/
