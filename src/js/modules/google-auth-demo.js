@@ -75,19 +75,22 @@ export function createPicker() {
   if (pickerApiLoaded && oauthToken) {
 
     // create epubs view
-    let epubView = new google.picker.View(google.picker.ViewId.DOCS)
+    // let epubView = new google.picker.View(google.picker.ViewId.DOCS)
+    let epubView = new google.picker.DocsView()
       // .setIncludeFolders(false)
       // .setQuery('epub')
       .setTitle('EPUB')
       .setMimeTypes('application/epub+zip, application/x-dtbncx+xml');
 
-    let pdfsView = new google.picker.View(google.picker.ViewId.DOCS)
+    // let pdfsView = new google.picker.View(google.picker.ViewId.DOCS)
+    let pdfsView = new google.picker.DocsView()
       // .setIncludeFolders(false)
       // .setQuery('epub')
       .setTitle('PDF')
       .setMimeTypes('application/pdf');
 
-    let docsView = new google.picker.View(google.picker.ViewId.DOCS)
+    // let docsView = new google.picker.View(google.picker.ViewId.DOCS)
+    let docsView = new google.picker.DocsView()
       .setTitle('Documents')
       .setMimeTypes('application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document');
 
