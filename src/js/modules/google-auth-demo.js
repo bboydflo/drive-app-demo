@@ -86,9 +86,21 @@ export function createPicker() {
 
 // A simple callback implementation.
 function pickerCallback(data) {
+  console.log(data);
   if (data.action === google.picker.Action.PICKED) {
     var fileId = data.docs[0].id;
-    console.log('The user selected: ' + fileId);
+
+    // send google drive api v3 request
+    return gapi.client.drive.files.get({ fileId }).then(resp => {
+
+      // log
+      console.log(resp);
+
+      // do some validation
+      if (resp && resp.status && resp.status === 200 && resp.result && resp.result.id) {
+        return resp.result;
+      }
+    });
   }
 }
 
