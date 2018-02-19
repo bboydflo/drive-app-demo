@@ -138,7 +138,7 @@ function pickerCallback(data) {
 
         if (mimeType.indexOf('pdf') > -1) {
           console.log('open into words pdf viewer');
-        } else if (mimeType.indexOf('word') > -1) {
+        } else if (mimeType.indexOf('word') > -1 || mimeType.indexOf('vnd.google-apps.document') > -1) {
           console.log('open into words doc viewer');
         } else if (mimeType.indexOf('epub') > -1) {
           console.log('open into words epub viewer');
