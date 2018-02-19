@@ -76,7 +76,7 @@ export function createPicker() {
 
     // create epubs view
     let epubView = new google.picker.View(google.picker.ViewId.DOCS)
-      .setIncludeFolders(false)
+      // .setIncludeFolders(false)
       .setQuery('epub')
       .setMimeTypes('application/epub, application/epub+zip, application/x-dtbncx+xml');
 
