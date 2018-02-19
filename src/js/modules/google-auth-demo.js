@@ -75,7 +75,8 @@ export function createPicker() {
   if (pickerApiLoaded && oauthToken) {
     picker = new google.picker.PickerBuilder()
       // .addView(google.picker.ViewId.PHOTOS)
-      .addView(google.picker.ViewId.FOLDERS)
+      // .addView(google.picker.ViewId.FOLDERS)
+      .addView(new google.picker.DocsView().setParent('root').setIncludeFolders(true))
       .setOAuthToken(oauthToken)
       .setDeveloperKey(API_KEY)
       .setCallback(pickerCallback)
