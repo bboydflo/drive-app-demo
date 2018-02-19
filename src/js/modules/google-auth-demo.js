@@ -75,7 +75,7 @@ export function createPicker() {
   if (pickerApiLoaded && oauthToken) {
 
     // create epubs view
-    let epubView = new google.picker.View(google.picker.ViewId.DOCUMENTS).View.setMimeTypes('application/epub+zip');
+    let epubView = new google.picker.View(google.picker.ViewId.DOCUMENTS).setMimeTypes('application/epub+zip');
 
     picker = new google.picker.PickerBuilder()
       // .addView(google.picker.ViewId.PHOTOS)
