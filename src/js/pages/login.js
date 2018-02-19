@@ -41,11 +41,22 @@ class IndexPage extends Component {
         // if (node && node.data && node.data.id === rootId) {
         if (node && node.data && node.data.name === 'root') {
           el = (
-            <div class='container'>
-              <div class='row'>
-                {createNestedList(node)}
+            <div id='modal1' class='modal'>
+              <div class='modal-content'>
+                <h4>Choose file</h4>
+                <div class='row'>
+                  {createNestedList(node)}
+                </div>
+              </div>
+              <div class='modal-footer'>
+                <a href='#!' class='modal-action modal-close waves-effect waves-green btn-flat'>Agree</a>
               </div>
             </div>
+            // <div class='container'>
+            //   <div class='row'>
+            //     {createNestedList(node)}
+            //   </div>
+            // </div>
           );
         }
       });
@@ -62,6 +73,7 @@ class IndexPage extends Component {
       // var instance = M.Collapsible.init(elem, options);
       M.Collapsible.init(elem); */
       $('.collapsible').collapsible();
+      $('.modal').modal();
     }
   }
 
@@ -255,7 +267,8 @@ function createNestedList(node) {
     }
     return (
       <ul class='collapsible' data-collapsible='accordion'>
-        {items.map(item => item)}
+        {/* {items.map(item => item)} */}
+        items
       </ul>
     );
   }
