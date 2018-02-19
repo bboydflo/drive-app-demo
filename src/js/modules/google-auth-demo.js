@@ -79,19 +79,21 @@ export function createPicker() {
     let epubView = new google.picker.DocsView()
       // .setIncludeFolders(false)
       // .setQuery('epub')
-      .setTitle('EPUB')
+      // .setTitle('EPUB')
+      .setLabel('EPUB')
       .setMimeTypes('application/epub+zip, application/x-dtbncx+xml');
 
     // let pdfsView = new google.picker.View(google.picker.ViewId.DOCS)
     let pdfsView = new google.picker.DocsView()
       // .setIncludeFolders(false)
       // .setQuery('epub')
-      .setTitle('PDF')
+      // .setTitle('PDF')
+      .setLabel('PDF')
       .setMimeTypes('application/pdf');
 
     // let docsView = new google.picker.View(google.picker.ViewId.DOCS)
     let docsView = new google.picker.DocsView()
-      .setTitle('Documents')
+      .setLabel('Documents')
       .setMimeTypes('application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document');
 
     picker = new google.picker.PickerBuilder()
