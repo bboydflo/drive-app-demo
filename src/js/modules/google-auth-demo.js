@@ -78,7 +78,7 @@ export function createPicker() {
     let epubView = new google.picker.View(google.picker.ViewId.DOCS)
     // let epubView = new google.picker.DocsView()
       // .setIncludeFolders(false)
-      // .setQuery('epub')
+      .setQuery('epub')
       // .setTitle('EPUB')
       .setLabel('EPUB')
       .setMimeTypes('application/epub+zip, application/x-dtbncx+xml');
@@ -86,7 +86,7 @@ export function createPicker() {
     let pdfsView = new google.picker.View(google.picker.ViewId.PDFS)
     // let pdfsView = new google.picker.DocsView()
       // .setIncludeFolders(false)
-      // .setQuery('epub')
+      .setQuery('epub')
       // .setTitle('PDF')
       .setLabel('PDF')
       .setMimeTypes('application/pdf');
