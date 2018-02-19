@@ -70,7 +70,7 @@ function onPickerApiLoad() {
 }
 
 // Create and render a Picker object for picking user Photos.
-function createPicker() {
+export function createPicker() {
   let oauthToken = getAccessToken();
   if (pickerApiLoaded && oauthToken) {
     picker = new google.picker.PickerBuilder()

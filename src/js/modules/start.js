@@ -83,14 +83,20 @@ export default () => {
         signedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
         store.dispatch({
           type: SIGNED_IN,
-          payload: gapi.auth2.getAuthInstance().isSignedIn.get()
+          payload: signedIn
         });
 
         gapiDemo.listenForSignInChanges(() => {
+          let isSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
           store.dispatch({
             type: SIGNED_IN,
-            payload: gapi.auth2.getAuthInstance().isSignedIn.get()
+            payload: isSignedIn
           });
+          if (isSignedIn) {
+
+            // create picker
+            gapiDemo.createPicker();
+          }
         });
 
         if (!signedIn) {

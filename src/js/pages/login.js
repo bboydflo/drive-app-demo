@@ -218,7 +218,7 @@ function materializeRender (props, state) {
           </button>
         </div>
         <div class='col s4'>
-          <button class='btn waves-effect waves-light' type='submit' onClick={this.getFolderStructure} name='action'>Open Drive Picker
+          <button class='btn waves-effect waves-light' type='submit' onClick={this.getFolderStructure} name='action'>See Drive Folders
           <i class='material-icons right'>folder_open</i>
           </button>
         </div>
