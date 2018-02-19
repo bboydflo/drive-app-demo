@@ -74,6 +74,7 @@ class IndexPage extends Component {
       M.Collapsible.init(elem); */
       $('.collapsible').collapsible();
       $('.modal').modal();
+      $('.modal').open();
     }
   }
 
@@ -268,7 +269,7 @@ function createNestedList(node) {
     return (
       <ul class='collapsible' data-collapsible='accordion'>
         {/* {items.map(item => item)} */}
-        items
+        {items}
       </ul>
     );
   }
