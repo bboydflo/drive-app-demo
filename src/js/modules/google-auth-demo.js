@@ -91,7 +91,8 @@ export function createPicker() {
       .setLabel('PDF')
       .setMimeTypes('application/pdf');
 
-    let docsView = new google.picker.View(google.picker.ViewId.DOCUMENTS)
+    // let docsView = new google.picker.View(google.picker.ViewId.DOCUMENTS)
+    let docsView = new google.picker.View()
     // let docsView = new google.picker.DocsView()
       .setLabel('Documents')
       .setMimeTypes('application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.google-apps.document');
@@ -100,6 +101,7 @@ export function createPicker() {
       // .addView(google.picker.ViewId.PHOTOS)
       // .addView(google.picker.ViewId.FOLDERS)
       .addView(new google.picker.DocsView().setParent('root').setIncludeFolders(true))
+      .addView(new google.picker.DocsView().setParent('root').setIncludeFolders(false).setLabel('MS Docs'))
       .addView(docsView)
       .addView(pdfsView)
       .addView(epubView)
