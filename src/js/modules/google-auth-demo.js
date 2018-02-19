@@ -81,7 +81,7 @@ export function createPicker() {
       // .setQuery('epub')
       // .setTitle('EPUB')
       .setLabel('EPUB')
-      .setMimeTypes('application/epub+zip, application/x-dtbncx+xml');
+      .setMimeTypes('application/epub+zip,application/x-dtbncx+xml');
 
     let pdfsView = new google.picker.View(google.picker.ViewId.PDFS)
     // let pdfsView = new google.picker.DocsView()
@@ -91,11 +91,10 @@ export function createPicker() {
       .setLabel('PDF')
       .setMimeTypes('application/pdf');
 
-    // let docsView = new google.picker.View(google.picker.ViewId.DOCUMENTS)
-    let docsView = new google.picker.View(google.picker.DocsView)
+    let docsView = new google.picker.View(google.picker.ViewId.DOCUMENTS)
     // let docsView = new google.picker.DocsView()
       .setLabel('Documents')
-      .setMimeTypes('application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.google-apps.document');
+      .setMimeTypes('application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.google-apps.document,application/msword');
 
     picker = new google.picker.PickerBuilder()
       // .addView(google.picker.ViewId.PHOTOS)
