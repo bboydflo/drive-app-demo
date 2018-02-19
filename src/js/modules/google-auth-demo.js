@@ -78,7 +78,7 @@ export function createPicker() {
     let epubView = new google.picker.View(google.picker.ViewId.DOCS)
     // let epubView = new google.picker.DocsView()
       // .setIncludeFolders(false)
-      .setQuery('epub')
+      // .setQuery('epub')
       // .setTitle('EPUB')
       .setLabel('EPUB')
       .setMimeTypes('application/epub+zip, application/x-dtbncx+xml');
@@ -86,7 +86,7 @@ export function createPicker() {
     let pdfsView = new google.picker.View(google.picker.ViewId.PDFS)
     // let pdfsView = new google.picker.DocsView()
       // .setIncludeFolders(false)
-      .setQuery('epub')
+      // .setQuery('epub')
       // .setTitle('PDF')
       .setLabel('PDF')
       .setMimeTypes('application/pdf');
@@ -113,17 +113,40 @@ export function createPicker() {
 // A simple callback implementation.
 function pickerCallback(data) {
   console.log(data);
+
+  /* // check view token
+  if (data.viewToken && Array.isArray(data.viewToken) && data.viewToken.length) {
+
+    // picked from google drive
+    if (data.viewToken[0] === 'all' && data.viewToken.length === 3) {
+    }
+  } */
+  // let viewToken = data.view
+
   if (data.action === google.picker.Action.PICKED) {
     var fileId = data.docs[0].id;
+    var mimeType = data.docs[0].mimeType;
 
     // send google drive api v3 request
     return gapi.client.drive.files.get({ fileId }).then(resp => {
 
       // log
-      console.log(resp);
+      // console.log(resp);
 
       // do some validation
       if (resp && resp.status && resp.status === 200 && resp.result && resp.result.id) {
+
+        if (mimeType.indexOf('pdf') > -1) {
+          console.log('open into words pdf viewer');
+        } else if (mimeType.indexOf('word') > -1) {
+          console.log('open into words doc viewer');
+        } else if (mimeType.indexOf('epub') > -1) {
+          console.log('open into words epub viewer');
+        } else {
+          console.log('open another viewer');
+        }
+
+        // check file mimetype
         return resp.result;
       }
     });
