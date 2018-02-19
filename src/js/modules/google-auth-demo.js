@@ -94,7 +94,7 @@ export function createPicker() {
     let docsView = new google.picker.View(google.picker.ViewId.DOCUMENTS)
     // let docsView = new google.picker.DocsView()
       .setLabel('Documents')
-      .setMimeTypes('application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+      .setMimeTypes('application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.google-apps.document');
 
     picker = new google.picker.PickerBuilder()
       // .addView(google.picker.ViewId.PHOTOS)
