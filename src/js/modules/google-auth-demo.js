@@ -101,7 +101,6 @@ export function createPicker() {
       // .addView(google.picker.ViewId.PHOTOS)
       // .addView(google.picker.ViewId.FOLDERS)
       .addView(new google.picker.DocsView().setParent('root').setIncludeFolders(true))
-      .addView(new google.picker.DocsView().setParent('root').setIncludeFolders(false).setLabel('MS Docs'))
       .addView(docsView)
       .addView(pdfsView)
       .addView(epubView)
