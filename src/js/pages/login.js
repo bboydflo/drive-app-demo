@@ -73,8 +73,13 @@ class IndexPage extends Component {
       // var instance = M.Collapsible.init(elem, options);
       M.Collapsible.init(elem); */
       $('.collapsible').collapsible();
-      $('.modal').modal();
-      $('.modal').open();
+      // $('.modal').modal();
+      // $('.modal').open();
+
+      // open modal
+      var elem = document.querySelector('.modal');
+      var instance = M.Modal.init(elem);
+      instance.open();
     }
   }
 
