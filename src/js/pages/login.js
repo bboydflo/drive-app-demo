@@ -44,8 +44,8 @@ class IndexPage extends Component {
             <div id='modal1' class='modal'>
               <div class='modal-content'>
                 <h4>Choose file</h4>
-                <div class='row'>
-                  <div class='scroll-wrapper'>
+                <div class='scroll-wrapper'>
+                  <div class='row'>
                     {createNestedList(node)}
                   </div>
                 </div>
