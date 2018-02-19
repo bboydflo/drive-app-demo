@@ -2,7 +2,7 @@
 import M from 'materialize-css';
 import { h, Component } from 'preact';
 import { connect } from 'preact-redux';
-import { getFolderStructure } from '../modules/google-auth-demo';
+import { showPicker, getFolderStructure } from '../modules/google-auth-demo';
 // import { renderStructure } from '../modules/google-auth-demo';
 import Navbar from '../components/navbar';
 import { toggleSpinner } from '../redux/actions';
@@ -22,7 +22,7 @@ class IndexPage extends Component {
     }
   };
 
-  render (props, state) {
+  renderOld (props, state) {
     let bootstrapTheme = false;
     let materialLiteTheme = false;
     if (bootstrapTheme) {
@@ -115,6 +115,10 @@ class IndexPage extends Component {
       // update tree structure
       this.setState({ t: tree }, () => this.props.toggleSpinner());
     });
+  }
+
+  openDrivePicker = () => {
+    showPicker();
   }
 };
 
@@ -209,13 +213,18 @@ function materializeRender (props, state) {
           </button>
         </div>
         <div class='col s4'>
-          <button class='btn waves-effect waves-light' type='submit' onClick={this.getFolderStructure} name='action'>Open File
-          <i class='material-icons right'>send</i>
+          <button class='btn waves-effect waves-light' type='submit' onClick={this.openDrivePicker} name='action'>Open Drive Picker
+          <i class='material-icons right'>folder</i>
           </button>
         </div>
         <div class='col s4'>
-          {isChrome && !isAppInstalled && <button class='btn waves-effect waves-light' type='submit' onClick={this.getFolderStructure} name='action'>Open File
-          <i class='material-icons right'>send</i>
+          <button class='btn waves-effect waves-light' type='submit' onClick={this.getFolderStructure} name='action'>Open Drive Picker
+          <i class='material-icons right'>folder_open</i>
+          </button>
+        </div>
+        <div class='col s4'>
+          {isChrome && !isAppInstalled && <button class='btn waves-effect waves-light' type='submit' onClick={this.getFolderStructure} name='action'>Add to Chrome
+          <i class='material-icons right'>apps</i>
           </button>}
         </div>
       </div>

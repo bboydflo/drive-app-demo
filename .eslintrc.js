@@ -17,6 +17,7 @@ module.exports = {
     gapi: true,
     PDFJS: true,
     chrome: true,
+    google: true,
     Modernizr: true,
     ActiveXObject: true
   },

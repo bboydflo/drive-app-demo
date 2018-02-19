@@ -12,6 +12,10 @@ const API_KEY = 'AIzaSyAM1Ktgs9e1YlIdLwcgiH_aHNN5hFdEkMw';
 // Array of API discovery doc URLs for APIs used by the quickstart
 const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
 
+// var oauthToken;
+var pickerApiLoaded = false;
+var picker;
+
 // Authorization scopes required by the API; multiple scopes can be
 // included, separated by spaces.
 // const SCOPES = 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.metadata.readonly';
@@ -20,6 +24,7 @@ const SCOPES = 'https://www.googleapis.com/auth/drive https://www.googleapis.com
 
 export const handleClientLoad = (callback) => {
   gapi.load('client:auth2', callback);
+  gapi.load('picker', onPickerApiLoad);
 };
 
 /**
@@ -57,6 +62,37 @@ export function signIn() {
  */
 export function signOut() {
   gapi.auth2.getAuthInstance().signOut();
+}
+
+function onPickerApiLoad() {
+  pickerApiLoaded = true;
+  createPicker();
+}
+
+// Create and render a Picker object for picking user Photos.
+function createPicker() {
+  let oauthToken = getAccessToken();
+  if (pickerApiLoaded && oauthToken) {
+    picker = new google.picker.PickerBuilder()
+      // .addView(google.picker.ViewId.PHOTOS)
+      .addView(google.picker.ViewId.FOLDERS)
+      .setOAuthToken(oauthToken)
+      .setDeveloperKey(API_KEY)
+      .setCallback(pickerCallback)
+      .build();
+  }
+}
+
+// A simple callback implementation.
+function pickerCallback(data) {
+  if (data.action === google.picker.Action.PICKED) {
+    var fileId = data.docs[0].id;
+    console.log('The user selected: ' + fileId);
+  }
+}
+
+export function showPicker() {
+  picker.setVisible(true);
 }
 
 function getRootFolders(nextPageToken, rootFolders = []) {
