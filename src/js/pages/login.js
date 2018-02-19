@@ -22,7 +22,7 @@ class IndexPage extends Component {
     }
   };
 
-  renderOld (props, state) {
+  render (props, state) {
     let bootstrapTheme = false;
     let materialLiteTheme = false;
     if (bootstrapTheme) {
