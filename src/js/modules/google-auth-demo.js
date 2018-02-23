@@ -1,9 +1,8 @@
+// tutorial here: https://developers.google.com/drive/v3/web/quickstart/js
+
 import _ from 'underscore';
-// import clone from 'clone';
 import Tree from './simple-tree';
 import isPojo from 'is-pojo';
-
-// tutorial here: https://developers.google.com/drive/v3/web/quickstart/js
 
 // Client ID and API key from the Developer Console
 const CLIENT_ID = '378789089814-77dah8n0j12glfhi2aa1ic73enacfnks.apps.googleusercontent.com';

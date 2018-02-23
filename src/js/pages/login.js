@@ -117,6 +117,21 @@ class IndexPage extends Component {
     });
   }
 
+  checkExternalExtension = () => {
+    let extensionId = 'lcmbpoclaodbgkbjafnkbbinogcbnjih';
+    let hasExtension = false;
+    chrome.runtime.sendMessage(extensionId, { message: 'version' }, reply => {
+      if (reply) {
+        if (reply.version) {
+          hasExtension = true;
+        }
+      } else {
+        hasExtension = false;
+      }
+      console.log('has extension: ', hasExtension);
+    });
+  }
+
   openDrivePicker = () => {
     showPicker();
   }
@@ -224,6 +239,13 @@ function materializeRender (props, state) {
         </div>
         <div class='col s4'>
           {isChrome && !isAppInstalled && <button class='btn waves-effect waves-light' type='submit' onClick={this.getFolderStructure} name='action'>Add to Chrome
+          <i class='material-icons right'>apps</i>
+          </button>}
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col s4'>
+          {isChrome && <button class='btn waves-effect waves-light' type='submit' onClick={this.checkExternalExtension} name='action'>Check extension
           <i class='material-icons right'>apps</i>
           </button>}
         </div>
